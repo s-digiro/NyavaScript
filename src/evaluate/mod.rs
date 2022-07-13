@@ -8,8 +8,13 @@ pub fn evaluate(expr: Expr, context: &mut Context) -> Expr {
     match expr {
         Expr::Atom(a) => eval_atom(a, context),
         Expr::Defun(d) => eval_defun(d, context),
+        Expr::Label(l) => Expr::Label(l),
+        Expr::Lambda(l) => Expr::Lambda(l),
         Expr::List(l) => eval_list(l, context),
-        other => other,
+        Expr::Nil => Expr::Nil,
+        Expr::Number(n) => Expr::Number(n),
+        Expr::Quote(q) => *q,
+        Expr::String(s) => Expr::String(s),
     }
 }
 

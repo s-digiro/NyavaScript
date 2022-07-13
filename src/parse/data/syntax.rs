@@ -2,6 +2,8 @@
 pub enum Syntax {
     Atom(String),
     List(Vec<Syntax>),
+    Number(isize),
+    String(String),
 }
 
 impl Syntax {
@@ -48,4 +50,3 @@ impl Syntax {
         }
     }
 }
-

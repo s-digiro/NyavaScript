@@ -24,13 +24,37 @@ fn parse_blank_works() {
         Syntax::list(),
     );
 }
-        
+
 
 #[test]
 fn parse_nil_list_works() {
     assert_eq!(
         parse(vec![Symbol::OpenList, Symbol::CloseList]).unwrap(),
         Syntax::List(vec![Syntax::list()]),
+    );
+}
+
+#[test]
+fn parse_string_works() {
+    assert_eq!(
+        parse(vec![
+              Symbol::OpenList,
+              Symbol::String("foo".to_owned()),
+              Symbol::CloseList
+        ]).unwrap(),
+        Syntax::List(vec![Syntax::List(vec![Syntax::String("foo".to_owned())])])
+    );
+}
+
+#[test]
+fn parse_number_works() {
+    assert_eq!(
+        parse(vec![
+              Symbol::OpenList,
+              Symbol::Number(105),
+              Symbol::CloseList
+        ]).unwrap(),
+        Syntax::List(vec![Syntax::List(vec![Syntax::Number(105)])])
     );
 }
 

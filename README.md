@@ -1,16 +1,16 @@
 # To Do
-[ ] Strings
-    [ ] Parse
+[*] Strings
+    [*] Parse
         [*] Lexical
-        [ ] Syntax
-        [ ] Semantic
-    [ ] Evaluate
-[ ] Numbers
-    [ ] Parse
+        [*] Syntax
+        [*] Semantic
+    [*] Evaluate
+[*] Numbers
+    [*] Parse
         [*] Lexical
-        [ ] Syntax
-        [ ] Semantic
-    [ ] Evaluate
+        [*] Syntax
+        [*] Semantic
+    [*] Evaluate
 [ ] Rust Contexts
     [ ] Move Special syntax parses to rust contexts if possible
 [ ] Change how lists are evaluated
@@ -30,3 +30,4 @@
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
+[ ] Add tests to semantic parsing

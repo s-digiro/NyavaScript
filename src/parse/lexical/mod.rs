@@ -114,6 +114,15 @@ pub fn parse(code: &str) -> Vec<Symbol> {
         }
     }
 
+    match state {
+        State::InAtom => ret.push(Symbol::Atom(mem::take(&mut buf))),
+        State::InNumber => ret.push(
+            Symbol::Number(mem::take(&mut buf).parse::<isize>().unwrap())
+        ),
+        State::InString => ret.push(Symbol::String(mem::take(&mut buf))),
+        _ => (),
+    }
+
     ret
 }
 

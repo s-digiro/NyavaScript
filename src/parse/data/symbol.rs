@@ -1,6 +1,6 @@
 #[derive(PartialEq)]
 #[derive(Debug)]
-pub enum Symbol {
+    pub enum Symbol {
     Atom(String),
     CloseList,
     Number(isize),

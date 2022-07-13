@@ -6,7 +6,9 @@ pub enum Expression {
     Lambda(Lambda),
     List(Vec<Expression>),
     Nil,
+    Number(isize),
     Quote(Box<Expression>),
+    String(String),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -120,7 +122,9 @@ impl std::fmt::Display for Expression {
                 Ok(())
             },
             Expression::Nil => write!(f, "NIL"),
+            Expression::Number(i) => write!(f, "{}", i),
             Expression::Quote(q) => write!(f, "'{}", q),
+            Expression::String(s) => write!(f, "\"{}\"", s),
         }
     }
 }

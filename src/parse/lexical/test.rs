@@ -64,6 +64,16 @@ fn parse_number_works() {
 }
 
 #[test]
+fn parse_negative_number_works() {
+    assert_eq!(
+        vec![
+            Symbol::Number(-1),
+        ],
+        parse("-1"),
+    );
+}
+
+#[test]
 fn parse_string_works() {
     assert_eq!(
         vec![
