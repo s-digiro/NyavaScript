@@ -29,6 +29,7 @@ pub fn parse(symbols: Vec<Symbol>) -> Result<Syntax, Error> {
                 .push(Syntax::Atom(a)),
             Symbol::Quote => current.as_mut_list().unwrap()
                 .push(Syntax::atom("quote")),
+            c => panic!("UNIMPLEMENTED SYNTAX PARSE: {:?}", c),
         }
     }
 
