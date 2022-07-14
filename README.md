@@ -16,7 +16,7 @@
 [?] Change how lists are evaluated
     1. Evaluate second through last
     2. If first is defined as a Lambda, execute it with second through last as args
-[ ] Change how atoms are evaluated
+[?] Change how atoms are evaluated
     1. If they are not defined, evaluate them to NIL, not themselves
 [ ] McCarthy things need to be implemented
     [ ] Car
@@ -25,13 +25,13 @@
     [ ] Equal
     [ ] Maybe more
     [ ] McCarthy context??? as a type of Rust context?
-[ ] Lib user defined Rust Contexts
+[?] Lib user defined Rust Contexts
 [ ] Rust context of lib that I find useful
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
 [ ] Add tests to semantic parsing
 [ ] . infix operator
-[ ] Use actual linked lists
-[ ] Do not consume lists when evaluating
+[?] Use actual linked lists
+[?] Do not consume lists when evaluating
 [ ] Macros?
