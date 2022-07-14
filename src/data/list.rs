@@ -1,12 +1,14 @@
 use std::rc::Rc;
-use std::cell::{ Ref, RefCell };
+use std::cell::{ RefCell, Ref };
 
+#[derive(Debug, PartialEq)]
 pub enum Expression {
     ConsCell(ConsCell),
     Atom(Atom),
 }
 
-struct ExRef(Option<Rc<RefCell<Expression>>>);
+#[derive(Debug, PartialEq)]
+pub struct ExRef(Option<Rc<RefCell<Expression>>>);
 
 impl ExRef {
     pub fn atom(a: Atom) -> ExRef {
@@ -29,37 +31,38 @@ impl ExRef {
     }
 
     pub fn is_cons_cell(&self) -> bool {
-        match self.as_expression() {
-            Some(e) => Ref::filter_map(e, |e| match e {
-                Expression::ConsCell(c) => Some(c),
-                _ => None,
-            }).is_ok(),
-            _ => false,
+        match self.0 {
+            Some(e) => match *e.borrow() {
+                Expression::ConsCell(_) => true,
+                _ => false,
+            },
+            None => false,
         }
+    }
+
+    pub fn is_list(&self) -> bool {
+        self.is_cons_cell()
     }
 
     pub fn nil() -> ExRef {
         ExRef(None)
     }
 
-    pub fn as_expression(&self) -> Option<Ref<Expression>> {
-        match &self.0 {
-            Some(e) => Some(e.borrow()),
+    pub fn as_atom(&self) -> Option<Ref<String>> {
+        match self {
+            Some(e) => e.borrow() {
+                match e {
+                    Expression::Atom(a) => Some(a),
+                    _ => None,
+                }
+            },
             None => None,
         }
     }
 
-    pub fn as_cons_cell(&self) -> Option<Ref<ConsCell>> {
-        match self.as_expression() {
-            Some(e) => Ref::filter_map(e, |e| match e {
-                Expression::ConsCell(c) => Some(c),
-                _ => None,
-            }).ok(),
-            _ => None,
-        }
-    }
 }
 
+#[derive(Debug, PartialEq)]
 pub struct ConsCell {
     car: ExRef,
     cdr: ExRef,
@@ -80,6 +83,7 @@ impl ConsCell {
     }
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Atom {
     Symbol(String),
     String(String),
@@ -104,11 +108,21 @@ impl Atom {
     }
 }
 
-struct List(ExRef);
+pub struct List(ExRef);
 
 impl List {
     pub fn new() -> ExRef {
         ExRef::nil()
+    }
+
+    pub fn from(v: Vec<ExRef>) -> ExRef {
+        let mut ret = List::new();
+
+        for e in v.into_iter().rev() {
+            ret = List::cons(&e, &ret)
+        }
+
+        ret
     }
 
     pub fn nil() -> ExRef {
@@ -162,6 +176,36 @@ impl List {
                 }
             }
         }
+    }
+
+    pub fn len(list: &ExRef) -> usize {
+        List(list).iter().count()
+    }
+}
+
+impl <'a> IntoIterator for &'a List {
+    type Item = ExRef;
+    type IntoIter = ListIter<'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        ListIter {
+            current: self.0,
+        }
+    }
+}
+
+pub struct ListIter<'a> {
+    current: &'a ExRef,
+}
+
+impl<'a> Iterator for ListIter<'a> {
+    type Item = ExRef;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let ret = List::car(&self.current);
+        self.current = List::cdr(&self.current);
+
+        Some(ret)
     }
 }
 

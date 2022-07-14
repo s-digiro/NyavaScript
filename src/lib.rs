@@ -1,5 +1,3 @@
-#![feature(cell_filter_map)]
-
 pub mod parse;
 pub mod evaluate;
 pub mod data;

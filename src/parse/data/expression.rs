@@ -113,7 +113,7 @@ impl Expression {
     }
 
     pub fn into_label(self) -> Option<Label> {
-        match self {
+       match self {
             Expression::Label(l) => Some(l),
             _ => None,
         }

@@ -1,48 +1,38 @@
 #[cfg(test)]
 mod test;
 
-mod special;
-use special::Special;
+use crate::parse::Syntax;
+use crate::data::list::*;
 
-use crate::parse::{ Expression as Expr, Syntax };
-
-pub fn parse(tree: Syntax) -> Result<Expr, String> {
+pub fn parse(tree: Syntax) -> Result<ExRef, String> {
     match tree {
-        Syntax::Atom(a) => parse_atom(a),
+        Syntax::Atom(a) => parse_symbol(a),
         Syntax::List(l) => parse_list(l),
         Syntax::Number(n) => parse_number(n),
         Syntax::String(s) => parse_string(s),
     }
 }
 
-fn parse_atom(atom: String) -> Result<Expr, String> {
-    Ok(Expr::Atom(atom))
+fn parse_symbol(symbol: String) -> Result<ExRef, String> {
+    Ok(Atom::symbol(&symbol))
 }
 
-fn parse_list(mut list: Vec<Syntax>) -> Result<Expr, String> {
+fn parse_list(mut list: Vec<Syntax>) -> Result<ExRef, String> {
     if list.len() == 0 {
-        return Ok(Expr::list())
-    }
-
-    if list[0].is_atom() {
-        if let Ok(special) = Special::try_from(list[0].as_atom().unwrap()) {
-            list.remove(0);
-
-            return special.parse(list)
-        }
+        return Ok(List::nil())
     }
 
     let children = list.into_iter()
         .map(|syn| parse(syn))
-        .collect::<Result<Vec<Expr>, String>>()?;
+        .collect::<Result<Vec<ExRef>, String>>()?;
 
-    Ok(Expr::List(children))
+    Ok(List::from(children))
 }
 
-fn parse_string(s: String) -> Result<Expr, String> {
-    Ok(Expr::String(s))
+fn parse_string(s: String) -> Result<ExRef, String> {
+    Ok(Atom::string(&s))
 }
 
-fn parse_number(n: isize) -> Result<Expr, String> {
-    Ok(Expr::Number(n))
+fn parse_number(n: isize) -> Result<ExRef, String> {
+    Ok(Atom::number(n))
 }

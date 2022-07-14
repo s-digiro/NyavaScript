@@ -8,7 +8,9 @@ pub use syntax::Error as SyntaxError;
 
 mod semantic;
 
-pub fn parse(text: &str) -> Result<Expression, String> {
+use crate::data::list::ExRef;
+
+pub fn parse(text: &str) -> Result<ExRef, String> {
     semantic::parse(
         syntax::parse(
             lexical::parse(text)

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use super::*;
 
 pub struct Scope {
-    map: HashMap<String, Expr>
+    map: HashMap<String, ExRef>
 }
 
 impl Scope {
@@ -28,7 +28,7 @@ impl Environment {
     }
 
     pub fn defun(&mut self, key: String, lambda: Lambda) {
-        self.stack[0].map.insert(key, Expr::Lambda(lambda));
+        self.stack[0].map.insert(key, ExRef::Lambda(lambda));
     }
 
     pub fn has(&self, key: &str) -> bool {
@@ -39,7 +39,7 @@ impl Environment {
         false
     }
 
-    pub fn get(&self, key: &str) -> Option<&Expr> {
+    pub fn get(&self, key: &str) -> Option<&ExRef> {
         self.stack.iter().rev().find_map(|s| s.map.get(key))
     }
 
@@ -51,7 +51,7 @@ impl Environment {
         self.stack.push(c);
     }
 
-    pub fn set(&mut self, key: String, val: Expr) {
+    pub fn set(&mut self, key: String, val: ExRef) {
         self.stack.last_mut().unwrap().map.insert(key, val);
     }
 }
