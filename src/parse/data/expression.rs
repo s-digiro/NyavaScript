@@ -8,6 +8,7 @@ pub enum Expression {
     Nil,
     Number(isize),
     Quote(Box<Expression>),
+    RustFn(fn(Expression) -> Expression),
     String(String),
 }
 
@@ -20,7 +21,7 @@ pub struct Defun {
 #[derive(Debug, PartialEq, Clone)]
 pub struct Label {
     pub name: String,
-    pub lambda: Lambda,
+    pub lambda: Box<Expression>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -39,6 +40,20 @@ impl Lambda {
 }
 
 impl Expression {
+    pub fn as_label(&self) -> Option<&Label> {
+        match self {
+            Expression::Label(l) => Some(l),
+            _ => None,
+        }
+    }
+
+    pub fn as_lambda(&self) -> Option<&Lambda> {
+        match self {
+            Expression::Lambda(l) => Some(l),
+            _ => None,
+        }
+    }
+
     pub fn defun(
         name: String,
         args: Vec<String>,
@@ -53,7 +68,7 @@ impl Expression {
     }
 
     pub fn label(name: String, lambda: Lambda) -> Expression {
-        Expression::Label(Label { name, lambda })
+        Expression::Label(Label { name, lambda: Box::new(Expression::Lambda(lambda)) })
     }
 
     pub fn lambda(args: Vec<String>, expr: Expression) -> Expression {
@@ -124,6 +139,7 @@ impl std::fmt::Display for Expression {
             Expression::Nil => write!(f, "NIL"),
             Expression::Number(i) => write!(f, "{}", i),
             Expression::Quote(q) => write!(f, "'{}", q),
+            Expression::RustFn(_) => write!(f, "<RUST_FN>"),
             Expression::String(s) => write!(f, "\"{}\"", s),
         }
     }

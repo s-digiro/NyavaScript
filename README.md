@@ -11,9 +11,9 @@
         [*] Syntax
         [*] Semantic
     [*] Evaluate
-[ ] Rust Contexts
-    [ ] Move Special syntax parses to rust contexts if possible
-[ ] Change how lists are evaluated
+[?] Rust Contexts
+[ ] Move Special syntax parses to rust contexts if possible
+[?] Change how lists are evaluated
     1. Evaluate second through last
     2. If first is defined as a Lambda, execute it with second through last as args
 [ ] Change how atoms are evaluated
@@ -31,3 +31,7 @@
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
 [ ] Add tests to semantic parsing
+[ ] . infix operator
+[ ] Use actual linked lists
+[ ] Do not consume lists when evaluating
+[ ] Macros?

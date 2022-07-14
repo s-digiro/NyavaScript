@@ -14,26 +14,33 @@ impl Scope {
     }
 }
 
-pub struct Context {
+pub struct Environment {
     stack: Vec<Scope>,
 }
 
-impl Context {
-    pub fn new() -> Context {
-        Context {
+impl Environment {
+    pub fn new() -> Environment {
+        Environment {
             stack: vec![
-                Scope::new(),
                 Scope::new(),
             ],
         }
     }
 
     pub fn defun(&mut self, key: String, lambda: Lambda) {
-        self.stack[1].map.insert(key, Expr::Lambda(lambda));
+        self.stack[0].map.insert(key, Expr::Lambda(lambda));
     }
 
     pub fn has(&self, key: &str) -> bool {
-        self.stack.iter().any(|c| c.map.contains_key(key))
+        self.stack.iter().any(|s| s.map.contains_key(key))
+    }
+
+    pub fn has_macro(&self, _key: &str) -> bool {
+        false
+    }
+
+    pub fn get(&self, key: &str) -> Option<&Expr> {
+        self.stack.iter().rev().find_map(|s| s.map.get(key))
     }
 
     pub fn pop(&mut self) -> Scope {
@@ -46,15 +53,5 @@ impl Context {
 
     pub fn set(&mut self, key: String, val: Expr) {
         self.stack.last_mut().unwrap().map.insert(key, val);
-    }
-
-    pub fn val(&self, key: &str) -> Option<Expr> {
-        for c in self.stack.iter().rev() {
-            if let Some(e) = c.map.get(key) {
-                return Some(e.clone())
-            }
-        }
-
-        None
     }
 }
