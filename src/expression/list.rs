@@ -36,9 +36,11 @@ impl List {
     }
 
     pub fn cons(car: &ExRef, cdr: &ExRef) -> ExRef {
-        ConsCell::new(
-            ExRef::clone(car),
-            ExRef::clone(cdr),
+        ExRef::cons_cell(
+            ConsCell::new(
+                ExRef::clone(car),
+                ExRef::clone(cdr),
+            )
         )
     }
 
@@ -82,5 +84,22 @@ impl Iterator for ListIter {
             Some(_) => Some(ret),
             None => None,
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::expression::{ Atom, Expression };
+
+    #[test]
+    fn cons_works() {
+        assert_eq!(
+            ExRef::new(Expression::ConsCell(ConsCell::new(
+                ExRef::new(Expression::Atom(Atom::Number(1))),
+                ExRef::new(Expression::Atom(Atom::Number(2))),
+            ))),
+            List::cons(&ExRef::atom(Atom::Number(1)), &ExRef::atom(Atom::Number(2))),
+        );
     }
 }

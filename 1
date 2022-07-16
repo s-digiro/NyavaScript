@@ -1,0 +1,50 @@
+warning: associated function is never used: `as_atom`
+  --> src/parse/data/syntax.rs:18:12
+   |
+18 |     pub fn as_atom(&self) -> Option<&str> {
+   |            ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: associated function is never used: `into_list`
+  --> src/parse/data/syntax.rs:32:12
+   |
+32 |     pub fn into_list(self) -> Option<Vec<Syntax>> {
+   |            ^^^^^^^^^
+
+warning: associated function is never used: `into_atom`
+  --> src/parse/data/syntax.rs:39:12
+   |
+39 |     pub fn into_atom(self) -> Option<String> {
+   |            ^^^^^^^^^
+
+warning: associated function is never used: `is_atom`
+  --> src/parse/data/syntax.rs:46:12
+   |
+46 |     pub fn is_atom(&self) -> bool {
+   |            ^^^^^^^
+
+warning: associated function is never used: `atom`
+  --> src/parse/data/symbol.rs:13:12
+   |
+13 |     pub fn atom(a: &str) -> Symbol {
+   |            ^^^^
+
+warning: associated function is never used: `string`
+  --> src/parse/data/symbol.rs:17:12
+   |
+17 |     pub fn string(a: &str) -> Symbol {
+   |            ^^^^^^
+
+warning: function is never used: `nuke`
+ --> src/evaluate/mod.rs:8:8
+  |
+8 |     fn nuke() -> ! {
+  |        ^^^^
+
+warning: `toylisp` (lib) generated 7 warnings
+warning: `toylisp` (lib test) generated 5 warnings (5 duplicates)
+    Finished test [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests (target/debug/deps/toylisp-b5913a7936c96202)
+     Running unittests (target/debug/deps/toylisp-8c497e3ec51b535b)
+   Doc-tests toylisp

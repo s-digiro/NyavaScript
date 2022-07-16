@@ -127,12 +127,28 @@ impl ExRef {
         self.is_cons_cell()
     }
 
+    pub fn lambda(lambda: Lambda) -> ExRef {
+        ExRef(Some(Rc::new(Expression::Lambda(lambda))))
+    }
+
     pub fn list(list: ConsCell) -> ExRef {
         ExRef(Some(Rc::new(Expression::ConsCell(list))))
     }
 
+    pub fn new(e: Expression) -> ExRef {
+        ExRef(Some(Rc::new(e)))
+    }
+
     pub fn nil() -> ExRef {
         ExRef(None)
+    }
+
+    pub fn rust_lambda(lambda: RustLambda) -> ExRef {
+        ExRef(Some(Rc::new(Expression::RustLambda(lambda))))
+    }
+
+    pub fn rust_macro(m: RustMacro) -> ExRef {
+        ExRef(Some(Rc::new(Expression::RustMacro(m))))
     }
 }
 

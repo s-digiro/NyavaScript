@@ -1,11 +1,21 @@
 use crate::evaluate::Environment;
-use crate::expression::{ ConsCell, ExRef };
+use crate::expression::ExRef;
 
-pub struct RustLambda(fn(&ConsCell, &mut Environment) -> ExRef);
+type LambdaFunc = fn(ExRef, &mut Environment) -> ExRef;
+
+pub struct RustLambda(LambdaFunc);
 
 impl RustLambda {
-    pub fn exec(&self, list: &ConsCell, env: &mut Environment) -> ExRef {
+    pub fn new(f: LambdaFunc) -> RustLambda {
+        RustLambda(f)
+    }
+
+    pub fn exec(&self, list: ExRef, env: &mut Environment) -> ExRef {
         self.0(list, env)
+    }
+
+    pub fn from(f: LambdaFunc) -> ExRef {
+        ExRef::rust_lambda(RustLambda::new(f))
     }
 }
 

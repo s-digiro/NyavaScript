@@ -5,10 +5,6 @@ pub use environment::*;
 use crate::expression::{ Atom, ConsCell, Expression, ExRef, Lambda, List, Macro };
 
 pub fn evaluate(expr: ExRef, env: &mut Env) -> ExRef {
-    fn nuke() -> ! {
-        panic!("This should never be called. Calling evaluate on Atoms is deprecated and should be removed. If you get here, this is an error")
-    }
-
     match expr.as_expression() {
         Some(Expression::Atom(a)) => eval_atom(a, env),
         Some(Expression::ConsCell(c)) => eval_list(c, env),
@@ -29,33 +25,61 @@ fn eval_atom(atom: &Atom, env: &Env) -> ExRef {
 }
 
 fn eval_list(list: &ConsCell, env: &mut Env) -> ExRef {
-    let arg1 = evaluate(ExRef::clone(&list.car), env);
+    let list = List::cons(&list.car, &list.cdr);
 
-    let list = match arg1.as_expression() {
-        Some(Expression::Macro(m)) => exec_macro(m, list, env),
-        Some(Expression::RustMacro(m)) => m.exec(list, env),
-        _ => List::cons(&list.car, &list.cdr),
-    };
+    let first = evaluate(List::car(&list), env);
+    let rest = List::cdr(&list);
 
-    let list = List::iter(&list)
-        .map(|exref| evaluate(exref, env)).collect::<ExRef>();
+    match first.as_expression() {
+        Some(Expression::Macro(m)) => {
+            println!("Macro in: {}", rest);
+            let ret = exec_macro(m, rest, env);
+            println!("Macro out: {}", ret);
+            println!();
+            evaluate(ret, env)
+        },
+        Some(Expression::RustMacro(m)) => {
+            println!("RustMacro in: {}", rest);
+            let ret = m.exec(rest, env);
+            println!("RustMacro out: {}", ret);
+            println!();
+            evaluate(ret, env)
+        },
+        _ => {
+            let rest = List::iter(&rest)
+                .map(|exref| evaluate(exref, env)).collect::<ExRef>();
 
-    match List::car(&list).as_expression() {
-        Some(Expression::Lambda(l)) =>
-            exec_lambda(l, &list.as_list().unwrap(), env),
-        Some(Expression::RustLambda(l)) => l.exec(&list.as_list().unwrap(), env),
-        _ => list,
+            match first.as_expression() {
+                Some(Expression::Lambda(l)) => {
+                    println!("Lambda in: {}", rest);
+                    let ret = exec_lambda(l, rest, env);
+                    println!("Lambda out: {}", ret);
+                    println!();
+
+                    ret
+                },
+                Some(Expression::RustLambda(l)) => {
+                    println!("RustLambda in: {}", rest);
+                    let ret = l.exec(rest, env);
+                    println!("RustLambda out: {}", ret);
+                    println!();
+
+                    ret
+                },
+                _ => List::cons(&first, &rest),
+            }
+        },
     }
 }
 
 fn exec_lambda(
     lambda: &Lambda,
-    args: &ConsCell,
+    args: ExRef,
     env: &mut Env
 ) -> ExRef {
     env.push(Scope::new());
 
-    for (key, val) in lambda.args().into_iter().zip(args.into_iter()) {
+    for (key, val) in lambda.args().into_iter().zip(List::iter(&args)) {
         env.set(key.to_owned(), val);
     }
 
@@ -68,12 +92,12 @@ fn exec_lambda(
 
 fn exec_macro(
     m: &Macro,
-    args: &ConsCell,
+    args: ExRef,
     env: &mut Env
 ) -> ExRef {
     env.push(Scope::new());
 
-    for (key, val) in m.args().into_iter().zip(args.iter()) {
+    for (key, val) in m.args().into_iter().zip(List::iter(&args)) {
         env.set(key.to_owned(), val);
     }
 

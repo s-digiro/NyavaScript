@@ -1,11 +1,21 @@
 use crate::evaluate::Environment;
 use crate::expression::{ ConsCell, ExRef };
 
-pub struct RustMacro(fn(&ConsCell, &mut Environment) -> ExRef);
+type MacroFunc = fn(ExRef, &mut Environment) -> ExRef;
+
+pub struct RustMacro(MacroFunc);
 
 impl RustMacro {
-    pub fn exec(&self, list: &ConsCell, env: &mut Environment) -> ExRef {
+    pub fn new(f: MacroFunc) -> RustMacro {
+        RustMacro(f)
+    }
+
+    pub fn exec(&self, list: ExRef, env: &mut Environment) -> ExRef {
         self.0(list, env)
+    }
+
+    pub fn from(f: MacroFunc) -> ExRef {
+        ExRef::rust_macro(RustMacro::new(f))
     }
 }
 

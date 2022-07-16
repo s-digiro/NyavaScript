@@ -27,6 +27,7 @@ pub struct Defun {
 
 
 fn first_arg_is(e: &ExRef, symbol: &str) -> bool {
+    eprintln!("{}", e);
     List::car(&e).as_atom()
         .map(|a| a.as_symbol().map(|s| s == symbol).unwrap_or(false))
         .unwrap_or(false)

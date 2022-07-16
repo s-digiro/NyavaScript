@@ -2,18 +2,12 @@ use std::collections::HashMap;
 
 use crate::expression::ExRef;
 
-pub struct Scope {
-    map: HashMap<String, ExRef>
-}
+mod mccarthy_scope;
+pub use mccarthy_scope::McCarthyScope;
 
-impl Scope {
-    pub fn new() -> Scope {
-        Scope {
-            map: HashMap::new(),
-        }
-    }
-}
+pub type Scope = HashMap<String, ExRef>;
 
+#[derive(Debug)]
 pub struct Environment {
     stack: Vec<Scope>,
 }
@@ -28,7 +22,7 @@ impl Environment {
     }
 
     pub fn has(&self, key: &str) -> bool {
-        self.stack.iter().any(|s| s.map.contains_key(key))
+        self.stack.iter().any(|s| s.contains_key(key))
     }
 
     pub fn has_macro(&self, _key: &str) -> bool {
@@ -37,7 +31,7 @@ impl Environment {
 
     pub fn get(&self, key: &str) -> ExRef {
         self.stack.iter().rev()
-            .find_map(|s| s.map.get(key).map(|exref| ExRef::clone(exref)))
+            .find_map(|s| s.get(key).map(|exref| ExRef::clone(exref)))
             .unwrap_or(ExRef::nil())
     }
 
@@ -50,6 +44,6 @@ impl Environment {
     }
 
     pub fn set(&mut self, key: String, val: ExRef) {
-        self.stack.last_mut().unwrap().map.insert(key, val);
+        self.stack.last_mut().unwrap().insert(key, val);
     }
 }
