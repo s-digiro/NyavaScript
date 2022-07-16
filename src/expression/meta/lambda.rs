@@ -34,3 +34,9 @@ impl Lambda {
         List::car(&List::cdr(&List::cdr(&self.0)))
     }
 }
+
+impl std::fmt::Display for Lambda {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "[Lambda]")
+    }
+}

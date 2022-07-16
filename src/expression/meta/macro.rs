@@ -34,3 +34,9 @@ impl Macro {
         List::car(&List::cdr(&List::cdr(&self.0)))
     }
 }
+
+impl std::fmt::Display for Macro {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "[Macro]")
+    }
+}

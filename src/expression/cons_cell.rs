@@ -27,6 +27,16 @@ impl ConsCell {
     }
 }
 
+impl std::fmt::Display for ConsCell {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "(")?;
+        for e in self.iter() {
+            write!(f, "{} ", e)?;
+        }
+        write!(f, ")")
+    }
+}
+
 impl<'a> IntoIterator for &'a ConsCell {
     type Item = ExRef;
     type IntoIter = ConsCellIter<'a>;

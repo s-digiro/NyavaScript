@@ -67,3 +67,12 @@ impl Atom {
     }
 }
 
+impl std::fmt::Display for Atom {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Atom::Number(n) => write!(f, "{}", n),
+            Atom::String(s) => write!(f, "{}", s),
+            Atom::Symbol(s) => write!(f, "{}", s),
+        }
+    }
+}

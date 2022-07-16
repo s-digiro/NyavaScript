@@ -11,7 +11,6 @@ mod meta;
 pub use meta::{ Lambda, Macro, RustLambda, RustMacro };
 
 use std::rc::Rc;
-use std::cell::RefCell;
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
@@ -63,42 +62,34 @@ impl Expression {
     }
 }
 
-#[derive(Debug, PartialEq)]
-pub struct ExRef(Option<Rc<RefCell<Expression>>>);
+impl std::fmt::Display for Expression {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Expression::ConsCell(c) => write!(f, "{}", c),
+            Expression::Atom(a) => write!(f, "{}", a),
+            Expression::Lambda(l) => write!(f, "{}", l),
+            Expression::Macro(m) => write!(f, "{}", m),
+            Expression::RustLambda(l) => write!(f, "{}", l),
+            Expression::RustMacro(m) => write!(f, "{}", m),
+        }
+    }
+}
 
-use std::cell::Ref;
+#[derive(Debug, PartialEq)]
+pub struct ExRef(Option<Rc<Expression>>);
 
 impl ExRef {
     pub fn as_atom(&self) -> Option<&Atom> {
-        self.0.map(|e| e.borrow().as_atom()).flatten()
+        self.0.as_ref().map(|e| e.as_atom()).flatten()
     }
 
     pub fn as_cons_cell(&self) -> Option<&ConsCell> {
-        match self.as_expression() {
-            Some(e) if e.is_cons_cell() => {
-                e.as_cons_cell()
-            },
-            _ => None,
-        }
-        //self.as_expression().map(|e| if e.is_cons_cell() { 
-        //self.0.map(|e| e.borrow().as_cons_cell()).flatten()
-    }
-
-    pub fn as_cons_cell2(&self) -> Option<Ref<ConsCell>> {
-        match self.as_expression2() {
-            Some(e) if e.is_cons_cell() => {
-                Some(Ref::map(e, |e| e.as_cons_cell().unwrap()))
-            },
-            _ => None,
-        }
+        self.0.as_ref().map(|e| e.as_cons_cell()).flatten()
+        //self.0.map(|e| e.as_cons_cell()).flatten()
     }
 
     pub fn as_expression(&self) -> Option<&Expression> {
-        self.0.as_ref().map(|e| &*e.borrow())
-    }
-
-    pub fn as_expression2(&self) -> Option<Ref<Expression>> {
-        self.0.as_ref().map(|e| e.borrow())
+        self.0.as_ref().map(|e| &**e)
     }
 
     pub fn as_list(&self) -> Option<&ConsCell> {
@@ -106,11 +97,11 @@ impl ExRef {
     }
 
     pub fn atom(a: Atom) -> ExRef {
-        ExRef(Some(Rc::new(RefCell::new(Expression::Atom(a)))))
+        ExRef(Some(Rc::new(Expression::Atom(a))))
     }
 
     pub fn cons_cell(c: ConsCell) -> ExRef {
-        ExRef(Some(Rc::new(RefCell::new(Expression::ConsCell(c)))))
+        ExRef(Some(Rc::new(Expression::ConsCell(c))))
     }
 
     pub fn clone(e: &ExRef) -> ExRef {
@@ -125,17 +116,11 @@ impl ExRef {
     }
 
     pub fn is_atom(&self) -> bool {
-        match self.0 {
-            Some(e) => e.borrow().is_atom(),
-            _ => false,
-        }
+        self.0.as_ref().map(|e| e.is_atom()).unwrap_or(false)
     }
 
     pub fn is_cons_cell(&self) -> bool {
-        match self.0 {
-            Some(e) => e.borrow().is_cons_cell(),
-            _ => false,
-        }
+        self.0.as_ref().map(|e| e.is_cons_cell()).unwrap_or(false)
     }
 
     pub fn is_list(&self) -> bool {
@@ -143,11 +128,20 @@ impl ExRef {
     }
 
     pub fn list(list: ConsCell) -> ExRef {
-        ExRef(Some(Rc::new(RefCell::new(Expression::ConsCell(list)))))
+        ExRef(Some(Rc::new(Expression::ConsCell(list))))
     }
 
     pub fn nil() -> ExRef {
         ExRef(None)
+    }
+}
+
+impl std::fmt::Display for ExRef {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self.as_expression() {
+            Some(e) => write!(f, "{}", e),
+            None => write!(f, "NIL"),
+        }
     }
 }
 

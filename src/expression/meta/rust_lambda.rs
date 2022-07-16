@@ -20,3 +20,9 @@ impl std::fmt::Debug  for RustLambda {
         write!(f, "[RustLambda]")
     }
 }
+
+impl std::fmt::Display for RustLambda {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "[RustLambda]")
+    }
+}

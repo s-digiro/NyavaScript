@@ -1,4 +1,4 @@
-use super::{ ConsCell, Expression, ExRef };
+use super::{ ConsCell, ExRef };
 
 pub struct List(ExRef);
 
@@ -22,21 +22,15 @@ impl List {
     }
 
     pub fn car(list: &ExRef) -> ExRef {
-        match &list.0 {
-            Some(e) => match &*e.borrow() {
-                Expression::ConsCell(cc) => ExRef::clone(&cc.car),
-                _ => ExRef::nil(),
-            },
+        match list.as_cons_cell() {
+            Some(e) => ExRef::clone(&e.car),
             None => ExRef::nil(),
         }
     }
 
     pub fn cdr(list: &ExRef) -> ExRef {
-        match &list.0 {
-            Some(e) => match &*e.borrow() {
-                Expression::ConsCell(cc) => ExRef::clone(&cc.cdr),
-                _ => ExRef::nil(),
-            },
+        match list.as_cons_cell() {
+            Some(e) => ExRef::clone(&e.cdr),
             None => ExRef::nil(),
         }
     }
@@ -48,25 +42,17 @@ impl List {
         )
     }
 
-    pub fn push(list: &mut ExRef, item: &ExRef) {
-        if List::car(list).is_cons_cell() {
-            List::push(&mut List::car(list), item);
+    pub fn push(list: &ExRef, item: &ExRef) -> ExRef {
+        if list.is_nil() {
+            List::cons(item, &List::nil())
         } else {
-            match &list.0 {
-                Some(e) => match &mut *e.borrow_mut() {
-                    Expression::ConsCell(cc) => cc.car = ExRef::clone(item),
-                    _ => panic!("Somehow push got called on an expression that isn't a cons list"),
-                },
-                None => {
-                    std::mem::replace(
-                        list,
-                        List::cons(
-                            item,
-                            &List::nil(),
-                        ),
-                    );
-                }
-            }
+            let head = List::car(&list);
+            let tail = List::cdr(&list);
+
+            List::cons(
+                &head,
+                &List::push(&tail, item),
+            )
         }
     }
 

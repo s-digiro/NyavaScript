@@ -20,3 +20,9 @@ impl std::fmt::Debug  for RustMacro {
         write!(f, "[RustMacro]")
     }
 }
+
+impl std::fmt::Display for RustMacro {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "[RustMacro]")
+    }
+}
