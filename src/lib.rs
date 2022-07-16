@@ -1,16 +1,15 @@
 pub mod parse;
 pub mod evaluate;
-pub mod data;
+pub mod expression;
 
-pub use parse::parse;
-pub use parse::Expression;
-pub use evaluate::evaluate;
-pub use evaluate::Environment;
+use expression::ExRef;
+use evaluate::{ Environment, evaluate };
+use parse::parse;
 
-pub fn run(text: &str) -> Result<Expression, String> {
+pub fn run(text: &str) -> Result<ExRef, String> {
     let parsed = parse(text)?;
 
     let mut context = Environment::new();
 
-    Ok(evaluate(&parsed, &mut context))
+    Ok(evaluate(parsed, &mut context))
 }

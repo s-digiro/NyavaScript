@@ -1,14 +1,9 @@
 mod lexical;
-
 mod data;
-pub use data::*;
-
 mod syntax;
-pub use syntax::Error as SyntaxError;
-
 mod semantic;
 
-use crate::data::list::ExRef;
+use crate::expression::ExRef;
 
 pub fn parse(text: &str) -> Result<ExRef, String> {
     semantic::parse(

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::*;
+use crate::expression::ExRef;
 
 pub struct Scope {
     map: HashMap<String, ExRef>
@@ -27,10 +27,6 @@ impl Environment {
         }
     }
 
-    pub fn defun(&mut self, key: String, lambda: Lambda) {
-        self.stack[0].map.insert(key, ExRef::Lambda(lambda));
-    }
-
     pub fn has(&self, key: &str) -> bool {
         self.stack.iter().any(|s| s.map.contains_key(key))
     }
@@ -39,8 +35,10 @@ impl Environment {
         false
     }
 
-    pub fn get(&self, key: &str) -> Option<&ExRef> {
-        self.stack.iter().rev().find_map(|s| s.map.get(key))
+    pub fn get(&self, key: &str) -> ExRef {
+        self.stack.iter().rev()
+            .find_map(|s| s.map.get(key).map(|exref| ExRef::clone(exref)))
+            .unwrap_or(ExRef::nil())
     }
 
     pub fn pop(&mut self) -> Scope {

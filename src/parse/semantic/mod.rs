@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod test;
 
-use crate::parse::Syntax;
-use crate::data::list::*;
+use super::data::Syntax;
+use crate::expression::{ Atom, ExRef, List };
 
 pub fn parse(tree: Syntax) -> Result<ExRef, String> {
     match tree {
@@ -17,7 +17,7 @@ fn parse_symbol(symbol: String) -> Result<ExRef, String> {
     Ok(Atom::symbol(&symbol))
 }
 
-fn parse_list(mut list: Vec<Syntax>) -> Result<ExRef, String> {
+fn parse_list(list: Vec<Syntax>) -> Result<ExRef, String> {
     if list.len() == 0 {
         return Ok(List::nil())
     }

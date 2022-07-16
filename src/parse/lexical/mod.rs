@@ -3,7 +3,7 @@ mod test;
 
 use std::mem;
 
-use crate::parse::data::Symbol;
+use super::data::Symbol;
 
 pub fn parse(code: &str) -> Vec<Symbol> {
     enum State {
