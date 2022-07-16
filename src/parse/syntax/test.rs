@@ -3,16 +3,16 @@ use super::*;
 #[test]
 fn unmatched_open_parenthesis_fails() {
     assert_eq!(
-        parse(vec![Symbol::OpenList]),
-        Err(Error::UnmatchedOpenListError),
+        parse(vec![Token::OpenList]),
+        Err(SyntaxError::UnmatchedOpenListError),
     );
 }
 
 #[test]
 fn unmatched_close_parenthesis_fails() {
     assert_eq!(
-        parse(vec![Symbol::CloseList]),
-        Err(Error::UnmatchedCloseListError),
+        parse(vec![Token::CloseList]),
+        Err(SyntaxError::UnmatchedCloseListError),
     );
 }
 
@@ -29,7 +29,7 @@ fn parse_blank_works() {
 #[test]
 fn parse_nil_list_works() {
     assert_eq!(
-        parse(vec![Symbol::OpenList, Symbol::CloseList]).unwrap(),
+        parse(vec![Token::OpenList, Token::CloseList]).unwrap(),
         Syntax::List(vec![Syntax::list()]),
     );
 }
@@ -38,9 +38,9 @@ fn parse_nil_list_works() {
 fn parse_string_works() {
     assert_eq!(
         parse(vec![
-              Symbol::OpenList,
-              Symbol::String("foo".to_owned()),
-              Symbol::CloseList
+              Token::OpenList,
+              Token::String("foo".to_owned()),
+              Token::CloseList
         ]).unwrap(),
         Syntax::List(vec![Syntax::List(vec![Syntax::String("foo".to_owned())])])
     );
@@ -50,9 +50,9 @@ fn parse_string_works() {
 fn parse_number_works() {
     assert_eq!(
         parse(vec![
-              Symbol::OpenList,
-              Symbol::Number(105),
-              Symbol::CloseList
+              Token::OpenList,
+              Token::Number(105),
+              Token::CloseList
         ]).unwrap(),
         Syntax::List(vec![Syntax::List(vec![Syntax::Number(105)])])
     );
@@ -62,22 +62,22 @@ fn parse_number_works() {
 fn parse_works() {
     assert_eq!(
         parse(vec![
-              Symbol::OpenList,
-              Symbol::atom("foo"),
-              Symbol::atom("bar"),
-              Symbol::CloseList]).unwrap(),
+              Token::OpenList,
+              Token::symbol("foo"),
+              Token::symbol("bar"),
+              Token::CloseList]).unwrap(),
         Syntax::List(vec![
             Syntax::List(vec![Syntax::atom("foo"), Syntax::atom("bar")])]));
 
     assert_eq!(
         parse(vec![
-              Symbol::OpenList,
-              Symbol::atom("foo"),
-              Symbol::OpenList,
-              Symbol::atom("bar"),
-              Symbol::atom("baz"),
-              Symbol::CloseList,
-              Symbol::CloseList]).unwrap(),
+              Token::OpenList,
+              Token::symbol("foo"),
+              Token::OpenList,
+              Token::symbol("bar"),
+              Token::symbol("baz"),
+              Token::CloseList,
+              Token::CloseList]).unwrap(),
         Syntax::List(vec![
             Syntax::List(vec![
                 Syntax::atom("foo"),
@@ -88,13 +88,13 @@ fn parse_works() {
 
     assert_eq!(
         parse(vec![
-              Symbol::OpenList,
-              Symbol::OpenList,
-              Symbol::atom("foo"),
-              Symbol::atom("bar"),
-              Symbol::CloseList,
-              Symbol::atom("baz"),
-              Symbol::CloseList]).unwrap(),
+              Token::OpenList,
+              Token::OpenList,
+              Token::symbol("foo"),
+              Token::symbol("bar"),
+              Token::CloseList,
+              Token::symbol("baz"),
+              Token::CloseList]).unwrap(),
         Syntax::List(vec![
             Syntax::List(vec![
                 Syntax::List(vec![

@@ -1,14 +1,40 @@
-mod lexical;
+mod lexical_analysis;
 mod data;
 mod syntax;
 mod semantic;
 
 use crate::expression::ExRef;
+use std::error::Error;
+use std::fmt;
 
-pub fn parse(text: &str) -> Result<ExRef, String> {
-    semantic::parse(
-        syntax::parse(
-            lexical::parse(text)
-        ).unwrap()
-    )
+pub fn parse(text: &str) -> Result<ExRef, Box<dyn Error>> {
+    let tokens = lexical_analysis::parse(text)?;
+    let syntax = syntax::parse(tokens)?;
+    let ret = semantic::parse(syntax).map_err(|e| StringError::new(e))?;
+
+    Ok(ret)
 }
+
+// Eventually remove stuff below for better errors
+#[derive(Debug)]
+pub struct StringError(String);
+
+impl StringError {
+    pub fn new(string: String) -> Self {
+        StringError(string)
+    }
+}
+
+impl From<&str> for StringError {
+    fn from(string: &str) -> Self {
+        StringError::new(string.to_owned())
+    }
+}
+
+impl fmt::Display for StringError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl Error for StringError { }

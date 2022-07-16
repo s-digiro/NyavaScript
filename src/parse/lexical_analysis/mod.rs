@@ -1,11 +1,15 @@
+mod error;
+pub use error::*;
+
+mod token;
+pub use token::*;
+
 #[cfg(test)]
 mod test;
 
 use std::mem;
 
-use super::data::Symbol;
-
-pub fn parse(code: &str) -> Vec<Symbol> {
+pub fn parse(text: &str) -> Result<Vec<Token>, ParseError> {
     enum State {
         InList,
         InAtom,
@@ -18,18 +22,18 @@ pub fn parse(code: &str) -> Vec<Symbol> {
     let mut buf = String::new();
     let mut ret = Vec::new();
 
-    for c in code.chars() {
+    for c in text.chars() {
         match (&state, c) {
-            (_, '\'') => ret.push(Symbol::Quote),
+            (_, '\'') => ret.push(Token::Quote),
 
             (State::InList, ' ')
             | (State::InList, '\t')
             | (State::InList, '\n')
             | (State::InList, '\r') => (),
 
-            (State::InList, '(') => ret.push(Symbol::OpenList),
+            (State::InList, '(') => ret.push(Token::OpenList),
 
-            (State::InList, ')') => ret.push(Symbol::CloseList),
+            (State::InList, ')') => ret.push(Token::CloseList),
 
             (State::InList, '"') => state = State::InString,
 
@@ -47,19 +51,19 @@ pub fn parse(code: &str) -> Vec<Symbol> {
             | (State::InAtom, '\t')
             | (State::InAtom, '\n')
             | (State::InAtom, '\r') => {
-                ret.push(Symbol::Atom(mem::replace(&mut buf, String::new())));
+                ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 state = State::InList;
             },
 
             (State::InAtom, '(') => {
-                ret.push(Symbol::Atom(mem::replace(&mut buf, String::new())));
-                ret.push(Symbol::OpenList);
+                ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
+                ret.push(Token::OpenList);
                 state = State::InList;
             }
 
             (State::InAtom, ')') => {
-                ret.push(Symbol::Atom(mem::replace(&mut buf, String::new())));
-                ret.push(Symbol::CloseList);
+                ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
+                ret.push(Token::CloseList);
                 state = State::InList;
             }
 
@@ -71,7 +75,7 @@ pub fn parse(code: &str) -> Vec<Symbol> {
             }
 
             (State::InString, '"') => {
-                ret.push(Symbol::String(mem::replace(&mut buf, String::new())));
+                ret.push(Token::String(mem::replace(&mut buf, String::new())));
                 state = State::InList;
             },
 
@@ -85,23 +89,23 @@ pub fn parse(code: &str) -> Vec<Symbol> {
             | (State::InNumber, '\r') => {
                 let num = mem::replace(&mut buf, String::new())
                     .parse::<isize>().unwrap();
-                ret.push(Symbol::Number(num));
+                ret.push(Token::Number(num));
                 state = State::InList;
             },
 
             (State::InNumber, '(') => {
                 let num = mem::replace(&mut buf, String::new())
                     .parse::<isize>().unwrap();
-                ret.push(Symbol::Number(num));
-                ret.push(Symbol::OpenList);
+                ret.push(Token::Number(num));
+                ret.push(Token::OpenList);
                 state = State::InList;
             }
 
             (State::InNumber, ')') => {
                 let num = mem::replace(&mut buf, String::new())
                     .parse::<isize>().unwrap();
-                ret.push(Symbol::Number(num));
-                ret.push(Symbol::CloseList);
+                ret.push(Token::Number(num));
+                ret.push(Token::CloseList);
                 state = State::InList;
             }
 
@@ -115,15 +119,23 @@ pub fn parse(code: &str) -> Vec<Symbol> {
     }
 
     match state {
-        State::InAtom => ret.push(Symbol::Atom(mem::take(&mut buf))),
+        State::InAtom => ret.push(Token::Symbol(mem::take(&mut buf))),
         State::InNumber => ret.push(
-            Symbol::Number(mem::take(&mut buf).parse::<isize>().unwrap())
+            Token::Number(mem::take(&mut buf).parse::<isize>().unwrap())
         ),
-        State::InString => ret.push(Symbol::String(mem::take(&mut buf))),
+        State::InString => {
+            let bad_string = format!("\"{}", buf);
+            let index = text.find(&bad_string).unwrap();
+            let pre_bad = &text[0..index];
+            let line = pre_bad.matches("\n").count() + 1;
+            let column = index - pre_bad.rfind("\n").unwrap();
+
+            return Err(UnterminatedStringError::new(bad_string, line, column))
+        }
         _ => (),
     }
 
-    ret
+    Ok(ret)
 }
 
 pub fn could_be_number(c: char) -> bool {
