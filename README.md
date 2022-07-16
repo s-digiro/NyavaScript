@@ -1,8 +1,9 @@
 # To Do
 [ ] Add line and column to unclosed parenthesis errors in syntax checking
-[ ] Replace String errors with something better
-[ ] Rename Lexical Symbol
-[ ] Rename Lexical atom to Symbol
+[*] Replace String errors with something better
+[ ] Replace StringErrors with actual errors where applicable
+[*] Rename Lexical Symbol (Renamed to Token)
+[*] Rename Lexical atom to Symbol
 [*] Strings
     [*] Parse
         [*] Lexical
@@ -29,6 +30,7 @@
     [*] Equal
     [ ] Maybe more
     [*] McCarthy context??? as a type of Rust context?
+    [ ] Make sure all McCarthy things are added
 [ ] Lib user defined Rust Contexts
 [ ] Rust context of lib that I find useful
     [ ] Like print
@@ -36,6 +38,7 @@
     [ ] Stuff that isn't pure McCarthy
 [ ] Add tests to semantic parsing
 [ ] . infix operator
-[?] Use actual linked lists
-[?] Do not consume lists when evaluating
-[ ] Macros?
+[*] Use actual linked lists
+[*] Do not consume lists when evaluating
+[ ] Garbage collector
+[*] Macros?
