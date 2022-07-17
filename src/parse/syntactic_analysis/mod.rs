@@ -1,12 +1,14 @@
-#[cfg(test)]
-mod test;
-
 mod error;
 pub use error::*;
 
+mod syntax;
+pub use syntax::Syntax;
+
+#[cfg(test)]
+mod test;
+
 use std::mem;
 
-use crate::parse::data::Syntax;
 use super::lexical_analysis::Token;
 
 pub fn parse(symbols: Vec<Token>) -> Result<Syntax, SyntaxError> {

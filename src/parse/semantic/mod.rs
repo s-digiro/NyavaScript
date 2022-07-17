@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod test;
 
-use super::data::Syntax;
 use crate::expression::{ Atom, ExRef, List };
+use super::syntactic_analysis::Syntax;
 
 pub fn parse(tree: Syntax) -> Result<ExRef, String> {
     match tree {
