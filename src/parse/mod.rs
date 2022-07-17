@@ -1,6 +1,8 @@
 mod lexical_analysis;
-mod syntactic_analysis;
 mod semantic_analysis;
+mod syntactic_analysis;
+#[cfg(test)]
+mod test;
 
 use crate::expression::ExRef;
 use std::error::Error;

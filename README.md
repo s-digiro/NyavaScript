@@ -3,14 +3,8 @@
 [ ] Add line and column to unclosed parenthesis errors in syntax checking
 [ ] Replace StringErrors with actual errors where applicable
 [*] Strings
-    [*] Parse
-        [*] Semantic
     [*] Evaluate
 [*] Numbers
-    [*] Parse
-        [*] Lexical
-        [*] Syntax
-        [*] Semantic
     [*] Evaluate
 [*] Rust Contexts
 [*] Move Special syntax parses to rust contexts if possible
