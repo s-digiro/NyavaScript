@@ -1,12 +1,18 @@
 use super::*;
 
 #[test]
-fn blank_text_is_empty_list() {
-    let empty: Vec<Token> = Vec::new();
-
+fn blank_text_is_no_root_error() {
     assert_eq!(
-        empty,
-        parse("").unwrap(),
+        Err(ParseError::no_root_list_error()),
+        parse(""),
+    );
+}
+
+#[test]
+fn no_first_parenthesis_makes_no_root_error() {
+    assert_eq!(
+        Err(ParseError::no_root_list_error()),
+        parse("foo bar baz)"),
     );
 }
 
@@ -67,9 +73,11 @@ fn parse_number_works() {
 fn parse_negative_number_works() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::Number(-1),
+            Token::CloseList,
         ],
-        parse("-1").unwrap(),
+        parse("(-1)").unwrap(),
     );
 }
 
@@ -77,9 +85,11 @@ fn parse_negative_number_works() {
 fn parse_simple_string() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string("foo"),
+            Token::CloseList,
         ],
-        parse("\"foo\"").unwrap(),
+        parse("(\"foo\")").unwrap(),
     );
 }
 
@@ -87,9 +97,11 @@ fn parse_simple_string() {
 fn parse_string_with_spaces() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string("foo bar"),
+            Token::CloseList,
         ],
-        parse("\"foo bar\"").unwrap(),
+        parse("(\"foo bar\")").unwrap(),
     );
 }
 
@@ -97,10 +109,12 @@ fn parse_string_with_spaces() {
 fn parse_multiple_strings() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string("foo bar"),
             Token::string("baz"),
+            Token::CloseList,
         ],
-        parse("\"foo bar\"   \"baz\"").unwrap(),
+        parse("(\"foo bar\"   \"baz\")").unwrap(),
     );
 }
 
@@ -108,14 +122,16 @@ fn parse_multiple_strings() {
 fn parse_string_with_symbol_and_list() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::symbol("print"),
             Token::string("foo"),
             Token::OpenList,
             Token::string("bar"),
             Token::Number(1),
             Token::CloseList,
+            Token::CloseList,
         ],
-        parse("print \"foo\" (\"bar\" 1)").unwrap(),
+        parse("(print \"foo\" (\"bar\" 1))").unwrap(),
     );
 }
 
@@ -123,29 +139,31 @@ fn parse_string_with_symbol_and_list() {
 fn parse_blank_string() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string(""),
+            Token::CloseList,
         ],
-        parse("\"\"").unwrap(),
+        parse("(\"\")").unwrap(),
     );
 }
 
 #[test]
 #[should_panic]
 fn parse_unclosed_double_quote_returns_error() {
-    parse("\"").unwrap();
+    parse("(\")").unwrap();
 }
 
 #[test]
 #[should_panic]
 fn parse_triple_quote_returns_error() {
-    parse("\"\"\"").unwrap();
+    parse("(\"\"\")").unwrap();
 }
 
 #[test]
 fn unterminated_string_error_location_is_correct() {
-    let s = "\nfoo \"bar";
+    let s = "(\nfoo \"bar)";
     assert_eq!(
-        Err(UnterminatedStringError::new("\"bar".to_owned(), 2, 5)),
+        Err(ParseError::unterminated_string_error("\"bar)".to_owned(), 2, 5)),
         parse(s),
     )
 }
@@ -154,9 +172,11 @@ fn unterminated_string_error_location_is_correct() {
 fn backslash_escapes_double_quote_in_string() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string("\""),
+            Token::CloseList,
         ],
-        parse("\"\\\"\"").unwrap(),
+        parse("(\"\\\"\")").unwrap(),
     );
 }
 
@@ -164,9 +184,11 @@ fn backslash_escapes_double_quote_in_string() {
 fn backslash_escapes_char_in_string() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::string("ab"),
+            Token::CloseList,
         ],
-        parse("\"a\\b\"").unwrap(),
+        parse("(\"a\\b\")").unwrap(),
     );
 }
 
@@ -174,9 +196,11 @@ fn backslash_escapes_char_in_string() {
 fn backslash_does_not_escape_in_symbol() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::symbol("a\\b"),
+            Token::CloseList,
         ],
-        parse("a\\b").unwrap(),
+        parse("(a\\b)").unwrap(),
     );
 }
 
@@ -184,9 +208,11 @@ fn backslash_does_not_escape_in_symbol() {
 fn single_backslash_symbol() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::symbol("\\"),
+            Token::CloseList,
         ],
-        parse("\\").unwrap(),
+        parse("(\\)").unwrap(),
     );
 }
 
@@ -194,9 +220,11 @@ fn single_backslash_symbol() {
 fn symbol_can_contain_1_double_quote() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::symbol("g\"h"),
+            Token::CloseList,
         ],
-        parse("g\"h").unwrap(),
+        parse("(g\"h)").unwrap(),
     );
 }
 
@@ -204,9 +232,11 @@ fn symbol_can_contain_1_double_quote() {
 fn symbol_can_contain_2_double_quote() {
     assert_eq!(
         vec![
+            Token::OpenList,
             Token::symbol("g\"h\""),
+            Token::CloseList,
         ],
-        parse("g\"h\"").unwrap(),
+        parse("(g\"h\")").unwrap(),
     );
 }
 

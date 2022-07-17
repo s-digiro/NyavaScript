@@ -130,9 +130,15 @@ pub fn parse(text: &str) -> Result<Vec<Token>, ParseError> {
             let line = pre_bad.matches("\n").count() + 1;
             let column = index - pre_bad.rfind("\n").unwrap();
 
-            return Err(UnterminatedStringError::new(bad_string, line, column))
+            return Err(
+                ParseError::unterminated_string_error(bad_string, line, column)
+            )
         }
         _ => (),
+    }
+
+    if ret.first() != Some(&Token::OpenList) {
+        return Err(ParseError::no_root_list_error())
     }
 
     Ok(ret)

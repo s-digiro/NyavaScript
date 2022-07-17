@@ -66,7 +66,7 @@ fn eval_list(list: &ConsCell, env: &mut Env) -> ExRef {
 
                     ret
                 },
-                _ => List::cons(&first, &rest),
+                _ => List::nil(),
             }
         },
     }

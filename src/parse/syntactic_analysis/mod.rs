@@ -12,6 +12,18 @@ use std::mem;
 use super::lexical_analysis::Token;
 
 pub fn parse(symbols: Vec<Token>) -> Result<Syntax, SyntaxError> {
+    if symbols.is_empty() {
+        return Err(SyntaxError::NoSymbolsError)
+    }
+
+    if symbols.first() != Some(&Token::OpenList) { 
+        return Err(SyntaxError::NoRootListError)
+    }
+
+    if symbols.last() != Some(&Token::CloseList) { 
+        return Err(SyntaxError::UnclosedRootListError)
+    }
+
     let mut stack = Vec::new();
     let mut current = Syntax::List(Vec::new());
 
@@ -43,5 +55,5 @@ pub fn parse(symbols: Vec<Token>) -> Result<Syntax, SyntaxError> {
         return Err(SyntaxError::UnmatchedOpenListError)
     }
 
-    Ok(current)
+    Ok(current.as_mut_list().unwrap().remove(0))
 }

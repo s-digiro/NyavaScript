@@ -38,3 +38,6 @@
         [ ] mod
     [*] parse
     [ ] lib
+[*] Call of non procedure returns nil
+[*] Eliminate automatic root list
+[*] NoRootList Error when missing first char is no open parenthesis
