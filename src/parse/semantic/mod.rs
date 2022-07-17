@@ -6,10 +6,10 @@ use super::syntactic_analysis::Syntax;
 
 pub fn parse(tree: Syntax) -> Result<ExRef, String> {
     match tree {
-        Syntax::Atom(a) => parse_symbol(a),
         Syntax::List(l) => parse_list(l),
         Syntax::Number(n) => parse_number(n),
         Syntax::String(s) => parse_string(s),
+        Syntax::Symbol(a) => parse_symbol(a),
     }
 }
 

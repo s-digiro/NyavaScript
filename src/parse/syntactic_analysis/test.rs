@@ -67,7 +67,7 @@ fn parse_works() {
               Token::symbol("bar"),
               Token::CloseList]).unwrap(),
         Syntax::List(vec![
-            Syntax::List(vec![Syntax::atom("foo"), Syntax::atom("bar")])]));
+            Syntax::List(vec![Syntax::symbol("foo"), Syntax::symbol("bar")])]));
 
     assert_eq!(
         parse(vec![
@@ -80,10 +80,10 @@ fn parse_works() {
               Token::CloseList]).unwrap(),
         Syntax::List(vec![
             Syntax::List(vec![
-                Syntax::atom("foo"),
+                Syntax::symbol("foo"),
                 Syntax::List(vec![
-                    Syntax::atom("bar"),
-                    Syntax::atom("baz")])])
+                    Syntax::symbol("bar"),
+                    Syntax::symbol("baz")])])
                 ]));
 
     assert_eq!(
@@ -98,7 +98,7 @@ fn parse_works() {
         Syntax::List(vec![
             Syntax::List(vec![
                 Syntax::List(vec![
-                    Syntax::atom("foo"),
-                    Syntax::atom("bar")]),
-                Syntax::atom("baz")])]));
+                    Syntax::symbol("foo"),
+                    Syntax::symbol("bar")]),
+                Syntax::symbol("baz")])]));
 }

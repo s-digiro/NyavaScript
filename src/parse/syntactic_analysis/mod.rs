@@ -29,9 +29,9 @@ pub fn parse(symbols: Vec<Token>) -> Result<Syntax, SyntaxError> {
                 current.as_mut_list().unwrap().push(child);
             },
             Token::Symbol(a) => current.as_mut_list().unwrap()
-                .push(Syntax::Atom(a)),
+                .push(Syntax::Symbol(a)),
             Token::Quote => current.as_mut_list().unwrap()
-                .push(Syntax::atom("quote")),
+                .push(Syntax::symbol("quote")),
             Token::String(s) => current.as_mut_list().unwrap()
                 .push(Syntax::String(s)),
             Token::Number(num) => current.as_mut_list().unwrap()

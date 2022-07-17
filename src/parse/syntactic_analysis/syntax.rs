@@ -1,9 +1,9 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum Syntax {
-    Atom(String),
     List(Vec<Syntax>),
     Number(isize),
     String(String),
+    Symbol(String),
 }
 
 impl Syntax {
@@ -11,13 +11,13 @@ impl Syntax {
         Syntax::List(Vec::new())
     }
 
-    pub fn atom(s: &str) -> Syntax {
-        Syntax::Atom(s.to_owned())
+    pub fn symbol(s: &str) -> Syntax {
+        Syntax::Symbol(s.to_owned())
     }
 
-    pub fn as_atom(&self) -> Option<&str> {
+    pub fn as_symbol(&self) -> Option<&str> {
         match self {
-            Syntax::Atom(a) => Some(a),
+            Syntax::Symbol(a) => Some(a),
             _ => None,
         }
     }
@@ -36,16 +36,16 @@ impl Syntax {
         }
     }
 
-    pub fn into_atom(self) -> Option<String> {
+    pub fn into_symbol(self) -> Option<String> {
         match self {
-            Syntax::Atom(s) => Some(s),
+            Syntax::Symbol(s) => Some(s),
             _ => None,
         }
     }
 
-    pub fn is_atom(&self) -> bool {
+    pub fn is_symbol(&self) -> bool {
         match self {
-            Syntax::Atom(_) => true,
+            Syntax::Symbol(_) => true,
             _ => false,
         }
     }
