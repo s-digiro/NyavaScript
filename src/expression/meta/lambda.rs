@@ -1,19 +1,17 @@
 use crate::parse::parse;
-use super::*;
+use crate::expression::{ Value, ValRef, List };
 
 #[derive(Debug, PartialEq)]
 pub struct Lambda(ValRef);
 
 impl Lambda {
-    pub fn new(e: &ValRef) -> Lambda {
-        Lambda(ValRef::clone(e))
+    pub fn new(e: ValRef) -> Lambda {
+        Lambda(e)
     }
 
     pub fn args(&self) -> Vec<String> {
-        List::iter(&List::car(&self.0))
-            .filter(|e| e.is_atom())
-            .filter(|e| e.as_atom().unwrap().is_symbol())
-            .map(|e| e.as_atom().unwrap().as_symbol().unwrap().to_owned())
+        List::iter(&List::car(&List::cdr(&self.0)))
+            .map(|v| v.as_symbol().unwrap().to_owned())
             .collect()
     }
 
@@ -22,7 +20,7 @@ impl Lambda {
     }
 
     pub fn from(s: &str) -> ValRef {
-        ValRef::lambda(Lambda(parse(s).unwrap()))
+        Value::lambda(Lambda(parse(s).unwrap()))
     }
 }
 

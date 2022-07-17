@@ -1,5 +1,5 @@
 use crate::evaluate::Environment;
-use crate::expression::ValRef;
+use crate::expression::{ Value, ValRef };
 
 type LambdaFunc = fn(ValRef, &mut Environment) -> ValRef;
 
@@ -15,7 +15,7 @@ impl RustLambda {
     }
 
     pub fn from(f: LambdaFunc) -> ValRef {
-        ValRef::rust_lambda(RustLambda::new(f))
+        Value::rust_lambda(RustLambda::new(f))
     }
 }
 

@@ -1,4 +1,4 @@
-use super::ValRef;
+use super::{ Value, ValRef };
 
 mod iter;
 use iter::ConsCellIter;
@@ -14,7 +14,7 @@ pub struct ConsCell {
 
 impl ConsCell {
     pub fn nil() -> ValRef {
-        ValRef::nil()
+        Value::nil()
     }
 
     pub fn new(car: ValRef, cdr: ValRef) -> ConsCell {

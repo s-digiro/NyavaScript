@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::expression::{ Atom, ValRef, Lambda, List, RustLambda, RustMacro };
+use crate::expression::{ Value, Lambda, List, RustLambda, RustMacro };
 
 pub struct McCarthyScope;
 
@@ -44,10 +44,12 @@ impl McCarthyScope {
                 |e, _| {
                     let arg = List::car(&e);
 
-                    if arg.is_atom() || arg.is_nil() {
-                        ValRef::atom(Atom::Number(1))
-                    } else {
-                        ValRef::nil()
+                    match *arg {
+                        Value::String(_)
+                        | Value::Symbol(_)
+                        | Value::Number(_)
+                        | Value::Nil => Value::number(1),
+                        _ => Value::nil(),
                     }
                 }
             )
@@ -61,9 +63,9 @@ impl McCarthyScope {
                     let arg2 = List::car(&List::cdr(&e));
 
                     if arg1 == arg2 {
-                        ValRef::atom(Atom::Number(1))
+                        Value::number(1)
                     } else {
-                        ValRef::nil()
+                        Value::nil()
                     }
                 }
             )
@@ -73,7 +75,7 @@ impl McCarthyScope {
             "lambda".to_string(),
             RustMacro::from(
                 |e, _| {
-                    ValRef::lambda(Lambda::new(&e))
+                    Value::lambda(Lambda::new(e))
                 }
             )
         );
@@ -86,12 +88,12 @@ impl McCarthyScope {
                         let p = List::car(&arg);
                         let e = List::car(&List::cdr(&arg));
 
-                        if ValRef::nil() != evaluate(p, env) {
+                        if Value::nil() != evaluate(p, env) {
                             return e
                         }
                     }
 
-                    ValRef::nil()
+                    Value::nil()
                 }
             )
         );

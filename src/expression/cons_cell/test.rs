@@ -1,16 +1,14 @@
 use super::*;
 
-use crate::expression::Atom;
-
 #[test]
 fn iter_works() {
     let subject = ConsCell::new(
-        ValRef::atom(Atom::Number(1)),
-        ValRef::cons_cell(ConsCell::new(
-            ValRef::atom(Atom::Number(2)),
-            ValRef::cons_cell(ConsCell::new(
-                ValRef::atom(Atom::Number(3)),
-                ValRef::nil(),
+        Value::number(1),
+        Value::cons_cell(ConsCell::new(
+            Value::number(2),
+            Value::cons_cell(ConsCell::new(
+                Value::number(3),
+                Value::nil(),
             )),
         )),
     );
@@ -18,17 +16,17 @@ fn iter_works() {
     let mut iter = subject.iter();
 
     assert_eq!(
-        Some(ValRef::atom(Atom::Number(1))),
+        Some(Value::number(1)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(ValRef::atom(Atom::Number(2))),
+        Some(Value::number(2)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(ValRef::atom(Atom::Number(3))),
+        Some(Value::number(3)),
         iter.next(),
     );
 
@@ -41,12 +39,12 @@ fn iter_works() {
 #[test]
 fn display_works() {
     let subject = ConsCell::new(
-        ValRef::atom(Atom::Number(1)),
-        ValRef::cons_cell(ConsCell::new(
-            ValRef::atom(Atom::Number(2)),
-            ValRef::cons_cell(ConsCell::new(
-                ValRef::atom(Atom::Number(3)),
-                ValRef::nil(),
+        Value::number(1),
+        Value::cons_cell(ConsCell::new(
+            Value::number(2),
+            Value::cons_cell(ConsCell::new(
+                Value::number(3),
+                Value::nil(),
             )),
         )),
     );

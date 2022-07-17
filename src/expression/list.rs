@@ -1,10 +1,10 @@
-use super::{ ConsCell, ValRef };
+use super::*;
 
 pub struct List(ValRef);
 
 impl List {
     pub fn new() -> ValRef {
-        ValRef::nil()
+        Value::nil()
     }
 
     pub fn from(v: Vec<ValRef>) -> ValRef {
@@ -18,28 +18,28 @@ impl List {
     }
 
     pub fn nil() -> ValRef {
-        ValRef::nil()
+        Value::nil()
     }
 
     pub fn car(list: &ValRef) -> ValRef {
         match list.as_cons_cell() {
-            Some(e) => ValRef::clone(&e.car),
-            None => ValRef::nil(),
+            Some(e) => Rc::clone(&e.car),
+            None => Value::nil(),
         }
     }
 
     pub fn cdr(list: &ValRef) -> ValRef {
         match list.as_cons_cell() {
-            Some(e) => ValRef::clone(&e.cdr),
-            None => ValRef::nil(),
+            Some(e) => Rc::clone(&e.cdr),
+            None => Value::nil(),
         }
     }
 
     pub fn cons(car: &ValRef, cdr: &ValRef) -> ValRef {
-        ValRef::cons_cell(
+        Value::cons_cell(
             ConsCell::new(
-                ValRef::clone(car),
-                ValRef::clone(cdr),
+                Rc::clone(car),
+                Rc::clone(cdr),
             )
         )
     }
@@ -64,7 +64,7 @@ impl List {
 
     pub fn iter(list: &ValRef) -> ListIter {
         ListIter {
-            current: ValRef::clone(list),
+            current: Rc::clone(list),
         }
     }
 }
@@ -80,9 +80,9 @@ impl Iterator for ListIter {
         let ret = List::car(&self.current);
         self.current = List::cdr(&self.current);
 
-        match ret.0 {
-            Some(_) => Some(ret),
-            None => None,
+        match &*ret {
+            Value::Nil => None,
+            _ => Some(ret),
         }
     }
 }
@@ -90,16 +90,16 @@ impl Iterator for ListIter {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::expression::{ Atom, Expression };
+    use crate::expression::Value;
 
     #[test]
     fn cons_works() {
         assert_eq!(
-            ValRef::new(Expression::ConsCell(ConsCell::new(
-                ValRef::new(Expression::Atom(Atom::Number(1))),
-                ValRef::new(Expression::Atom(Atom::Number(2))),
-            ))),
-            List::cons(&ValRef::atom(Atom::Number(1)), &ValRef::atom(Atom::Number(2))),
+            Value::cons_cell(ConsCell::new(
+                Value::number(1),
+                Value::number(2),
+            )),
+            List::cons(&Value::number(1), &Value::number(2)),
         );
     }
 }

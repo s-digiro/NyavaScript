@@ -1,6 +1,7 @@
+use std::rc::Rc;
 use std::collections::HashMap;
 
-use crate::expression::ValRef;
+use crate::expression::{ Value, ValRef };
 
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
@@ -31,8 +32,8 @@ impl Environment {
 
     pub fn get(&self, key: &str) -> ValRef {
         self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| ValRef::clone(exref)))
-            .unwrap_or(ValRef::nil())
+            .find_map(|s| s.get(key).map(|exref| Rc::clone(exref)))
+            .unwrap_or(Value::nil())
     }
 
     pub fn pop(&mut self) -> Scope {

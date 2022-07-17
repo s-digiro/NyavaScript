@@ -1,56 +1,56 @@
 use super::*;
 
-use crate::expression::{ Atom, ConsCell, ValRef };
+use crate::expression::{ ConsCell, Value };
 
 #[test]
 pub fn full_parse() {
     let subject = "((lambda (x) (cons x (\"foo\" 2))) (car (3 \"bar\")))";
 
     let expected =
-        ValRef::cons_cell(ConsCell::new( // First actual parenthesis
-            ValRef::cons_cell(ConsCell::new(
-                ValRef::atom(Atom::Symbol("lambda".to_owned())),
-                ValRef::cons_cell(ConsCell::new(
-                    ValRef::cons_cell(ConsCell::new(
-                        ValRef::atom(Atom::Symbol("x".to_owned())),
-                        ValRef::nil(),
+        Value::cons_cell(ConsCell::new( // First actual parenthesis
+            Value::cons_cell(ConsCell::new(
+                Value::symbol("lambda".to_owned()),
+                Value::cons_cell(ConsCell::new(
+                    Value::cons_cell(ConsCell::new(
+                        Value::symbol("x".to_owned()),
+                        Value::nil(),
                     )),
-                    ValRef::cons_cell(ConsCell::new(
-                        ValRef::cons_cell(ConsCell::new(
-                            ValRef::atom(Atom::Symbol("cons".to_owned())),
-                            ValRef::cons_cell(ConsCell::new(
-                                ValRef::atom(Atom::Symbol("x".to_owned())),
-                                ValRef::cons_cell(ConsCell::new(
-                                    ValRef::cons_cell(ConsCell::new(
-                                        ValRef::atom(Atom::String("foo".to_owned())),
-                                        ValRef::cons_cell(ConsCell::new(
-                                            ValRef::atom(Atom::Number(2)),
-                                            ValRef::nil(),
+                    Value::cons_cell(ConsCell::new(
+                        Value::cons_cell(ConsCell::new(
+                            Value::symbol("cons".to_owned()),
+                            Value::cons_cell(ConsCell::new(
+                                Value::symbol("x".to_owned()),
+                                Value::cons_cell(ConsCell::new(
+                                    Value::cons_cell(ConsCell::new(
+                                        Value::string("foo".to_owned()),
+                                        Value::cons_cell(ConsCell::new(
+                                            Value::number(2),
+                                            Value::nil(),
                                         )),
                                     )),
-                                    ValRef::nil(),
+                                    Value::nil(),
                                 )),
                             )),
                         )),
-                        ValRef::nil(),
+                        Value::nil(),
                     )),
                 )),
             )),
-            ValRef::cons_cell(ConsCell::new(
-                ValRef::cons_cell(ConsCell::new(
-                    ValRef::atom(Atom::Symbol("car".to_owned())),
-                    ValRef::cons_cell(ConsCell::new(
-                        ValRef::cons_cell(ConsCell::new(
-                            ValRef::atom(Atom::Number(3)),
-                            ValRef::cons_cell(ConsCell::new(
-                                ValRef::atom(Atom::String("bar".to_owned())),
-                                ValRef::nil(),
+            Value::cons_cell(ConsCell::new(
+                Value::cons_cell(ConsCell::new(
+                    Value::symbol("car".to_owned()),
+                    Value::cons_cell(ConsCell::new(
+                        Value::cons_cell(ConsCell::new(
+                            Value::number(3),
+                            Value::cons_cell(ConsCell::new(
+                                Value::string("bar".to_owned()),
+                                Value::nil(),
                             )),
                         )),
-                        ValRef::nil(),
+                        Value::nil(),
                     )),
                 )),
-                ValRef::nil(),
+                Value::nil(),
             )),
         ));
 
