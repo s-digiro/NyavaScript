@@ -1,13 +1,13 @@
-use super::{ ConsCell, ExRef };
+use super::{ ConsCell, ValRef };
 
-pub struct List(ExRef);
+pub struct List(ValRef);
 
 impl List {
-    pub fn new() -> ExRef {
-        ExRef::nil()
+    pub fn new() -> ValRef {
+        ValRef::nil()
     }
 
-    pub fn from(v: Vec<ExRef>) -> ExRef {
+    pub fn from(v: Vec<ValRef>) -> ValRef {
         let mut ret = List::new();
 
         for e in v.into_iter().rev() {
@@ -17,34 +17,34 @@ impl List {
         ret
     }
 
-    pub fn nil() -> ExRef {
-        ExRef::nil()
+    pub fn nil() -> ValRef {
+        ValRef::nil()
     }
 
-    pub fn car(list: &ExRef) -> ExRef {
+    pub fn car(list: &ValRef) -> ValRef {
         match list.as_cons_cell() {
-            Some(e) => ExRef::clone(&e.car),
-            None => ExRef::nil(),
+            Some(e) => ValRef::clone(&e.car),
+            None => ValRef::nil(),
         }
     }
 
-    pub fn cdr(list: &ExRef) -> ExRef {
+    pub fn cdr(list: &ValRef) -> ValRef {
         match list.as_cons_cell() {
-            Some(e) => ExRef::clone(&e.cdr),
-            None => ExRef::nil(),
+            Some(e) => ValRef::clone(&e.cdr),
+            None => ValRef::nil(),
         }
     }
 
-    pub fn cons(car: &ExRef, cdr: &ExRef) -> ExRef {
-        ExRef::cons_cell(
+    pub fn cons(car: &ValRef, cdr: &ValRef) -> ValRef {
+        ValRef::cons_cell(
             ConsCell::new(
-                ExRef::clone(car),
-                ExRef::clone(cdr),
+                ValRef::clone(car),
+                ValRef::clone(cdr),
             )
         )
     }
 
-    pub fn push(list: &ExRef, item: &ExRef) -> ExRef {
+    pub fn push(list: &ValRef, item: &ValRef) -> ValRef {
         if list.is_nil() {
             List::cons(item, &List::nil())
         } else {
@@ -58,23 +58,23 @@ impl List {
         }
     }
 
-    pub fn len(list: &ExRef) -> usize {
+    pub fn len(list: &ValRef) -> usize {
         List::iter(list).count()
     }
 
-    pub fn iter(list: &ExRef) -> ListIter {
+    pub fn iter(list: &ValRef) -> ListIter {
         ListIter {
-            current: ExRef::clone(list),
+            current: ValRef::clone(list),
         }
     }
 }
 
 pub struct ListIter {
-    current: ExRef,
+    current: ValRef,
 }
 
 impl Iterator for ListIter {
-    type Item = ExRef;
+    type Item = ValRef;
 
     fn next(&mut self) -> Option<Self::Item> {
         let ret = List::car(&self.current);
@@ -95,11 +95,11 @@ mod test {
     #[test]
     fn cons_works() {
         assert_eq!(
-            ExRef::new(Expression::ConsCell(ConsCell::new(
-                ExRef::new(Expression::Atom(Atom::Number(1))),
-                ExRef::new(Expression::Atom(Atom::Number(2))),
+            ValRef::new(Expression::ConsCell(ConsCell::new(
+                ValRef::new(Expression::Atom(Atom::Number(1))),
+                ValRef::new(Expression::Atom(Atom::Number(2))),
             ))),
-            List::cons(&ExRef::atom(Atom::Number(1)), &ExRef::atom(Atom::Number(2))),
+            List::cons(&ValRef::atom(Atom::Number(1)), &ValRef::atom(Atom::Number(2))),
         );
     }
 }

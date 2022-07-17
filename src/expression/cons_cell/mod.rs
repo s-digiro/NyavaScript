@@ -1,4 +1,4 @@
-use super::ExRef;
+use super::ValRef;
 
 mod iter;
 use iter::ConsCellIter;
@@ -8,16 +8,16 @@ mod test;
 
 #[derive(Debug, PartialEq)]
 pub struct ConsCell {
-    pub car: ExRef,
-    pub cdr: ExRef,
+    pub car: ValRef,
+    pub cdr: ValRef,
 }
 
 impl ConsCell {
-    pub fn nil() -> ExRef {
-        ExRef::nil()
+    pub fn nil() -> ValRef {
+        ValRef::nil()
     }
 
-    pub fn new(car: ExRef, cdr: ExRef) -> ConsCell {
+    pub fn new(car: ValRef, cdr: ValRef) -> ConsCell {
         ConsCell {
             car,
             cdr,

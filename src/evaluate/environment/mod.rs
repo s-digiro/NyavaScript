@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
-use crate::expression::ExRef;
+use crate::expression::ValRef;
 
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
 
-pub type Scope = HashMap<String, ExRef>;
+pub type Scope = HashMap<String, ValRef>;
 
 #[derive(Debug)]
 pub struct Environment {
@@ -29,10 +29,10 @@ impl Environment {
         false
     }
 
-    pub fn get(&self, key: &str) -> ExRef {
+    pub fn get(&self, key: &str) -> ValRef {
         self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| ExRef::clone(exref)))
-            .unwrap_or(ExRef::nil())
+            .find_map(|s| s.get(key).map(|exref| ValRef::clone(exref)))
+            .unwrap_or(ValRef::nil())
     }
 
     pub fn pop(&mut self) -> Scope {
@@ -43,7 +43,7 @@ impl Environment {
         self.stack.push(c);
     }
 
-    pub fn set(&mut self, key: String, val: ExRef) {
+    pub fn set(&mut self, key: String, val: ValRef) {
         self.stack.last_mut().unwrap().insert(key, val);
     }
 }

@@ -1,9 +1,9 @@
 use super::ConsCell;
-use crate::expression::{ ExRef, List };
+use crate::expression::{ ValRef, List };
 use crate::expression::list::ListIter;
 
 impl<'a> IntoIterator for &'a ConsCell {
-    type Item = ExRef;
+    type Item = ValRef;
     type IntoIter = ConsCellIter<'a>;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -31,12 +31,12 @@ impl<'a> ConsCellIter<'a> {
 }
 
 impl<'a> Iterator for ConsCellIter<'a> {
-    type Item = ExRef;
+    type Item = ValRef;
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.current {
             Current::Amp(e) => {
-                let ret = ExRef::clone(&e.car);
+                let ret = ValRef::clone(&e.car);
 
                 self.current = Current::Ref(List::iter(&e.cdr));
 

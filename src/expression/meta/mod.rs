@@ -1,4 +1,4 @@
-use super::{ ExRef, List };
+use super::{ ValRef, List };
 
 mod lambda;
 pub use lambda::Lambda;
@@ -26,14 +26,14 @@ pub struct Defun {
 }
 
 
-fn first_arg_is(e: &ExRef, symbol: &str) -> bool {
+fn first_arg_is(e: &ValRef, symbol: &str) -> bool {
     eprintln!("{}", e);
     List::car(&e).as_atom()
         .map(|a| a.as_symbol().map(|s| s == symbol).unwrap_or(false))
         .unwrap_or(false)
 }
 
-fn second_arg_is_list_of_symbols(e: &ExRef) -> bool {
+fn second_arg_is_list_of_symbols(e: &ValRef) -> bool {
     let arg2 = List::car(&List::cdr(&e));
 
     arg2.is_list() && List::iter(&arg2).all(|e| e.as_atom().map(|a| a.is_symbol()).unwrap_or(false))

@@ -3,11 +3,11 @@ pub mod expression;
 pub mod parse;
 
 use evaluate::{ Environment, evaluate, McCarthyScope };
-use expression::ExRef;
+use expression::ValRef;
 use parse::parse;
 use std::error::Error;
 
-pub fn run(text: &str) -> Result<ExRef, Box<dyn Error>> {
+pub fn run(text: &str) -> Result<ValRef, Box<dyn Error>> {
     let parsed = parse(text)?;
 
     let mut context = Environment::new();

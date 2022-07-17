@@ -2,11 +2,11 @@ use crate::parse::parse;
 use super::*;
 
 #[derive(Debug, PartialEq)]
-pub struct Lambda(ExRef);
+pub struct Lambda(ValRef);
 
 impl Lambda {
-    pub fn new(e: &ExRef) -> Lambda {
-        Lambda(ExRef::clone(e))
+    pub fn new(e: &ValRef) -> Lambda {
+        Lambda(ValRef::clone(e))
     }
 
     pub fn args(&self) -> Vec<String> {
@@ -17,12 +17,12 @@ impl Lambda {
             .collect()
     }
 
-    pub fn definition(&self) -> ExRef {
+    pub fn definition(&self) -> ValRef {
         List::car(&List::cdr(&self.0))
     }
 
-    pub fn from(s: &str) -> ExRef {
-        ExRef::lambda(Lambda(parse(s).unwrap()))
+    pub fn from(s: &str) -> ValRef {
+        ValRef::lambda(Lambda(parse(s).unwrap()))
     }
 }
 

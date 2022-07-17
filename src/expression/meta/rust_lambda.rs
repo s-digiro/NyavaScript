@@ -1,7 +1,7 @@
 use crate::evaluate::Environment;
-use crate::expression::ExRef;
+use crate::expression::ValRef;
 
-type LambdaFunc = fn(ExRef, &mut Environment) -> ExRef;
+type LambdaFunc = fn(ValRef, &mut Environment) -> ValRef;
 
 pub struct RustLambda(LambdaFunc);
 
@@ -10,12 +10,12 @@ impl RustLambda {
         RustLambda(f)
     }
 
-    pub fn exec(&self, list: ExRef, env: &mut Environment) -> ExRef {
+    pub fn exec(&self, list: ValRef, env: &mut Environment) -> ValRef {
         self.0(list, env)
     }
 
-    pub fn from(f: LambdaFunc) -> ExRef {
-        ExRef::rust_lambda(RustLambda::new(f))
+    pub fn from(f: LambdaFunc) -> ValRef {
+        ValRef::rust_lambda(RustLambda::new(f))
     }
 }
 

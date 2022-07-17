@@ -2,9 +2,9 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
-use crate::expression::{ Atom, ConsCell, Expression, ExRef, Lambda, List, Macro };
+use crate::expression::{ Atom, ConsCell, Expression, ValRef, Lambda, List, Macro };
 
-pub fn evaluate(expr: ExRef, env: &mut Env) -> ExRef {
+pub fn evaluate(expr: ValRef, env: &mut Env) -> ValRef {
     match expr.as_expression() {
         Some(Expression::Atom(a)) => eval_atom(a, env),
         Some(Expression::ConsCell(c)) => eval_list(c, env),
@@ -12,11 +12,11 @@ pub fn evaluate(expr: ExRef, env: &mut Env) -> ExRef {
         | Some(Expression::Macro(_))
         | Some(Expression::RustLambda(_)) 
         | Some(Expression::RustMacro(_)) => expr,
-        None => ExRef::nil(),
+        None => ValRef::nil(),
     }
 }
 
-fn eval_atom(atom: &Atom, env: &Env) -> ExRef {
+fn eval_atom(atom: &Atom, env: &Env) -> ValRef {
     match atom {
         Atom::Number(n) => Atom::number(*n),
         Atom::String(s) => Atom::string(&s),
@@ -24,7 +24,7 @@ fn eval_atom(atom: &Atom, env: &Env) -> ExRef {
     }
 }
 
-fn eval_list(list: &ConsCell, env: &mut Env) -> ExRef {
+fn eval_list(list: &ConsCell, env: &mut Env) -> ValRef {
     let list = List::cons(&list.car, &list.cdr);
 
     let first = evaluate(List::car(&list), env);
@@ -47,7 +47,7 @@ fn eval_list(list: &ConsCell, env: &mut Env) -> ExRef {
         },
         _ => {
             let rest = List::iter(&rest)
-                .map(|exref| evaluate(exref, env)).collect::<ExRef>();
+                .map(|exref| evaluate(exref, env)).collect::<ValRef>();
 
             match first.as_expression() {
                 Some(Expression::Lambda(l)) => {
@@ -74,9 +74,9 @@ fn eval_list(list: &ConsCell, env: &mut Env) -> ExRef {
 
 fn exec_lambda(
     lambda: &Lambda,
-    args: ExRef,
+    args: ValRef,
     env: &mut Env
-) -> ExRef {
+) -> ValRef {
     env.push(Scope::new());
 
     for (key, val) in lambda.args().into_iter().zip(List::iter(&args)) {
@@ -92,9 +92,9 @@ fn exec_lambda(
 
 fn exec_macro(
     m: &Macro,
-    args: ExRef,
+    args: ValRef,
     env: &mut Env
-) -> ExRef {
+) -> ValRef {
     env.push(Scope::new());
 
     for (key, val) in m.args().into_iter().zip(List::iter(&args)) {

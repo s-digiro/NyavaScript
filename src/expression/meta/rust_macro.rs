@@ -1,7 +1,7 @@
 use crate::evaluate::Environment;
-use crate::expression::ExRef;
+use crate::expression::ValRef;
 
-type MacroFunc = fn(ExRef, &mut Environment) -> ExRef;
+type MacroFunc = fn(ValRef, &mut Environment) -> ValRef;
 
 pub struct RustMacro(MacroFunc);
 
@@ -10,12 +10,12 @@ impl RustMacro {
         RustMacro(f)
     }
 
-    pub fn exec(&self, list: ExRef, env: &mut Environment) -> ExRef {
+    pub fn exec(&self, list: ValRef, env: &mut Environment) -> ValRef {
         self.0(list, env)
     }
 
-    pub fn from(f: MacroFunc) -> ExRef {
-        ExRef::rust_macro(RustMacro::new(f))
+    pub fn from(f: MacroFunc) -> ValRef {
+        ValRef::rust_macro(RustMacro::new(f))
     }
 }
 

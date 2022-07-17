@@ -1,10 +1,10 @@
 use super::*;
 
 #[derive(Debug, PartialEq)]
-pub struct Macro(ExRef);
+pub struct Macro(ValRef);
 
 impl Macro {
-    pub fn new(e: &ExRef) -> Result<Macro, String> {
+    pub fn new(e: &ValRef) -> Result<Macro, String> {
         if !e.is_list() {
             return Err(format!("Expression must be a list for it to be turned into a macro"))
         }
@@ -21,7 +21,7 @@ impl Macro {
             return Err(format!("Expression second argument must be a list of all symbol macro"))
         }
 
-        Ok(Macro(ExRef::clone(e)))
+        Ok(Macro(ValRef::clone(e)))
     }
 
     pub fn args(&self) -> Vec<String> {
@@ -30,7 +30,7 @@ impl Macro {
             .collect()
     }
 
-    pub fn definition(&self) -> ExRef {
+    pub fn definition(&self) -> ValRef {
         List::car(&List::cdr(&List::cdr(&self.0)))
     }
 }

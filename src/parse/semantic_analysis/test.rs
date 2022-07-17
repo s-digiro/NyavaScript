@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn parse_blank() {
     assert_eq!(
-        Atom::nil(),
+        ValRef::nil(),
         parse(Syntax::list()),
     );
 }
@@ -11,7 +11,7 @@ fn parse_blank() {
 #[test]
 fn parse_empty_list() {
     assert_eq!(
-        Atom::nil(),
+        ValRef::nil(),
         parse(Syntax::list()),
     );
 }
@@ -21,16 +21,16 @@ fn parse_string() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Atom::string("foo"),
-                Atom::string("bar"),
+                ValRef::string("foo".into()),
+                ValRef::string("bar".into()),
             ]),
             List::new(),
         ]),
         parse(
             Syntax::List(vec![
                 Syntax::List(vec![
-                    Syntax::String("foo".to_owned()),
-                    Syntax::String("bar".to_owned()),
+                    Syntax::String("foo".into()),
+                    Syntax::String("bar".into()),
                 ]),
                 Syntax::list(),
             ])
@@ -43,8 +43,8 @@ fn parse_number() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Atom::number(105),
-                Atom::number(-87)
+                ValRef::number(105),
+                ValRef::number(-87)
             ]),
             List::new(),
         ]),
@@ -65,7 +65,7 @@ fn parse_symbol() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Atom::symbol("foo"),
+                ValRef::symbol("foo".into()),
             ]),
             List::new(),
         ]),

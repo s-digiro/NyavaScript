@@ -10,12 +10,19 @@ pub use list::List;
 mod meta;
 pub use meta::{ Lambda, Macro, RustLambda, RustMacro };
 
+use derive_new::new;
+use enum_as_inner::EnumAsInner;
 use std::rc::Rc;
+use std::fmt::Display;
+use enum_display_derive::Display;
 
-#[derive(Debug, PartialEq)]
-pub enum Expression {
+#[derive(Debug, PartialEq, EnumAsInner, Display, new)]
+pub enum Value {
+    // Basic
     ConsCell(ConsCell),
-    Atom(Atom),
+    Number(isize),
+    String(String),
+    Symbol(String),
 
     // Higher level abstraction
     Lambda(Lambda),
@@ -24,151 +31,134 @@ pub enum Expression {
     RustMacro(RustMacro),
 }
 
-impl Expression {
-    pub fn as_atom(&self) -> Option<&Atom> {
-        match self {
-            Expression::Atom(a) => Some(a),
-            _ => None,
-        }
-    }
+#[derive(Debug, PartialEq)]
+pub struct ValRef(Option<Rc<Value>>);
 
+impl ValRef {
     pub fn as_cons_cell(&self) -> Option<&ConsCell> {
-        match self {
-            Expression::ConsCell(c) => Some(c),
-            _ => None,
+        self.0.as_ref().map(|e| e.as_cons_cell()).flatten()
+    }
+
+    pub fn as_number(&self) -> Option<&isize> {
+        self.0.as_ref().map(|e| e.as_number()).flatten()
+    }
+
+    pub fn as_string(&self) -> Option<&String> {
+        self.0.as_ref().map(|e| e.as_string()).flatten()
+    }
+
+    pub fn as_symbol(&self) -> Option<&String> {
+        self.0.as_ref().map(|e| e.as_symbol()).flatten()
+    }
+
+    pub fn as_lambda(&self) -> Option<&Lambda> {
+        self.0.as_ref().map(|e| e.as_lambda()).flatten()
+    }
+
+    pub fn as_macro(&self) -> Option<&Macro> {
+        self.0.as_ref().map(|e| e.as_macro()).flatten()
+    }
+
+    pub fn as_rust_lambda(&self) -> Option<&RustLambda> {
+        self.0.as_ref().map(|e| e.as_rust_lambda()).flatten()
+    }
+
+    pub fn as_rust_macro(&self) -> Option<&RustMacro> {
+        self.0.as_ref().map(|e| e.as_rust_macro()).flatten()
+    }
+
+    pub fn clone(e: &ValRef) -> ValRef {
+        match &e.0 {
+            Some(rc) => ValRef(Some(Rc::clone(&rc))),
+            None => ValRef(None),
         }
     }
 
-    pub fn as_list(&self) -> Option<&ConsCell> {
-        self.as_cons_cell()
-    }
-
-    pub fn is_atom(&self) -> bool {
-        match self {
-            Expression::Atom(_) => true,
-            _ => false,
-        }
+    pub fn cons_cell(c: ConsCell) -> ValRef {
+        ValRef::new(Value::ConsCell(c))
     }
 
     pub fn is_cons_cell(&self) -> bool {
-        match self {
-            Expression::ConsCell(_) => true,
-            _ => false,
-        }
-    }
-
-    pub fn is_list(&self) -> bool {
-        self.is_cons_cell()
-    }
-}
-
-impl std::fmt::Display for Expression {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            Expression::ConsCell(c) => write!(f, "{}", c),
-            Expression::Atom(a) => write!(f, "{}", a),
-            Expression::Lambda(l) => write!(f, "{}", l),
-            Expression::Macro(m) => write!(f, "{}", m),
-            Expression::RustLambda(l) => write!(f, "{}", l),
-            Expression::RustMacro(m) => write!(f, "{}", m),
-        }
-    }
-}
-
-#[derive(Debug, PartialEq)]
-pub struct ExRef(Option<Rc<Expression>>);
-
-impl ExRef {
-    pub fn as_atom(&self) -> Option<&Atom> {
-        self.0.as_ref().map(|e| e.as_atom()).flatten()
-    }
-
-    pub fn as_cons_cell(&self) -> Option<&ConsCell> {
-        self.0.as_ref().map(|e| e.as_cons_cell()).flatten()
-        //self.0.map(|e| e.as_cons_cell()).flatten()
-    }
-
-    pub fn as_expression(&self) -> Option<&Expression> {
-        self.0.as_ref().map(|e| &**e)
-    }
-
-    pub fn as_list(&self) -> Option<&ConsCell> {
-        self.as_cons_cell()
-    }
-
-    pub fn atom(a: Atom) -> ExRef {
-        ExRef(Some(Rc::new(Expression::Atom(a))))
-    }
-
-    pub fn cons_cell(c: ConsCell) -> ExRef {
-        ExRef(Some(Rc::new(Expression::ConsCell(c))))
-    }
-
-    pub fn clone(e: &ExRef) -> ExRef {
-        match &e.0 {
-            Some(rc) => ExRef(Some(Rc::clone(&rc))),
-            None => ExRef(None),
-        }
+        self.as_cons_cell().is_some()
     }
 
     pub fn is_nil(&self) -> bool {
         self.0.is_none()
     }
 
-    pub fn is_atom(&self) -> bool {
-        self.0.as_ref().map(|e| e.is_atom()).unwrap_or(false)
+    pub fn is_number(&self) -> bool {
+        self.as_number().is_some()
     }
 
-    pub fn is_cons_cell(&self) -> bool {
-        self.0.as_ref().map(|e| e.is_cons_cell()).unwrap_or(false)
+    pub fn is_string(&self) -> bool {
+        self.as_string().is_some()
     }
 
-    pub fn is_list(&self) -> bool {
-        self.is_cons_cell()
+    pub fn is_symbol(&self) -> bool {
+        self.as_symbol().is_some()
     }
 
-    pub fn lambda(lambda: Lambda) -> ExRef {
-        ExRef(Some(Rc::new(Expression::Lambda(lambda))))
+    pub fn is_lambda(&self) -> bool {
+        self.as_lambda().is_some()
     }
 
-    pub fn list(list: ConsCell) -> ExRef {
-        ExRef(Some(Rc::new(Expression::ConsCell(list))))
+    pub fn is_macro(&self) -> bool {
+        self.as_macro().is_some()
     }
 
-    pub fn new(e: Expression) -> ExRef {
-        ExRef(Some(Rc::new(e)))
+    pub fn is_rust_lambda(&self) -> bool {
+        self.as_rust_lambda().is_some()
     }
 
-    pub fn nil() -> ExRef {
-        ExRef(None)
+    pub fn is_rust_macro(&self) -> bool {
+        self.as_rust_macro().is_some()
     }
 
-    pub fn rust_lambda(lambda: RustLambda) -> ExRef {
-        ExRef(Some(Rc::new(Expression::RustLambda(lambda))))
+    pub fn lambda(lambda: Lambda) -> ValRef {
+        ValRef::new(Value::Lambda(lambda))
     }
 
-    pub fn rust_macro(m: RustMacro) -> ExRef {
-        ExRef(Some(Rc::new(Expression::RustMacro(m))))
+    pub fn r#macro(m: Macro) -> ValRef {
+        ValRef::new(Value::Macro(m))
+    }
+
+    pub fn new(v: Value) -> ValRef {
+        ValRef(Some(Rc::new(v)))
+    }
+
+    pub fn number(n: isize) -> ValRef {
+        ValRef::new(Value::Number(n))
+    }
+
+    pub fn nil() -> ValRef {
+        ValRef(None)
+    }
+
+    pub fn rust_lambda(lambda: RustLambda) -> ValRef {
+        ValRef::new(Value::RustLambda(lambda))
+    }
+
+    pub fn rust_macro(m: RustMacro) -> ValRef {
+        ValRef::new(Value::RustMacro(m))
+    }
+
+    pub fn string(s: String) -> ValRef {
+        ValRef::new(Value::String(s))
+    }
+
+    pub fn symbol(s: String) -> ValRef {
+        ValRef::new(Value::Symbol(s))
     }
 }
 
-impl std::fmt::Display for ExRef {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self.as_expression() {
-            Some(e) => write!(f, "{}", e),
-            None => write!(f, "NIL"),
-        }
-    }
-}
-
-impl FromIterator<ExRef> for ExRef {
-    fn from_iter<I: IntoIterator<Item=ExRef>>(i: I) -> Self {
-        let mut ret = ExRef::nil();
+impl FromIterator<ValRef> for ValRef {
+    fn from_iter<I: IntoIterator<Item=ValRef>>(i: I) -> Self {
+        let mut ret = ValRef::nil();
 
         // Probably a more efficient way to do this, but since cons aren't
         // double ended, just convert them to vecs for now
-        for exref in i.into_iter().collect::<Vec<ExRef>>().iter().rev() {
-            ret = List::cons(exref, &ret);
+        for valref in i.into_iter().collect::<Vec<ValRef>>().iter().rev() {
+            ret = List::cons(valref, &ret);
         }
 
         ret

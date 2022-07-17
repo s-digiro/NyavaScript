@@ -1,6 +1,5 @@
 # To Do
 [ ] Analyze dead code
-[ ] Add line and column to unclosed parenthesis errors in syntax checking
 [ ] Replace StringErrors with actual errors where applicable
 [ ] McCarthy things need to be implemented
     [*] Car

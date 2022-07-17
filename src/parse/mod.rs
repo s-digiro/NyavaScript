@@ -4,11 +4,11 @@ mod syntactic_analysis;
 #[cfg(test)]
 mod test;
 
-use crate::expression::ExRef;
+use crate::expression::ValRef;
 use std::error::Error;
 use std::fmt;
 
-pub fn parse(text: &str) -> Result<ExRef, Box<dyn Error>> {
+pub fn parse(text: &str) -> Result<ValRef, Box<dyn Error>> {
     let tokens = lexical_analysis::parse(text)?;
     let syntax = syntactic_analysis::parse(tokens)?;
     let ret = semantic_analysis::parse(syntax);

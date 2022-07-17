@@ -1,4 +1,4 @@
-use super::ExRef;
+use super::ValRef;
 
 #[derive(Debug, PartialEq)]
 pub enum Atom {
@@ -50,20 +50,20 @@ impl Atom {
         }
     }
 
-    pub fn nil() -> ExRef {
-        ExRef::nil()
+    pub fn nil() -> ValRef {
+        ValRef::nil()
     }
 
-    pub fn symbol(s: &str) -> ExRef {
-        ExRef::atom(Atom::Symbol(s.to_owned()))
+    pub fn symbol(s: &str) -> ValRef {
+        ValRef::atom(Atom::Symbol(s.to_owned()))
     }
 
-    pub fn string(s: &str) -> ExRef {
-        ExRef::atom(Atom::String(s.to_owned()))
+    pub fn string(s: &str) -> ValRef {
+        ValRef::atom(Atom::String(s.to_owned()))
     }
 
-    pub fn number(n: isize) -> ExRef {
-        ExRef::atom(Atom::Number(n))
+    pub fn number(n: isize) -> ValRef {
+        ValRef::atom(Atom::Number(n))
     }
 }
 

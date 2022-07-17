@@ -5,12 +5,12 @@ use crate::expression::Atom;
 #[test]
 fn iter_works() {
     let subject = ConsCell::new(
-        ExRef::atom(Atom::Number(1)),
-        ExRef::cons_cell(ConsCell::new(
-            ExRef::atom(Atom::Number(2)),
-            ExRef::cons_cell(ConsCell::new(
-                ExRef::atom(Atom::Number(3)),
-                ExRef::nil(),
+        ValRef::atom(Atom::Number(1)),
+        ValRef::cons_cell(ConsCell::new(
+            ValRef::atom(Atom::Number(2)),
+            ValRef::cons_cell(ConsCell::new(
+                ValRef::atom(Atom::Number(3)),
+                ValRef::nil(),
             )),
         )),
     );
@@ -18,17 +18,17 @@ fn iter_works() {
     let mut iter = subject.iter();
 
     assert_eq!(
-        Some(ExRef::atom(Atom::Number(1))),
+        Some(ValRef::atom(Atom::Number(1))),
         iter.next(),
     );
 
     assert_eq!(
-        Some(ExRef::atom(Atom::Number(2))),
+        Some(ValRef::atom(Atom::Number(2))),
         iter.next(),
     );
 
     assert_eq!(
-        Some(ExRef::atom(Atom::Number(3))),
+        Some(ValRef::atom(Atom::Number(3))),
         iter.next(),
     );
 
@@ -41,12 +41,12 @@ fn iter_works() {
 #[test]
 fn display_works() {
     let subject = ConsCell::new(
-        ExRef::atom(Atom::Number(1)),
-        ExRef::cons_cell(ConsCell::new(
-            ExRef::atom(Atom::Number(2)),
-            ExRef::cons_cell(ConsCell::new(
-                ExRef::atom(Atom::Number(3)),
-                ExRef::nil(),
+        ValRef::atom(Atom::Number(1)),
+        ValRef::cons_cell(ConsCell::new(
+            ValRef::atom(Atom::Number(2)),
+            ValRef::cons_cell(ConsCell::new(
+                ValRef::atom(Atom::Number(3)),
+                ValRef::nil(),
             )),
         )),
     );
