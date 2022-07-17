@@ -9,7 +9,7 @@ mod test;
 
 use std::mem;
 
-pub fn parse(text: &str) -> Result<Vec<Token>, ParseError> {
+pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
     enum State {
         InList,
         InAtom,
@@ -131,14 +131,14 @@ pub fn parse(text: &str) -> Result<Vec<Token>, ParseError> {
             let column = index - pre_bad.rfind("\n").unwrap();
 
             return Err(
-                ParseError::unterminated_string_error(bad_string, line, column)
+                LexError::unterminated_string_error(bad_string, line, column)
             )
         }
         _ => (),
     }
 
     if ret.first() != Some(&Token::OpenList) {
-        return Err(ParseError::no_root_list_error())
+        return Err(LexError::no_root_list_error())
     }
 
     Ok(ret)

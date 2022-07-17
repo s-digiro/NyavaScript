@@ -1,6 +1,14 @@
 mod lexical_analysis;
+pub use lexical_analysis::parse as lex_parse;
+pub use lexical_analysis::{ Token, LexError };
+
 mod semantic_analysis;
+pub use semantic_analysis::parse as sem_parse;
+
 mod syntactic_analysis;
+pub use syntactic_analysis::parse as syn_parse;
+pub use syntactic_analysis::{ Syntax, SyntaxError };
+
 #[cfg(test)]
 mod test;
 

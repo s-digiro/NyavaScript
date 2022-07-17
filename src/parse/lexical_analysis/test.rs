@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn blank_text_is_no_root_error() {
     assert_eq!(
-        Err(ParseError::no_root_list_error()),
+        Err(LexError::no_root_list_error()),
         parse(""),
     );
 }
@@ -11,7 +11,7 @@ fn blank_text_is_no_root_error() {
 #[test]
 fn no_first_parenthesis_makes_no_root_error() {
     assert_eq!(
-        Err(ParseError::no_root_list_error()),
+        Err(LexError::no_root_list_error()),
         parse("foo bar baz)"),
     );
 }
@@ -163,7 +163,7 @@ fn parse_triple_quote_returns_error() {
 fn unterminated_string_error_location_is_correct() {
     let s = "(\nfoo \"bar)";
     assert_eq!(
-        Err(ParseError::unterminated_string_error("\"bar)".to_owned(), 2, 5)),
+        Err(LexError::unterminated_string_error("\"bar)".to_owned(), 2, 5)),
         parse(s),
     )
 }
