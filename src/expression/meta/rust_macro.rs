@@ -1,5 +1,5 @@
 use crate::evaluate::Environment;
-use crate::expression::{ ConsCell, ExRef };
+use crate::expression::ExRef;
 
 type MacroFunc = fn(ExRef, &mut Environment) -> ExRef;
 

@@ -4,7 +4,7 @@ use super::*;
 fn parse_blank() {
     assert_eq!(
         Atom::nil(),
-        parse(Syntax::list()).unwrap(),
+        parse(Syntax::list()),
     );
 }
 
@@ -12,7 +12,7 @@ fn parse_blank() {
 fn parse_empty_list() {
     assert_eq!(
         Atom::nil(),
-        parse(Syntax::list()).unwrap(),
+        parse(Syntax::list()),
     );
 }
 
@@ -34,7 +34,7 @@ fn parse_string() {
                 ]),
                 Syntax::list(),
             ])
-        ).unwrap(),
+        ),
     );
 }
 
@@ -56,6 +56,6 @@ fn parse_number() {
                 ]),
                 Syntax::list(),
             ])
-        ).unwrap(),
+        ),
     );
 }

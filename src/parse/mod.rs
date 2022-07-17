@@ -1,6 +1,6 @@
 mod lexical_analysis;
 mod syntactic_analysis;
-mod semantic;
+mod semantic_analysis;
 
 use crate::expression::ExRef;
 use std::error::Error;
@@ -9,7 +9,7 @@ use std::fmt;
 pub fn parse(text: &str) -> Result<ExRef, Box<dyn Error>> {
     let tokens = lexical_analysis::parse(text)?;
     let syntax = syntactic_analysis::parse(tokens)?;
-    let ret = semantic::parse(syntax).map_err(|e| StringError::new(e))?;
+    let ret = semantic_analysis::parse(syntax);
 
     Ok(ret)
 }
