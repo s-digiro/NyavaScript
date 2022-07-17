@@ -59,3 +59,23 @@ fn parse_number() {
         ),
     );
 }
+
+#[test]
+fn parse_symbol() {
+    assert_eq!(
+        List::from(vec![
+            List::from(vec![
+                Atom::symbol("foo"),
+            ]),
+            List::new(),
+        ]),
+        parse(
+            Syntax::List(vec![
+                Syntax::List(vec![
+                    Syntax::symbol("foo"),
+                ]),
+                Syntax::list(),
+            ])
+        ),
+    );
+}
