@@ -1,5 +1,5 @@
 use crate::parse::parse;
-use crate::expression::{ Value, ValRef, List };
+use crate::value::{ Value, ValRef, List };
 
 #[derive(Debug, PartialEq)]
 pub struct Lambda(ValRef);

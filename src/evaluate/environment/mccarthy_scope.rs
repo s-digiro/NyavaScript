@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::expression::{ Value, Lambda, List, RustLambda, RustMacro };
+use crate::value::{ Value, Lambda, List, RustLambda, RustMacro };
 
 pub struct McCarthyScope;
 

@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::expression::{ ConsCell, Value };
+use crate::value::{ ConsCell, Value };
 
 #[test]
 pub fn full_parse() {

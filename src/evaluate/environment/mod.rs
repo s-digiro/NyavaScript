@@ -1,7 +1,7 @@
 use std::rc::Rc;
 use std::collections::HashMap;
 
-use crate::expression::{ Value, ValRef };
+use crate::value::{ Value, ValRef };
 
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;

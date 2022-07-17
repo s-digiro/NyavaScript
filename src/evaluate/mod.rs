@@ -2,7 +2,7 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
-use crate::expression::{ Value, ValRef, Lambda, List, Macro };
+use crate::value::{ Value, ValRef, Lambda, List, Macro };
 
 pub fn evaluate(valref: ValRef, env: &mut Env) -> ValRef {
     match *valref {

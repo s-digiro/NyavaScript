@@ -4,7 +4,7 @@ mod syntactic_analysis;
 #[cfg(test)]
 mod test;
 
-use crate::expression::ValRef;
+use crate::value::ValRef;
 use std::error::Error;
 use std::fmt;
 

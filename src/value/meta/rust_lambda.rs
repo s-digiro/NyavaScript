@@ -1,5 +1,5 @@
 use crate::evaluate::Environment;
-use crate::expression::{ Value, ValRef };
+use crate::value::{ Value, ValRef };
 
 type LambdaFunc = fn(ValRef, &mut Environment) -> ValRef;
 

@@ -1,9 +1,9 @@
 pub mod evaluate;
-pub mod expression;
+pub mod value;
 pub mod parse;
 
 use evaluate::{ Environment, evaluate, McCarthyScope };
-use expression::ValRef;
+use value::ValRef;
 use parse::parse;
 use std::error::Error;
 

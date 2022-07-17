@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test;
 
-use crate::expression::{ Value, ValRef, List };
+use crate::value::{ Value, ValRef, List };
 use super::syntactic_analysis::Syntax;
 
 pub fn parse(tree: Syntax) -> ValRef {
