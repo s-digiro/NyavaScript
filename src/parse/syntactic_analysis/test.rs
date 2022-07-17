@@ -59,6 +59,24 @@ fn parse_number_works() {
 }
 
 #[test]
+fn parse_list_works() {
+    assert_eq!(
+        parse(vec![
+              Token::OpenList,
+              Token::symbol("foo"),
+              Token::string("bar"),
+              Token::Number(105),
+              Token::CloseList,
+        ]).unwrap(),
+        Syntax::List(vec![Syntax::List(vec![
+            Syntax::symbol("foo"),
+            Syntax::string("bar"),
+            Syntax::Number(105),
+        ])]),
+    );
+}
+
+#[test]
 fn parse_works() {
     assert_eq!(
         parse(vec![
