@@ -2,14 +2,6 @@
 [ ] Analyze dead code
 [ ] Add line and column to unclosed parenthesis errors in syntax checking
 [ ] Replace StringErrors with actual errors where applicable
-[*] Strings
-    [*] Evaluate
-[*] Numbers
-    [*] Evaluate
-[*] Rust Contexts
-[*] Move Special syntax parses to rust contexts if possible
-[*] Change how lists are evaluated
-[*] Change how atoms are evaluated
 [ ] McCarthy things need to be implemented
     [*] Car
     [*] Cons
@@ -23,9 +15,26 @@
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
-[ ] Add tests to semantic parsing
 [ ] . infix operator
-[*] Use actual linked lists
-[*] Do not consume lists when evaluating
 [ ] Garbage collector
-[*] Macros?
+[ ] Add tests
+    [ ] evaluate
+        [ ] environment
+            [ ] mccarthy_scope
+            [ ] mod
+        [ ] mod
+    [ ] expression
+        [ ] cons_cell
+            [ ] iter
+            [ ] mod
+        [ ] meta
+            [ ] lambda
+            [ ] macro
+            [ ] mod
+            [ ] rust_lambda
+            [ ] rust_macro
+        [ ] atom
+        [ ] list
+        [ ] mod
+    [*] parse
+    [ ] lib
