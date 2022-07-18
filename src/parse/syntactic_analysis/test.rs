@@ -12,7 +12,15 @@ fn unmatched_open_parenthesis_fails() {
 fn unmatched_close_parenthesis_fails() {
     assert_eq!(
         parse(vec![Token::OpenList, Token::CloseList, Token::CloseList]),
-        Err(SyntaxError::UnmatchedCloseListError),
+        Err(SyntaxError::UnexpectedTrailingTokensError),
+    );
+}
+
+#[test]
+fn unlisted_extra_tokens_fails() {
+    assert_eq!(
+        parse(vec![Token::OpenList, Token::CloseList, Token::symbol("foo")]),
+        Err(SyntaxError::UnexpectedTrailingTokensError),
     );
 }
 
@@ -36,12 +44,12 @@ fn parse_missing_open_root_list_fails() {
 fn parse_missing_close_root_list_fails() {
     assert_eq!(
         parse(vec![Token::OpenList, Token::symbol("test")]),
-        Err(SyntaxError::UnclosedRootListError),
+        Err(SyntaxError::UnmatchedOpenListError),
     );
 
     assert_eq!(
         parse(vec![Token::OpenList]),
-        Err(SyntaxError::UnclosedRootListError),
+        Err(SyntaxError::UnmatchedOpenListError),
     );
 }
 
@@ -91,6 +99,71 @@ fn parse_list_works() {
             Syntax::symbol("foo"),
             Syntax::string("bar"),
             Syntax::Number(105),
+        ]),
+    );
+}
+
+#[test]
+fn parse_quote_works() {
+    assert_eq!(
+        parse(vec![
+              Token::OpenList,
+              Token::Quote,
+              Token::symbol("foo"),
+              Token::CloseList,
+        ]).unwrap(),
+        Syntax::List(vec![
+            Syntax::symbol("quote"),
+            Syntax::symbol("foo"),
+        ]),
+    );
+}
+
+#[test]
+fn quote_before_close_list_fails() {
+    assert_eq!(
+        parse(vec![
+              Token::OpenList,
+              Token::Quote,
+              Token::CloseList,
+        ]),
+        Err(SyntaxError::QuoteMissingItemError),
+    );
+}
+
+#[test]
+fn quote_at_end_of_token_list_fails() {
+    assert_eq!(
+        parse(vec![
+              Token::OpenList,
+              Token::Quote,
+        ]),
+        Err(SyntaxError::QuoteMissingItemError),
+    );
+}
+
+#[test]
+fn parse_quote_as_not_first_value_in_list() {
+    assert_eq!(
+        parse(vec![
+              Token::OpenList,
+              Token::symbol("car"),
+              Token::Quote,
+              Token::OpenList,
+              Token::symbol("foo"),
+              Token::symbol("bar"),
+              Token::CloseList,
+              Token::CloseList,
+        ]).unwrap(),
+        Syntax::List(vec![
+            Syntax::symbol("car"),
+            Syntax::List(vec![
+                Syntax::symbol("quote"),
+                Syntax::List(vec![
+                    Syntax::symbol("foo"),
+                    Syntax::symbol("bar"),
+                ]),
+            ]),
         ]),
     );
 }

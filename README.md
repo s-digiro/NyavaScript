@@ -1,11 +1,13 @@
 # To Do
-[ ] Analyze dead code
 [ ] Replace StringErrors with actual errors where applicable
+[ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
+[ ] Passing lambdas to other lambdas is a lil weird... figure it out
 [ ] McCarthy things need to be implemented
     [*] Car
     [*] Cons
     [*] Cdr
     [*] Equal
+    [*] quote
     [ ] Maybe more
     [*] McCarthy context??? as a type of Rust context?
     [ ] Make sure all McCarthy things are added
@@ -40,3 +42,4 @@
 [*] Call of non procedure returns nil
 [*] Eliminate automatic root list
 [*] NoRootList Error when missing first char is no open parenthesis
+[*] Analyze dead code

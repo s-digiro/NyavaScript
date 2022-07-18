@@ -57,6 +57,23 @@ fn parse_number_in_quote_works() {
 }
 
 #[test]
+fn parse_quote_as_not_first_in_list_works() {
+    assert_eq!(
+        vec![
+            Token::OpenList,
+            Token::symbol("car"),
+            Token::Quote,
+            Token::OpenList,
+            Token::symbol("a"),
+            Token::symbol("b"),
+            Token::CloseList,
+            Token::CloseList,
+        ],
+        parse("(car '(a b))").unwrap(),
+    );
+}
+
+#[test]
 fn parse_number_works() {
     assert_eq!(
         vec![

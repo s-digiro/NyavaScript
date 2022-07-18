@@ -10,18 +10,10 @@ pub fn main() -> Result<(), String> {
     match res {
         Ok(res) => {
             let s = res.to_string();
-            println!("{}", if res.to_string().starts_with("(") { trim(&s) } else { &s });
+            println!("{}", s);
         },
         Err(e) => println!("{}", e),
     }
 
     Ok(())
-}
-
-fn trim(s: &str) -> &str {
-    if s.len() > 1 {
-        &s[1..s.len() - 2]
-    } else {
-        s
-    }
 }

@@ -9,10 +9,8 @@ pub use meta::{ Lambda, Macro, RustLambda, RustMacro };
 
 use enum_as_inner::EnumAsInner;
 use std::rc::Rc;
-use std::fmt::Display;
-use enum_display_derive::Display;
 
-#[derive(Debug, PartialEq, EnumAsInner, Display)]
+#[derive(Debug, PartialEq, EnumAsInner)]
 pub enum Value {
     // Basic
     ConsCell(ConsCell),
@@ -26,6 +24,24 @@ pub enum Value {
     Macro(Macro),
     RustLambda(RustLambda),
     RustMacro(RustMacro),
+    Quote(ValRef),
+}
+
+impl std::fmt::Display for Value {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Value::ConsCell(x) => write!(f, "{}", x),
+            Value::Number(x) => write!(f, "{}", x),
+            Value::String(x) => write!(f, "\"{}\"", x),
+            Value::Symbol(x) => write!(f, "{}", x),
+            Value::Nil => write!(f, "NIL"),
+            Value::Lambda(x) => write!(f, "{}", x),
+            Value::Macro(x) => write!(f, "{}", x),
+            Value::RustLambda(x) => write!(f, "{}", x),
+            Value::RustMacro(x) => write!(f, "{}", x),
+            Value::Quote(x) => write!(f, "'{}", x),
+        }
+    }
 }
 
 pub type ValRef = Rc<Value>;
@@ -33,13 +49,6 @@ pub type ValRef = Rc<Value>;
 impl Value {
     pub fn cons_cell(c: ConsCell) -> ValRef {
         Rc::new(Value::ConsCell(c))
-    }
-    pub fn is_rust_lambda(&self) -> bool {
-        self.as_rust_lambda().is_some()
-    }
-
-    pub fn is_rust_macro(&self) -> bool {
-        self.as_rust_macro().is_some()
     }
 
     pub fn lambda(lambda: Lambda) -> ValRef {
@@ -56,6 +65,10 @@ impl Value {
 
     pub fn nil() -> ValRef {
         Rc::new(Value::Nil)
+    }
+
+    pub fn quote(v: ValRef) -> ValRef {
+        Rc::new(Value::Quote(v))
     }
 
     pub fn rust_lambda(lambda: RustLambda) -> ValRef {

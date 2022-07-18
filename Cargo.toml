@@ -8,4 +8,3 @@ edition = "2021"
 [dependencies]
 derive-new = "0.5.9"
 enum-as-inner = "0.5.0"
-enum-display-derive = "0.1.1"

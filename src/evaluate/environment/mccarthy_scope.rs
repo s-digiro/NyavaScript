@@ -99,23 +99,32 @@ impl McCarthyScope {
         );
 
         ret.insert(
+            "quote".into(),
+            RustMacro::from(
+                |args, _| {
+                    Value::quote(List::car(&args))
+                }
+            )
+        );
+
+        ret.insert(
             "null".to_string(),
-            Lambda::from("(x) (equal x ())"),
+            Lambda::from("((x) (equal x ()))"),
         );
 
         ret.insert(
             "and".to_string(),
-            Lambda::from("(p q) (cond (p q))"),
+            Lambda::from("((p q) (cond (p q)))"),
         );
 
         ret.insert(
             "or".to_string(),
-            Lambda::from("(p q) (cond (p 1) (q 1))"),
+            Lambda::from("((p q) (cond (p 1) (q 1)))"),
         );
 
         ret.insert(
             "not".to_string(),
-            Lambda::from("(x) (cond (x ()) (1 1))"),
+            Lambda::from("((x) (cond (x ()) (1 1)))"),
         );
 
         ret

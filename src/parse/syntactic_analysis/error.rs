@@ -5,7 +5,9 @@ use std::error::Error;
 pub enum SyntaxError {
     NoRootListError,
     NoSymbolsError,
+    QuoteMissingItemError,
     UnclosedRootListError,
+    UnexpectedTrailingTokensError,
     UnmatchedCloseListError,
     UnmatchedOpenListError,
 }
@@ -20,6 +22,8 @@ impl fmt::Display for SyntaxError {
             SyntaxError::UnclosedRootListError => write!(f, "Root list is unclosed. Add a closing parenthesis to it"),
             SyntaxError::UnmatchedOpenListError => write!(f, "Unmatched Open List: Open parenthesis is missing close parenthesis"),
             SyntaxError::UnmatchedCloseListError => write!(f, "Unmatched Close List: Close parenthesis is missing open parenthesis"),
+            SyntaxError::QuoteMissingItemError => write!(f, "Quote is missing an item after it"),
+            SyntaxError::UnexpectedTrailingTokensError => write!(f, "Unexpected Trailing tokens"),
         }
     }
 }

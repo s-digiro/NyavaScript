@@ -3,12 +3,27 @@ use environment::Environment as Env;
 pub use environment::*;
 
 use crate::value::{ Value, ValRef, Lambda, List, Macro };
+use std::rc::Rc;
+
+use std::sync::atomic::{AtomicUsize, Ordering};
+fn get_id() -> usize {
+    static COUNTER: AtomicUsize = AtomicUsize::new(1);
+    COUNTER.fetch_add(1, Ordering::Relaxed)
+}
+
 
 pub fn evaluate(valref: ValRef, env: &mut Env) -> ValRef {
-    match *valref {
+    let id = get_id();
+    eprintln!("{} - evaling: {}", id, valref);
+    let ret = match &*valref {
         Value::ConsCell(_) => eval_list(valref, env),
+        Value::Quote(r) => Rc::clone(r),
+        Value::Symbol(s) => env.get(s),
         _ => valref,
-    }
+    };
+    eprintln!("{} - returning: {}", id, ret);
+
+    ret
 }
 
 fn eval_list(list: ValRef, env: &mut Env) -> ValRef {
@@ -52,7 +67,10 @@ fn eval_list(list: ValRef, env: &mut Env) -> ValRef {
 
                     ret
                 },
-                _ => List::nil(),
+                _ => {
+                    println!("fn {} on args {} evaluated to nil!", first, rest);
+                    List::nil()
+                },
             }
         },
     }
@@ -63,9 +81,11 @@ fn exec_lambda(
     args: ValRef,
     env: &mut Env
 ) -> ValRef {
+    eprintln!("exec lambda args ->");
     env.push(Scope::new());
 
     for (key, val) in lambda.args().into_iter().zip(List::iter(&args)) {
+        eprintln!("    {} = {}", key, val);
         env.set(key.to_owned(), val);
     }
 
