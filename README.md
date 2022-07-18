@@ -40,6 +40,20 @@
     [*] parse
     [ ] lib
 [*] Call of non procedure returns nil
-[*] Eliminate automatic root list
-[*] NoRootList Error when missing first char is no open parenthesis
-[*] Analyze dead code
+[ ] Lisp macro should only recieve one arg, which is arg list
+[ ] Lisp lambda should get args like normal
+[ ] Macro and Lambda should be their own values, not weird wrappers
+[ ] Evaluate List should be refactored into more functions so its easier to read
+[ ] Allow multiple lists in root, without tacking on a root list as a new
+    function. Maybe as a vector of refvals
+[ ] Everything should be implementable in lisp, other than Mccarthy basics
+[ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols?
+    Pick one
+[ ] List macro
+[ ] Label macro
+[ ] let macro
+[ ] arbitrary cdaddr function
+[ ] Maybe mccarthy functions should be "specials", separate from macros?
+    decide.
+[ ] Invalid function calls should fail spectacularly rather than returning nil
+[ ] NIL keyword
