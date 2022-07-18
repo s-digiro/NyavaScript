@@ -88,7 +88,7 @@ pub fn parse_list(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token
                 let mut x = false;
                 if ret.len() == 1 {
                     if let Some(Syntax::List(l)) = ret.first() {
-                        if let Syntax::Symbol(s) = l.first().unwrap() {
+                        if let Some(Syntax::Symbol(s)) = l.first() {
                             if s == "quote" {
                                 x = true;
                             }

@@ -1,4 +1,5 @@
-use crate::value::{ ValRef, List };
+use crate::parse::parse;
+use crate::value::{ Value, ValRef, List };
 
 #[derive(Debug, PartialEq)]
 pub struct Macro(ValRef);
@@ -16,6 +17,10 @@ impl Macro {
 
     pub fn definition(&self) -> ValRef {
         List::car(&List::cdr(&List::cdr(&self.0)))
+    }
+
+    pub fn from(s: &str) -> ValRef {
+        Value::r#macro(Macro(parse(s).unwrap()))
     }
 }
 

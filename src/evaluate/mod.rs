@@ -103,8 +103,8 @@ fn exec_macro(
 ) -> ValRef {
     env.push(Scope::new());
 
-    for (key, val) in m.args().into_iter().zip(List::iter(&args)) {
-        env.set(key.to_owned(), val);
+    if let Some(key) = m.args().first() {
+        env.set(key.to_owned(), List::car(&args));
     }
 
     let ret = evaluate(m.definition(), env);

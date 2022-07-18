@@ -109,22 +109,41 @@ impl McCarthyScope {
 
         ret.insert(
             "null".to_string(),
-            Lambda::from("((x) (equal x ()))"),
+            Lambda::from("(lambda (x) (equal x ()))"),
         );
 
         ret.insert(
             "and".to_string(),
-            Lambda::from("((p q) (cond (p q)))"),
+            Lambda::from("(lambda (p q) (cond (p q)))"),
         );
 
         ret.insert(
             "or".to_string(),
-            Lambda::from("((p q) (cond (p 1) (q 1)))"),
+            Lambda::from("(lambda (p q) (cond (p 1) (q 1)))"),
         );
 
         ret.insert(
             "not".to_string(),
-            Lambda::from("((x) (cond (x ()) (1 1)))"),
+            Lambda::from("(lambda (x) (cond (x ()) (1 1)))"),
+        );
+
+        ret.insert(
+            "defun".to_string(),
+            RustMacro::from(
+                |args, env| {
+                    if let Value::Symbol(name) = &*List::car(&args) {
+                        eprintln!("name: {}", name);
+                        let rest = List::cdr(&args);
+
+                        env.set(
+                            name.into(),
+                            Value::lambda(Lambda::new(rest)),
+                        );
+                    }
+
+                    Value::nil()
+                }
+            )
         );
 
         ret

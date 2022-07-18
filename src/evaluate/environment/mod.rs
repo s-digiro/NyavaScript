@@ -6,6 +6,9 @@ use crate::value::{ Value, ValRef };
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
 
+mod fun_scope;
+pub use fun_scope::FunScope;
+
 pub type Scope = HashMap<String, ValRef>;
 
 #[derive(Debug)]
