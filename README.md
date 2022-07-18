@@ -1,5 +1,5 @@
 # To Do
-[ ] Rename RefVal and Value to RefSExpr and SExpr
+[*] Rename RefVal and Value to RefSExpr and SExpr
 [ ] Macro and Lambda should be their own values, not weird wrappers
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
