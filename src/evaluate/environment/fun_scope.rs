@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::value::{ Value, Lambda, List, Macro, RustLambda, RustMacro };
+use crate::s_expression::{ SExpression, Lambda, List, Macro, RustLambda, RustMacro };
 
 pub struct FunScope;
 
@@ -12,11 +12,11 @@ impl FunScope {
             "|>".into(),
             RustMacro::from(
                 |args, env| {
-                    let mut last = Value::nil();
+                    let mut last = SExpression::nil();
 
                     for arg in List::iter(&args) {
                         let arg = List::push(&arg, &last);
-                        last = Value::quote(evaluate(arg, env))
+                        last = SExpression::quote(evaluate(arg, env))
                     }
 
                     last
@@ -35,21 +35,21 @@ impl FunScope {
                 |args, _env| {
                     match List::iter(&args).next() {
                         Some(val) => match &*val {
-                            Value::Nil => println!(),
-                            Value::Macro(_) => println!("[macro]"),
-                            Value::Lambda(_) => println!("[lambda]"),
-                            Value::Number(n) => println!("{}", n),
-                            Value::String(s) => println!("{}", s),
-                            Value::Symbol(s) => println!("{}", s),
-                            Value::Quote(q) => println!("'{}", q),
-                            Value::ConsCell(c) => println!("{}", c),
-                            Value::RustMacro(_) => println!("[rust macro]"),
-                            Value::RustLambda(_) => println!("[rust lambda]"),
+                            SExpression::Nil => println!(),
+                            SExpression::Macro(_) => println!("[macro]"),
+                            SExpression::Lambda(_) => println!("[lambda]"),
+                            SExpression::Number(n) => println!("{}", n),
+                            SExpression::String(s) => println!("{}", s),
+                            SExpression::Symbol(s) => println!("{}", s),
+                            SExpression::Quote(q) => println!("'{}", q),
+                            SExpression::ConsCell(c) => println!("{}", c),
+                            SExpression::RustMacro(_) => println!("[rust macro]"),
+                            SExpression::RustLambda(_) => println!("[rust lambda]"),
                         },
                         None => println!(),
                     }
 
-                    Value::nil()
+                    SExpression::nil()
                 }
             ),
         );

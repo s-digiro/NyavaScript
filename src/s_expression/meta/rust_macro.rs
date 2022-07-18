@@ -1,7 +1,7 @@
 use crate::evaluate::Environment;
-use crate::value::{ Value, ValRef };
+use crate::s_expression::{ SExpression, SExpressionRef };
 
-type MacroFunc = fn(ValRef, &mut Environment) -> ValRef;
+type MacroFunc = fn(SExpressionRef, &mut Environment) -> SExpressionRef;
 
 pub struct RustMacro(MacroFunc);
 
@@ -10,12 +10,12 @@ impl RustMacro {
         RustMacro(f)
     }
 
-    pub fn exec(&self, list: ValRef, env: &mut Environment) -> ValRef {
+    pub fn exec(&self, list: SExpressionRef, env: &mut Environment) -> SExpressionRef {
         self.0(list, env)
     }
 
-    pub fn from(f: MacroFunc) -> ValRef {
-        Value::rust_macro(RustMacro::new(f))
+    pub fn from(f: MacroFunc) -> SExpressionRef {
+        SExpression::rust_macro(RustMacro::new(f))
     }
 }
 

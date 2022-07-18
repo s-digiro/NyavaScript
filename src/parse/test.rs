@@ -1,56 +1,56 @@
 use super::*;
 
-use crate::value::{ ConsCell, Value };
+use crate::s_expression::{ ConsCell, SExpression };
 
 #[test]
 pub fn full_parse() {
     let subject = "((lambda (x) (cons x (\"foo\" 2))) (car (3 \"bar\")))";
 
     let expected =
-        Value::cons_cell(ConsCell::new( // First actual parenthesis
-            Value::cons_cell(ConsCell::new(
-                Value::symbol("lambda".to_owned()),
-                Value::cons_cell(ConsCell::new(
-                    Value::cons_cell(ConsCell::new(
-                        Value::symbol("x".to_owned()),
-                        Value::nil(),
+        SExpression::cons_cell(ConsCell::new( // First actual parenthesis
+            SExpression::cons_cell(ConsCell::new(
+                SExpression::symbol("lambda".to_owned()),
+                SExpression::cons_cell(ConsCell::new(
+                    SExpression::cons_cell(ConsCell::new(
+                        SExpression::symbol("x".to_owned()),
+                        SExpression::nil(),
                     )),
-                    Value::cons_cell(ConsCell::new(
-                        Value::cons_cell(ConsCell::new(
-                            Value::symbol("cons".to_owned()),
-                            Value::cons_cell(ConsCell::new(
-                                Value::symbol("x".to_owned()),
-                                Value::cons_cell(ConsCell::new(
-                                    Value::cons_cell(ConsCell::new(
-                                        Value::string("foo".to_owned()),
-                                        Value::cons_cell(ConsCell::new(
-                                            Value::number(2),
-                                            Value::nil(),
+                    SExpression::cons_cell(ConsCell::new(
+                        SExpression::cons_cell(ConsCell::new(
+                            SExpression::symbol("cons".to_owned()),
+                            SExpression::cons_cell(ConsCell::new(
+                                SExpression::symbol("x".to_owned()),
+                                SExpression::cons_cell(ConsCell::new(
+                                    SExpression::cons_cell(ConsCell::new(
+                                        SExpression::string("foo".to_owned()),
+                                        SExpression::cons_cell(ConsCell::new(
+                                            SExpression::number(2),
+                                            SExpression::nil(),
                                         )),
                                     )),
-                                    Value::nil(),
+                                    SExpression::nil(),
                                 )),
                             )),
                         )),
-                        Value::nil(),
+                        SExpression::nil(),
                     )),
                 )),
             )),
-            Value::cons_cell(ConsCell::new(
-                Value::cons_cell(ConsCell::new(
-                    Value::symbol("car".to_owned()),
-                    Value::cons_cell(ConsCell::new(
-                        Value::cons_cell(ConsCell::new(
-                            Value::number(3),
-                            Value::cons_cell(ConsCell::new(
-                                Value::string("bar".to_owned()),
-                                Value::nil(),
+            SExpression::cons_cell(ConsCell::new(
+                SExpression::cons_cell(ConsCell::new(
+                    SExpression::symbol("car".to_owned()),
+                    SExpression::cons_cell(ConsCell::new(
+                        SExpression::cons_cell(ConsCell::new(
+                            SExpression::number(3),
+                            SExpression::cons_cell(ConsCell::new(
+                                SExpression::string("bar".to_owned()),
+                                SExpression::nil(),
                             )),
                         )),
-                        Value::nil(),
+                        SExpression::nil(),
                     )),
                 )),
-                Value::nil(),
+                SExpression::nil(),
             )),
         ));
 

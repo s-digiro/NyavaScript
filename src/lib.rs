@@ -1,13 +1,13 @@
 pub mod evaluate;
-pub mod value;
+pub mod s_expression;
 pub mod parse;
 
 use evaluate::{ Environment, evaluate, McCarthyScope, FunScope };
-use value::ValRef;
+use s_expression::SExpressionRef;
 use parse::parse;
 use std::error::Error;
 
-pub fn run(text: &str) -> Result<ValRef, Box<dyn Error>> {
+pub fn run(text: &str) -> Result<SExpressionRef, Box<dyn Error>> {
     let parsed = parse(text)?;
 
     let mut context = Environment::new();

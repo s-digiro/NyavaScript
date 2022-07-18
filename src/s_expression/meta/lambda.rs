@@ -1,11 +1,11 @@
 use crate::parse::parse;
-use crate::value::{ Value, ValRef, List };
+use crate::s_expression::{ SExpression, SExpressionRef, List };
 
 #[derive(Debug, PartialEq)]
-pub struct Lambda(ValRef);
+pub struct Lambda(SExpressionRef);
 
 impl Lambda {
-    pub fn new(e: ValRef) -> Lambda {
+    pub fn new(e: SExpressionRef) -> Lambda {
         Lambda(e)
     }
 
@@ -16,12 +16,12 @@ impl Lambda {
             .collect()
     }
 
-    pub fn definition(&self) -> ValRef {
+    pub fn definition(&self) -> SExpressionRef {
         List::car(&List::cdr(&List::cdr(&self.0)))
     }
 
-    pub fn from(s: &str) -> ValRef {
-        Value::lambda(Lambda(parse(s).unwrap()))
+    pub fn from(s: &str) -> SExpressionRef {
+        SExpression::lambda(Lambda(parse(s).unwrap()))
     }
 }
 

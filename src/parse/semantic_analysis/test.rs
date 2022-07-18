@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn parse_blank() {
     assert_eq!(
-        Value::nil(),
+        SExpression::nil(),
         parse(Syntax::list()),
     );
 }
@@ -11,7 +11,7 @@ fn parse_blank() {
 #[test]
 fn parse_empty_list() {
     assert_eq!(
-        Value::nil(),
+        SExpression::nil(),
         parse(Syntax::list()),
     );
 }
@@ -21,8 +21,8 @@ fn parse_string() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Value::string("foo".into()),
-                Value::string("bar".into()),
+                SExpression::string("foo".into()),
+                SExpression::string("bar".into()),
             ]),
             List::new(),
         ]),
@@ -43,8 +43,8 @@ fn parse_number() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Value::number(105),
-                Value::number(-87)
+                SExpression::number(105),
+                SExpression::number(-87)
             ]),
             List::new(),
         ]),
@@ -65,7 +65,7 @@ fn parse_symbol() {
     assert_eq!(
         List::from(vec![
             List::from(vec![
-                Value::symbol("foo".into()),
+                SExpression::symbol("foo".into()),
             ]),
             List::new(),
         ]),

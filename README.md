@@ -1,5 +1,7 @@
 # To Do
-[ ] Replace StringErrors with actual errors where applicable
+[ ] Rename RefVal and Value to RefSExpr and SExpr
+[ ] Macro and Lambda should be their own values, not weird wrappers
+[ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
 [ ] Passing lambdas to other lambdas is a lil weird... figure it out
 [ ] McCarthy things need to be implemented
@@ -42,7 +44,6 @@
 [*] Call of non procedure returns nil
 [ ] Lisp macro should only recieve one arg, which is arg list
 [ ] Lisp lambda should get args like normal
-[ ] Macro and Lambda should be their own values, not weird wrappers
 [ ] Evaluate List should be refactored into more functions so its easier to read
 [ ] Allow multiple lists in root, without tacking on a root list as a new
     function. Maybe as a vector of refvals

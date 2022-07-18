@@ -1,11 +1,11 @@
 use crate::parse::parse;
-use crate::value::{ Value, ValRef, List };
+use crate::s_expression::{ SExpression, SExpressionRef, List };
 
 #[derive(Debug, PartialEq)]
-pub struct Macro(ValRef);
+pub struct Macro(SExpressionRef);
 
 impl Macro {
-    pub fn new(v: ValRef) -> Macro {
+    pub fn new(v: SExpressionRef) -> Macro {
         Macro(v)
     }
 
@@ -15,12 +15,12 @@ impl Macro {
             .collect()
     }
 
-    pub fn definition(&self) -> ValRef {
+    pub fn definition(&self) -> SExpressionRef {
         List::car(&List::cdr(&List::cdr(&self.0)))
     }
 
-    pub fn from(s: &str) -> ValRef {
-        Value::r#macro(Macro(parse(s).unwrap()))
+    pub fn from(s: &str) -> SExpressionRef {
+        SExpression::r#macro(Macro(parse(s).unwrap()))
     }
 }
 
