@@ -5,7 +5,7 @@ use crate::s_expression::{
     SExpressionRef as SXRef,
     Function,
     List,
-    RustLambda,
+    RustFunction,
     RustMacro
 };
 

@@ -5,7 +5,7 @@ use crate::s_expression::{
     SExpressionRef as SXRef,
     Function,
     List,
-    RustLambda,
+    RustFunction,
     RustMacro
 };
 
@@ -51,7 +51,7 @@ impl FunScope {
                             SX::Quote(q) => println!("'{}", q),
                             SX::ConsCell(c) => println!("{}", c),
                             SX::RustMacro(_) => println!("[rust macro]"),
-                            SX::RustLambda(_) => println!("[rust lambda]"),
+                            SX::RustFunction(_) => println!("[rust function]"),
                         },
                         None => println!(),
                     }

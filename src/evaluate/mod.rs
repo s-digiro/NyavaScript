@@ -65,10 +65,10 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
 
                     ret
                 },
-                SExpression::RustLambda(l) => {
-                    println!("RustLambda in: {}", rest);
+                SExpression::RustFunction(l) => {
+                    println!("RustFunction in: {}", rest);
                     let ret = l.exec(rest, env);
-                    println!("RustLambda out: {}", ret);
+                    println!("RustFunction out: {}", ret);
                     println!();
 
                     ret

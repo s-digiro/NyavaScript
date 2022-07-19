@@ -8,12 +8,14 @@ mod list;
 pub use list::List;
 
 mod meta;
-pub use meta::{ Macro, RustLambda, RustMacro };
+pub use meta::{ Macro, RustMacro };
 
-use enum_as_inner::EnumAsInner;
+mod rust_function;
+pub use rust_function::RustFunction;
+
 use std::rc::Rc;
 
-#[derive(Debug, PartialEq, EnumAsInner)]
+#[derive(Debug, PartialEq)]
 pub enum SExpression {
     // Basic
     ConsCell(ConsCell),
@@ -25,7 +27,7 @@ pub enum SExpression {
     // Higher level abstraction
     Function(Function),
     Macro(Macro),
-    RustLambda(RustLambda),
+    RustFunction(RustFunction),
     RustMacro(RustMacro),
     Quote(SExpressionRef),
 }
@@ -40,7 +42,7 @@ impl std::fmt::Display for SExpression {
             SExpression::Nil => write!(f, "NIL"),
             SExpression::Function(x) => write!(f, "{}", x),
             SExpression::Macro(x) => write!(f, "{}", x),
-            SExpression::RustLambda(x) => write!(f, "{}", x),
+            SExpression::RustFunction(x) => write!(f, "{}", x),
             SExpression::RustMacro(x) => write!(f, "{}", x),
             SExpression::Quote(x) => write!(f, "'{}", x),
         }
@@ -48,6 +50,20 @@ impl std::fmt::Display for SExpression {
 }
 
 impl SExpression {
+    pub fn as_cons_cell(&self) -> Option<&ConsCell> {
+        match self {
+            Self::ConsCell(c) => Some(c),
+            _ => None,
+        }
+    }
+
+    pub fn as_symbol(&self) -> Option<&str> {
+        match self {
+            Self::Symbol(s) => Some(s),
+            _ => None,
+        }
+    }
+
     pub fn from_iter<I: IntoIterator<Item=SExpressionRef>>(i: I) -> SExpressionRef {
         let mut ret = SExpressionRef::nil();
 
@@ -58,6 +74,13 @@ impl SExpression {
         }
 
         ret
+    }
+
+    pub fn is_nil(&self) -> bool {
+        match self {
+            Self::Nil => true,
+            _ => false,
+        }
     }
 }
 
@@ -107,8 +130,8 @@ impl SExpressionRef {
         Self::new(SExpression::Quote(v))
     }
 
-    pub fn rust_lambda(lambda: RustLambda) -> Self {
-        Self::new(SExpression::RustLambda(lambda))
+    pub fn rust_function(f: RustFunction) -> Self {
+        Self::new(SExpression::RustFunction(f))
     }
 
     pub fn rust_macro(m: RustMacro) -> Self {
