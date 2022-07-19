@@ -1,14 +1,15 @@
 use super::*;
+use crate::s_expression::SExpression as SX;
 
 #[test]
 fn iter_works() {
     let subject = ConsCell::new(
-        SExpression::number(1),
-        SExpression::cons_cell(ConsCell::new(
-            SExpression::number(2),
-            SExpression::cons_cell(ConsCell::new(
-                SExpression::number(3),
-                SExpression::nil(),
+        SX::number(1),
+        SX::cons_cell(ConsCell::new(
+            SX::number(2),
+            SX::cons_cell(ConsCell::new(
+                SX::number(3),
+                SX::nil(),
             )),
         )),
     );
@@ -16,17 +17,17 @@ fn iter_works() {
     let mut iter = subject.iter();
 
     assert_eq!(
-        Some(SExpression::number(1)),
+        Some(SX::number(1)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(SExpression::number(2)),
+        Some(SX::number(2)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(SExpression::number(3)),
+        Some(SX::number(3)),
         iter.next(),
     );
 
@@ -39,12 +40,12 @@ fn iter_works() {
 #[test]
 fn display_works() {
     let subject = ConsCell::new(
-        SExpression::number(1),
-        SExpression::cons_cell(ConsCell::new(
-            SExpression::number(2),
-            SExpression::cons_cell(ConsCell::new(
-                SExpression::number(3),
-                SExpression::nil(),
+        SX::number(1),
+        SX::cons_cell(ConsCell::new(
+            SX::number(2),
+            SX::cons_cell(ConsCell::new(
+                SX::number(3),
+                SX::nil(),
             )),
         )),
     );

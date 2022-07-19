@@ -26,10 +26,10 @@
             [ ] mccarthy_scope
             [ ] mod
         [ ] mod
-    [ ] expression
-        [ ] cons_cell
-            [ ] iter
-            [ ] mod
+    [ ] s_expression
+        [*] cons_cell
+            [*] iter
+            [*] mod
         [ ] meta
             [ ] lambda
             [ ] macro
