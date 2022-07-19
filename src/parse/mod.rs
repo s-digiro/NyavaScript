@@ -14,11 +14,41 @@ mod test;
 
 use crate::s_expression::SExpressionRef;
 use std::error::Error;
+use std::convert::From;
 
-pub fn parse(text: &str) -> Result<SExpressionRef, Box<dyn Error>> {
+pub fn parse(text: &str) -> Result<SExpressionRef, ParseError> {
     let tokens = lexical_analysis::parse(text)?;
     let syntax = syntactic_analysis::parse(tokens)?;
     let ret = semantic_analysis::parse(syntax);
 
     Ok(ret)
 }
+
+#[derive(Debug)]
+pub enum ParseError {
+    Lex(LexError),
+    Syntax(SyntaxError),
+}
+
+impl std::fmt::Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            ParseError::Lex(err) => write!(f, "{}", err),
+            ParseError::Syntax(err) => write!(f, "{}", err),
+        }
+    }
+}
+
+impl From<LexError> for ParseError {
+    fn from(err: LexError) -> Self {
+        ParseError::Lex(err)
+    }
+}
+
+impl From<SyntaxError> for ParseError {
+    fn from(err: SyntaxError) -> Self {
+        ParseError::Syntax(err)
+    }
+}
+
+impl Error for ParseError { }

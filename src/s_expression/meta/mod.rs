@@ -1,6 +1,3 @@
-mod lambda;
-pub use lambda::Lambda;
-
 mod r#macro;
 pub use r#macro::Macro;
 

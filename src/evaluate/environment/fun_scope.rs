@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::s_expression::{ SExpression, Lambda, List, Macro, RustLambda, RustMacro };
+use crate::s_expression::{ SExpression, Function, List, Macro, RustLambda, RustMacro };
 
 pub struct FunScope;
 
@@ -26,7 +26,7 @@ impl FunScope {
 
         ret.insert(
             ";".into(),
-            Lambda::from("(lambda () (()))"),
+           Function::try_from("(lambda () (()))").unwrap().sxref(),
         );
 
         ret.insert(
@@ -37,7 +37,7 @@ impl FunScope {
                         Some(val) => match &*val {
                             SExpression::Nil => println!(),
                             SExpression::Macro(_) => println!("[macro]"),
-                            SExpression::Lambda(_) => println!("[lambda]"),
+                            SExpression::Function(_) => println!("[lambda]"),
                             SExpression::Number(n) => println!("{}", n),
                             SExpression::String(s) => println!("{}", s),
                             SExpression::Symbol(s) => println!("{}", s),

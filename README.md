@@ -1,6 +1,7 @@
 # To Do
-[*] Rename RefVal and Value to RefSExpr and SExpr
-[ ] Macro and Lambda should be their own values, not weird wrappers
+[ ] Try making SExpressionRef a singleton tuple that derefs to Rc
+[ ] Rename RustLambda to RustFunction for consistency
+[ ] Macro should be its own value, not a weird wrapper
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
 [ ] Passing lambdas to other lambdas is a lil weird... figure it out
@@ -41,7 +42,6 @@
         [ ] mod
     [*] parse
     [ ] lib
-[*] Call of non procedure returns nil
 [ ] Lisp macro should only recieve one arg, which is arg list
 [ ] Lisp lambda should get args like normal
 [ ] Evaluate List should be refactored into more functions so its easier to read
@@ -58,3 +58,6 @@
     decide.
 [ ] Invalid function calls should fail spectacularly rather than returning nil
 [ ] NIL keyword
+[*] Rename lambda to function to make clearer the difference between lambda
+    macro and actual data structure
+[*] Lambda should be its own value, not a weird wrapper

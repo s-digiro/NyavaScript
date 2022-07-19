@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::s_expression::{ SExpression, Lambda, List, RustLambda, RustMacro };
+use crate::s_expression::{ SExpression, Function, List, RustLambda, RustMacro };
 
 pub struct McCarthyScope;
 
@@ -75,7 +75,7 @@ impl McCarthyScope {
             "lambda".to_string(),
             RustMacro::from(
                 |e, _| {
-                    SExpression::lambda(Lambda::new(e))
+                    SExpression::function(Function::new(e))
                 }
             )
         );
@@ -109,22 +109,25 @@ impl McCarthyScope {
 
         ret.insert(
             "null".to_string(),
-            Lambda::from("(lambda (x) (equal x ()))"),
+            Function::try_from("(lambda (x) (equal x ()))").unwrap().sxref(),
         );
 
         ret.insert(
             "and".to_string(),
-            Lambda::from("(lambda (p q) (cond (p q)))"),
+            Function::try_from("(lambda (p q) (cond (p q)))").unwrap().sxref(),
         );
 
         ret.insert(
             "or".to_string(),
-            Lambda::from("(lambda (p q) (cond (p 1) (q 1)))"),
+            Function::try_from("(lambda (p q) (cond (p 1) (q 1)))")
+                .unwrap()
+                .sxref(),
         );
 
         ret.insert(
             "not".to_string(),
-            Lambda::from("(lambda (x) (cond (x ()) (1 1)))"),
+            Function::try_from("(lambda (x) (cond (x ()) (1 1)))").unwrap()
+                .sxref(),
         );
 
         ret.insert(
@@ -137,7 +140,7 @@ impl McCarthyScope {
 
                         env.set(
                             name.into(),
-                            SExpression::lambda(Lambda::new(rest)),
+                            SExpression::function(Function::new(rest)),
                         );
                     }
 

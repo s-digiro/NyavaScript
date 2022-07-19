@@ -1,11 +1,14 @@
 mod cons_cell;
 pub use cons_cell::ConsCell;
 
+mod function;
+pub use function::Function;
+
 mod list;
 pub use list::List;
 
 mod meta;
-pub use meta::{ Lambda, Macro, RustLambda, RustMacro };
+pub use meta::{ Macro, RustLambda, RustMacro };
 
 use enum_as_inner::EnumAsInner;
 use std::rc::Rc;
@@ -20,7 +23,7 @@ pub enum SExpression {
     Nil,
 
     // Higher level abstraction
-    Lambda(Lambda),
+    Function(Function),
     Macro(Macro),
     RustLambda(RustLambda),
     RustMacro(RustMacro),
@@ -35,7 +38,7 @@ impl std::fmt::Display for SExpression {
             SExpression::String(x) => write!(f, "\"{}\"", x),
             SExpression::Symbol(x) => write!(f, "{}", x),
             SExpression::Nil => write!(f, "NIL"),
-            SExpression::Lambda(x) => write!(f, "{}", x),
+            SExpression::Function(x) => write!(f, "{}", x),
             SExpression::Macro(x) => write!(f, "{}", x),
             SExpression::RustLambda(x) => write!(f, "{}", x),
             SExpression::RustMacro(x) => write!(f, "{}", x),
@@ -51,8 +54,8 @@ impl SExpression {
         Rc::new(SExpression::ConsCell(c))
     }
 
-    pub fn lambda(lambda: Lambda) -> SExpressionRef {
-        Rc::new(SExpression::Lambda(lambda))
+    pub fn function(function: Function) -> SExpressionRef {
+        Rc::new(SExpression::Function(function))
     }
 
     pub fn r#macro(m: Macro) -> SExpressionRef {

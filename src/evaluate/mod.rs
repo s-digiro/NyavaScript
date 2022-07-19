@@ -2,7 +2,7 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
-use crate::s_expression::{ SExpression, SExpressionRef, Lambda, List, Macro };
+use crate::s_expression::{ SExpression, SExpressionRef, Function, List, Macro };
 use std::rc::Rc;
 
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -51,10 +51,10 @@ fn eval_list(list: SExpressionRef, env: &mut Env) -> SExpressionRef {
             );
 
             match &*first {
-                SExpression::Lambda(l) => {
-                    println!("Lambda in: {}", rest);
+                SExpression::Function(l) => {
+                    println!("Function in: {}", rest);
                     let ret = exec_lambda(&l, rest, env);
-                    println!("Lambda out: {}", ret);
+                    println!("Function out: {}", ret);
                     println!();
 
                     ret
@@ -77,19 +77,19 @@ fn eval_list(list: SExpressionRef, env: &mut Env) -> SExpressionRef {
 }
 
 fn exec_lambda(
-    lambda: &Lambda,
+    f: &Function,
     args: SExpressionRef,
     env: &mut Env
 ) -> SExpressionRef {
-    eprintln!("exec lambda args ->");
+    eprintln!("exec function args ->");
     env.push(Scope::new());
 
-    for (key, val) in lambda.args().into_iter().zip(List::iter(&args)) {
+    for (key, val) in f.args().into_iter().zip(List::iter(&args)) {
         eprintln!("    {} = {}", key, val);
         env.set(key.to_owned(), val);
     }
 
-    let ret = evaluate(lambda.definition(), env);
+    let ret = evaluate(f.definition(), env);
 
     env.pop();
 
