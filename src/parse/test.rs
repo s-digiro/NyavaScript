@@ -1,59 +1,58 @@
 use super::*;
 
-use crate::s_expression::{ ConsCell, SExpression };
+use crate::s_expression::{ ConsCell };
 
 #[test]
 pub fn full_parse() {
     let subject = "((lambda (x) (cons x (\"foo\" 2))) (car (3 \"bar\")))";
 
     let expected =
-        SExpression::cons_cell(ConsCell::new( // First actual parenthesis
-            SExpression::cons_cell(ConsCell::new(
-                SExpression::symbol("lambda".to_owned()),
-                SExpression::cons_cell(ConsCell::new(
-                    SExpression::cons_cell(ConsCell::new(
-                        SExpression::symbol("x".to_owned()),
-                        SExpression::nil(),
+        SExpressionRef::cons_cell(ConsCell::new( // First actual parenthesis
+            SExpressionRef::cons_cell(ConsCell::new(
+                SExpressionRef::symbol("lambda".to_owned()),
+                SExpressionRef::cons_cell(ConsCell::new(
+                    SExpressionRef::cons_cell(ConsCell::new(
+                        SExpressionRef::symbol("x".to_owned()),
+                        SExpressionRef::nil(),
                     )),
-                    SExpression::cons_cell(ConsCell::new(
-                        SExpression::cons_cell(ConsCell::new(
-                            SExpression::symbol("cons".to_owned()),
-                            SExpression::cons_cell(ConsCell::new(
-                                SExpression::symbol("x".to_owned()),
-                                SExpression::cons_cell(ConsCell::new(
-                                    SExpression::cons_cell(ConsCell::new(
-                                        SExpression::string("foo".to_owned()),
-                                        SExpression::cons_cell(ConsCell::new(
-                                            SExpression::number(2),
-                                            SExpression::nil(),
+                    SExpressionRef::cons_cell(ConsCell::new(
+                        SExpressionRef::cons_cell(ConsCell::new(
+                            SExpressionRef::symbol("cons".to_owned()),
+                            SExpressionRef::cons_cell(ConsCell::new(
+                                SExpressionRef::symbol("x".to_owned()),
+                                SExpressionRef::cons_cell(ConsCell::new(
+                                    SExpressionRef::cons_cell(ConsCell::new(
+                                        SExpressionRef::string("foo".to_owned()),
+                                        SExpressionRef::cons_cell(ConsCell::new(
+                                            SExpressionRef::number(2),
+                                            SExpressionRef::nil(),
                                         )),
                                     )),
-                                    SExpression::nil(),
+                                    SExpressionRef::nil(),
                                 )),
                             )),
                         )),
-                        SExpression::nil(),
+                        SExpressionRef::nil(),
                     )),
                 )),
             )),
-            SExpression::cons_cell(ConsCell::new(
-                SExpression::cons_cell(ConsCell::new(
-                    SExpression::symbol("car".to_owned()),
-                    SExpression::cons_cell(ConsCell::new(
-                        SExpression::cons_cell(ConsCell::new(
-                            SExpression::number(3),
-                            SExpression::cons_cell(ConsCell::new(
-                                SExpression::string("bar".to_owned()),
-                                SExpression::nil(),
+            SExpressionRef::cons_cell(ConsCell::new(
+                SExpressionRef::cons_cell(ConsCell::new(
+                    SExpressionRef::symbol("car".to_owned()),
+                    SExpressionRef::cons_cell(ConsCell::new(
+                        SExpressionRef::cons_cell(ConsCell::new(
+                            SExpressionRef::number(3),
+                            SExpressionRef::cons_cell(ConsCell::new(
+                                SExpressionRef::string("bar".to_owned()),
+                                SExpressionRef::nil(),
                             )),
                         )),
-                        SExpression::nil(),
+                        SExpressionRef::nil(),
                     )),
                 )),
-                SExpression::nil(),
+                SExpressionRef::nil(),
             )),
         ));
 
-    println!("{}", expected);
     assert_eq!(expected, parse(subject).unwrap());
 }

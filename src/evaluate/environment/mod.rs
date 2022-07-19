@@ -1,7 +1,5 @@
-use std::rc::Rc;
+use crate::s_expression::SExpressionRef as SXRef;
 use std::collections::HashMap;
-
-use crate::s_expression::{ SExpression, SExpressionRef };
 
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
@@ -9,7 +7,7 @@ pub use mccarthy_scope::McCarthyScope;
 mod fun_scope;
 pub use fun_scope::FunScope;
 
-pub type Scope = HashMap<String, SExpressionRef>;
+pub type Scope = HashMap<String, SXRef>;
 
 #[derive(Debug)]
 pub struct Environment {
@@ -33,10 +31,10 @@ impl Environment {
         false
     }
 
-    pub fn get(&self, key: &str) -> SExpressionRef {
+    pub fn get(&self, key: &str) -> SXRef {
         self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| Rc::clone(exref)))
-            .unwrap_or(SExpression::nil())
+            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)))
+            .unwrap_or(SXRef::nil())
     }
 
     pub fn pop(&mut self) -> Scope {
@@ -47,7 +45,7 @@ impl Environment {
         self.stack.push(c);
     }
 
-    pub fn set(&mut self, key: String, val: SExpressionRef) {
+    pub fn set(&mut self, key: String, val: SXRef) {
         self.stack.last_mut().unwrap().insert(key, val);
     }
 }

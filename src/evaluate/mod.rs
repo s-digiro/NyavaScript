@@ -2,22 +2,28 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
-use crate::s_expression::{ SExpression, SExpressionRef, Function, List, Macro };
-use std::rc::Rc;
+use crate::s_expression::{
+    Function,
+    List,
+    Macro,
+    SExpression,
+    SExpressionRef as SXRef,
+};
 
 use std::sync::atomic::{AtomicUsize, Ordering};
+
 fn get_id() -> usize {
     static COUNTER: AtomicUsize = AtomicUsize::new(1);
     COUNTER.fetch_add(1, Ordering::Relaxed)
 }
 
 
-pub fn evaluate(valref: SExpressionRef, env: &mut Env) -> SExpressionRef {
+pub fn evaluate(valref: SXRef, env: &mut Env) -> SXRef {
     let id = get_id();
     eprintln!("{} - evaling: {}", id, valref);
     let ret = match &*valref {
         SExpression::ConsCell(_) => eval_list(valref, env),
-        SExpression::Quote(r) => Rc::clone(r),
+        SExpression::Quote(r) => SXRef::clone(r),
         SExpression::Symbol(s) => env.get(s),
         _ => valref,
     };
@@ -26,7 +32,7 @@ pub fn evaluate(valref: SExpressionRef, env: &mut Env) -> SExpressionRef {
     ret
 }
 
-fn eval_list(list: SExpressionRef, env: &mut Env) -> SExpressionRef {
+fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
     let first = evaluate(List::car(&list), env);
     let rest = List::cdr(&list);
 
@@ -78,9 +84,9 @@ fn eval_list(list: SExpressionRef, env: &mut Env) -> SExpressionRef {
 
 fn exec_lambda(
     f: &Function,
-    args: SExpressionRef,
+    args: SXRef,
     env: &mut Env
-) -> SExpressionRef {
+) -> SXRef {
     eprintln!("exec function args ->");
     env.push(Scope::new());
 
@@ -98,9 +104,9 @@ fn exec_lambda(
 
 fn exec_macro(
     m: &Macro,
-    args: SExpressionRef,
+    args: SXRef,
     env: &mut Env
-) -> SExpressionRef {
+) -> SXRef {
     env.push(Scope::new());
 
     if let Some(key) = m.args().first() {

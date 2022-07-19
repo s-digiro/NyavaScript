@@ -15,7 +15,7 @@ impl RustLambda {
     }
 
     pub fn from(f: LambdaFunc) -> SExpressionRef {
-        SExpression::rust_lambda(RustLambda::new(f))
+        SExpressionRef::rust_lambda(RustLambda::new(f))
     }
 }
 

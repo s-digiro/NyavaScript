@@ -7,9 +7,9 @@ use super::syntactic_analysis::Syntax;
 pub fn parse(tree: Syntax) -> SExpressionRef {
     match tree {
         Syntax::List(l) => parse_list(l),
-        Syntax::Number(n) => SExpression::number(n),
-        Syntax::String(s) => SExpression::string(s),
-        Syntax::Symbol(s) => SExpression::symbol(s),
+        Syntax::Number(n) => SExpressionRef::number(n),
+        Syntax::String(s) => SExpressionRef::string(s),
+        Syntax::Symbol(s) => SExpressionRef::symbol(s),
     }
 }
 

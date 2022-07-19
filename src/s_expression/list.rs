@@ -1,13 +1,14 @@
+use super::SExpressionRef as SXRef;
 use super::*;
 
-pub struct List(SExpressionRef);
+pub struct List(SXRef);
 
 impl List {
-    pub fn new() -> SExpressionRef {
-        SExpression::nil()
+    pub fn new() -> SXRef {
+        SExpressionRef::nil()
     }
 
-    pub fn from(v: Vec<SExpressionRef>) -> SExpressionRef {
+    pub fn from(v: Vec<SXRef>) -> SXRef {
         let mut ret = List::new();
 
         for e in v.into_iter().rev() {
@@ -17,34 +18,34 @@ impl List {
         ret
     }
 
-    pub fn nil() -> SExpressionRef {
-        SExpression::nil()
+    pub fn nil() -> SXRef {
+        SExpressionRef::nil()
     }
 
-    pub fn car(list: &SExpressionRef) -> SExpressionRef {
+    pub fn car(list: &SXRef) -> SXRef {
         match list.as_cons_cell() {
-            Some(e) => Rc::clone(&e.car),
-            None => SExpression::nil(),
+            Some(e) => SXRef::clone(&e.car),
+            None => SExpressionRef::nil(),
         }
     }
 
-    pub fn cdr(list: &SExpressionRef) -> SExpressionRef {
+    pub fn cdr(list: &SXRef) -> SXRef {
         match list.as_cons_cell() {
-            Some(e) => Rc::clone(&e.cdr),
-            None => SExpression::nil(),
+            Some(e) => SXRef::clone(&e.cdr),
+            None => SExpressionRef::nil(),
         }
     }
 
-    pub fn cons(car: &SExpressionRef, cdr: &SExpressionRef) -> SExpressionRef {
-        SExpression::cons_cell(
+    pub fn cons(car: &SXRef, cdr: &SXRef) -> SXRef {
+        SExpressionRef::cons_cell(
             ConsCell::new(
-                Rc::clone(car),
-                Rc::clone(cdr),
+                SXRef::clone(car),
+                SXRef::clone(cdr),
             )
         )
     }
 
-    pub fn push(list: &SExpressionRef, item: &SExpressionRef) -> SExpressionRef {
+    pub fn push(list: &SXRef, item: &SXRef) -> SXRef {
         if list.is_nil() {
             List::cons(item, &List::nil())
         } else {
@@ -58,23 +59,23 @@ impl List {
         }
     }
 
-    pub fn len(list: &SExpressionRef) -> usize {
+    pub fn len(list: &SXRef) -> usize {
         List::iter(list).count()
     }
 
-    pub fn iter(list: &SExpressionRef) -> ListIter {
+    pub fn iter(list: &SXRef) -> ListIter {
         ListIter {
-            current: Rc::clone(list),
+            current: SXRef::clone(list),
         }
     }
 }
 
 pub struct ListIter {
-    current: SExpressionRef,
+    current: SXRef,
 }
 
 impl Iterator for ListIter {
-    type Item = SExpressionRef;
+    type Item = SXRef;
 
     fn next(&mut self) -> Option<Self::Item> {
         let ret = List::car(&self.current);
@@ -90,16 +91,42 @@ impl Iterator for ListIter {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::s_expression::SExpression;
+    use super::SExpressionRef as SXRef;
 
     #[test]
     fn cons_works() {
         assert_eq!(
-            SExpression::cons_cell(ConsCell::new(
-                SExpression::number(1),
-                SExpression::number(2),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(1),
+                SXRef::number(2),
             )),
-            List::cons(&SExpression::number(1), &SExpression::number(2)),
+            List::cons(&SXRef::number(1), &SXRef::number(2)),
+        );
+    }
+
+    #[test]
+    fn car_works() {
+        let subject = SXRef::cons_cell(ConsCell::new(
+            SXRef::number(1),
+            SXRef::number(2),
+        ));
+
+        assert_eq!(
+            SXRef::number(1),
+            List::car(&subject),
+        );
+    }
+
+    #[test]
+    fn cdr_works() {
+        let subject = SXRef::cons_cell(ConsCell::new(
+            SXRef::number(1),
+            SXRef::number(2),
+        ));
+
+        assert_eq!(
+            SXRef::number(2),
+            List::cdr(&subject),
         );
     }
 }

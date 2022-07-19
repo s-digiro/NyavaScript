@@ -1,7 +1,7 @@
 use crate::parse::{ parse, ParseError };
 use crate::s_expression::List;
 use std::convert::TryFrom;
-use super::{ SExpression as SX, SExpressionRef as SXRef };
+use super::SExpressionRef as SXRef;
 
 #[derive(Debug, PartialEq)]
 pub struct Function {
@@ -25,11 +25,11 @@ impl Function {
     }
 
     pub fn definition(&self) -> SXRef {
-        std::rc::Rc::clone(&self.definition)
+        SXRef::clone(&self.definition)
     }
 
     pub fn sxref(self) -> SXRef {
-        SX::function(self)
+        SXRef::function(self)
     }
 }
 

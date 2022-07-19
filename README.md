@@ -1,5 +1,4 @@
 # To Do
-[ ] Try making SExpressionRef a singleton tuple that derefs to Rc
 [ ] Rename RustLambda to RustFunction for consistency
 [ ] Macro should be its own value, not a weird wrapper
 [ ] Add line and column to errors where applicable
@@ -61,3 +60,4 @@
 [*] Rename lambda to function to make clearer the difference between lambda
     macro and actual data structure
 [*] Lambda should be its own value, not a weird wrapper
+[*] Try making SExpressionRef a singleton tuple that derefs to Rc

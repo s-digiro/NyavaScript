@@ -1,6 +1,13 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::s_expression::{ SExpression, Function, List, Macro, RustLambda, RustMacro };
+use crate::s_expression::{
+    SExpression as SX,
+    SExpressionRef as SXRef,
+    Function,
+    List,
+    RustLambda,
+    RustMacro
+};
 
 pub struct FunScope;
 
@@ -12,11 +19,11 @@ impl FunScope {
             "|>".into(),
             RustMacro::from(
                 |args, env| {
-                    let mut last = SExpression::nil();
+                    let mut last = SXRef::nil();
 
                     for arg in List::iter(&args) {
                         let arg = List::push(&arg, &last);
-                        last = SExpression::quote(evaluate(arg, env))
+                        last = SXRef::quote(evaluate(arg, env))
                     }
 
                     last
@@ -35,21 +42,21 @@ impl FunScope {
                 |args, _env| {
                     match List::iter(&args).next() {
                         Some(val) => match &*val {
-                            SExpression::Nil => println!(),
-                            SExpression::Macro(_) => println!("[macro]"),
-                            SExpression::Function(_) => println!("[lambda]"),
-                            SExpression::Number(n) => println!("{}", n),
-                            SExpression::String(s) => println!("{}", s),
-                            SExpression::Symbol(s) => println!("{}", s),
-                            SExpression::Quote(q) => println!("'{}", q),
-                            SExpression::ConsCell(c) => println!("{}", c),
-                            SExpression::RustMacro(_) => println!("[rust macro]"),
-                            SExpression::RustLambda(_) => println!("[rust lambda]"),
+                            SX::Nil => println!(),
+                            SX::Macro(_) => println!("[macro]"),
+                            SX::Function(_) => println!("[lambda]"),
+                            SX::Number(n) => println!("{}", n),
+                            SX::String(s) => println!("{}", s),
+                            SX::Symbol(s) => println!("{}", s),
+                            SX::Quote(q) => println!("'{}", q),
+                            SX::ConsCell(c) => println!("{}", c),
+                            SX::RustMacro(_) => println!("[rust macro]"),
+                            SX::RustLambda(_) => println!("[rust lambda]"),
                         },
                         None => println!(),
                     }
 
-                    SExpression::nil()
+                    SXRef::nil()
                 }
             ),
         );

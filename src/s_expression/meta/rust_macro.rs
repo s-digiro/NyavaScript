@@ -15,7 +15,7 @@ impl RustMacro {
     }
 
     pub fn from(f: MacroFunc) -> SExpressionRef {
-        SExpression::rust_macro(RustMacro::new(f))
+        SExpressionRef::rust_macro(RustMacro::new(f))
     }
 }
 

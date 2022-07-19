@@ -1,15 +1,15 @@
 use super::*;
-use crate::s_expression::SExpression as SX;
+use crate::s_expression::SExpressionRef as SXRef;
 
 #[test]
 fn iter_works() {
     let subject = ConsCell::new(
-        SX::number(1),
-        SX::cons_cell(ConsCell::new(
-            SX::number(2),
-            SX::cons_cell(ConsCell::new(
-                SX::number(3),
-                SX::nil(),
+        SXRef::number(1),
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(2),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(3),
+                SXRef::nil(),
             )),
         )),
     );
@@ -17,17 +17,17 @@ fn iter_works() {
     let mut iter = subject.iter();
 
     assert_eq!(
-        Some(SX::number(1)),
+        Some(SXRef::number(1)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(SX::number(2)),
+        Some(SXRef::number(2)),
         iter.next(),
     );
 
     assert_eq!(
-        Some(SX::number(3)),
+        Some(SXRef::number(3)),
         iter.next(),
     );
 
@@ -40,17 +40,16 @@ fn iter_works() {
 #[test]
 fn display_works() {
     let subject = ConsCell::new(
-        SX::number(1),
-        SX::cons_cell(ConsCell::new(
-            SX::number(2),
-            SX::cons_cell(ConsCell::new(
-                SX::number(3),
-                SX::nil(),
+        SXRef::number(1),
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(2),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(3),
+                SXRef::nil(),
             )),
         )),
     );
 
-    eprintln!("{}", subject.to_string());
     assert_eq!(
         "(1 2 3 )",
         subject.to_string(),

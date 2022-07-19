@@ -1,6 +1,13 @@
 use super::Scope;
 use crate::evaluate::evaluate;
-use crate::s_expression::{ SExpression, Function, List, RustLambda, RustMacro };
+use crate::s_expression::{
+    SExpression as SX,
+    SExpressionRef as SXRef,
+    Function,
+    List,
+    RustLambda,
+    RustMacro
+};
 
 pub struct McCarthyScope;
 
@@ -45,11 +52,11 @@ impl McCarthyScope {
                     let arg = List::car(&e);
 
                     match *arg {
-                        SExpression::String(_)
-                        | SExpression::Symbol(_)
-                        | SExpression::Number(_)
-                        | SExpression::Nil => SExpression::number(1),
-                        _ => SExpression::nil(),
+                        SX::String(_)
+                        | SX::Symbol(_)
+                        | SX::Number(_)
+                        | SX::Nil => SXRef::number(1),
+                        _ => SXRef::nil(),
                     }
                 }
             )
@@ -63,9 +70,9 @@ impl McCarthyScope {
                     let arg2 = List::car(&List::cdr(&e));
 
                     if arg1 == arg2 {
-                        SExpression::number(1)
+                        SXRef::number(1)
                     } else {
-                        SExpression::nil()
+                        SXRef::nil()
                     }
                 }
             )
@@ -75,7 +82,7 @@ impl McCarthyScope {
             "lambda".to_string(),
             RustMacro::from(
                 |e, _| {
-                    SExpression::function(Function::new(e))
+                    SXRef::function(Function::new(e))
                 }
             )
         );
@@ -88,12 +95,12 @@ impl McCarthyScope {
                         let p = List::car(&arg);
                         let e = List::car(&List::cdr(&arg));
 
-                        if SExpression::nil() != evaluate(p, env) {
+                        if SXRef::nil() != evaluate(p, env) {
                             return e
                         }
                     }
 
-                    SExpression::nil()
+                    SXRef::nil()
                 }
             )
         );
@@ -102,7 +109,7 @@ impl McCarthyScope {
             "quote".into(),
             RustMacro::from(
                 |args, _| {
-                    SExpression::quote(List::car(&args))
+                    SXRef::quote(List::car(&args))
                 }
             )
         );
@@ -134,17 +141,17 @@ impl McCarthyScope {
             "defun".to_string(),
             RustMacro::from(
                 |args, env| {
-                    if let SExpression::Symbol(name) = &*List::car(&args) {
+                    if let SX::Symbol(name) = &*List::car(&args) {
                         eprintln!("name: {}", name);
                         let rest = List::cdr(&args);
 
                         env.set(
                             name.into(),
-                            SExpression::function(Function::new(rest)),
+                            SXRef::function(Function::new(rest)),
                         );
                     }
 
-                    SExpression::nil()
+                    SXRef::nil()
                 }
             )
         );

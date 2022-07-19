@@ -1,5 +1,5 @@
 use crate::parse::parse;
-use crate::s_expression::{ SExpression, SExpressionRef, List };
+use crate::s_expression::{ SExpressionRef, List };
 
 #[derive(Debug, PartialEq)]
 pub struct Macro(SExpressionRef);
@@ -20,7 +20,7 @@ impl Macro {
     }
 
     pub fn from(s: &str) -> SExpressionRef {
-        SExpression::r#macro(Macro(parse(s).unwrap()))
+        SExpressionRef::r#macro(Macro(parse(s).unwrap()))
     }
 }
 
