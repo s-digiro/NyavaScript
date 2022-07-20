@@ -19,6 +19,12 @@ impl RustMacro {
     }
 }
 
+impl From<MacroFunc> for RustMacro {
+    fn from(f: MacroFunc) -> Self {
+        Self::new(f)
+    }
+}
+
 impl PartialEq for RustMacro {
     fn eq(&self, _other: &Self) -> bool {
         panic!("Do not call PartialEq on a RustMacro.");
