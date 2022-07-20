@@ -161,3 +161,9 @@ impl From<Function> for SExpressionRef {
         Self::function(f)
     }
 }
+
+impl From<RustFunction> for SExpressionRef {
+    fn from(f: RustFunction) -> Self {
+        Self::rust_function(f)
+    }
+}

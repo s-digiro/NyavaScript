@@ -38,7 +38,7 @@ impl FunScope {
 
         ret.insert(
             "println".into(),
-            RustFunction::from(
+            RustFunction::new(
                 |args, _env| {
                     match List::iter(&args).next() {
                         Some(val) => match &*val {
@@ -58,7 +58,7 @@ impl FunScope {
 
                     SXRef::nil()
                 }
-            ),
+            ).into(),
         );
 
         ret

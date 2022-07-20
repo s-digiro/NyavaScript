@@ -13,10 +13,6 @@ impl RustFunction {
     pub fn exec(&self, list: SXRef, env: &mut Environment) -> SXRef {
         self.0(list, env)
     }
-
-    pub fn from(f: Func) -> SXRef {
-        SXRef::rust_function(RustFunction::new(f))
-    }
 }
 
 impl From<Func> for RustFunction {
