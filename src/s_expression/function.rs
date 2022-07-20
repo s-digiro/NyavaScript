@@ -10,13 +10,7 @@ pub struct Function {
 }
 
 impl Function {
-    pub fn new(sx: SXRef) -> Function {
-        let args = List::iter(&List::car(&List::cdr(&sx)))
-            .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
-            .collect();
-
-        let definition = List::car(&List::cdr(&List::cdr(&sx)));
-
+    pub fn new(args: Vec<String>, definition: SXRef) -> Function {
         Function { args, definition }
     }
 
@@ -38,9 +32,20 @@ impl TryFrom<&str> for Function {
 
     fn try_from(text: &str) -> Result<Self, Self::Error> {
         let ast = parse(text)?;
-        let function = Function::new(ast);
 
-        Ok(function)
+        Ok(ast.into())
+    }
+}
+
+impl From<SXRef> for Function {
+    fn from(sx: SXRef) -> Self {
+        let args = List::iter(&List::car(&List::cdr(&sx)))
+            .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
+            .collect();
+
+        let definition = List::car(&List::cdr(&List::cdr(&sx)));
+
+        Function { args, definition }
     }
 }
 

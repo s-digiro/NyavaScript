@@ -82,7 +82,7 @@ impl McCarthyScope {
             "lambda".to_string(),
             RustMacro::from(
                 |e, _| {
-                    SXRef::function(Function::new(e))
+                    SXRef::function(e.into())
                 }
             )
         );
@@ -147,7 +147,7 @@ impl McCarthyScope {
 
                         env.set(
                             name.into(),
-                            SXRef::function(Function::new(rest)),
+                            SXRef::function(rest.into()),
                         );
                     }
 

@@ -1,5 +1,5 @@
 # To Do
-[ ] From<SXRef> for Function
+[ ] pass all args to macro
 [ ] Pass env to macro
 [ ] Move RustMacro outside of weird meta module.
 [ ] Add line and column to errors where applicable
@@ -65,3 +65,4 @@
 [*] Rename RustLambda to RustFunction for consistency
 [*] Move Macro outside of weird macro module
 [*] Macro should be its own value, not a weird wrapper
+[*] From<SXRef> for Function
