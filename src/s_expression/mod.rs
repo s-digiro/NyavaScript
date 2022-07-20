@@ -8,7 +8,10 @@ mod list;
 pub use list::List;
 
 mod meta;
-pub use meta::{ Macro, RustMacro };
+pub use meta::RustMacro;
+
+mod r#macro;
+pub use r#macro::Macro;
 
 mod rust_function;
 pub use rust_function::RustFunction;
