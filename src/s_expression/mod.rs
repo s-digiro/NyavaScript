@@ -155,3 +155,9 @@ impl std::fmt::Display for SExpressionRef {
         write!(f, "{}", self.0)
     }
 }
+
+impl From<Function> for SExpressionRef {
+    fn from(f: Function) -> Self {
+        Self::function(f)
+    }
+}

@@ -30,13 +30,10 @@
         [*] cons_cell
             [*] iter
             [*] mod
-        [ ] meta
-            [ ] lambda
-            [ ] macro
-            [ ] mod
-            [ ] rust_lambda
-            [ ] rust_macro
-        [ ] atom
+        [ ] function
+        [ ] macro
+        [ ] rust_function
+        [ ] rust_macro
         [ ] list
         [ ] mod
     [*] parse

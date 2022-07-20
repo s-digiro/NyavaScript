@@ -33,7 +33,7 @@ impl FunScope {
 
         ret.insert(
             ";".into(),
-           Function::try_from("(lambda () (()))").unwrap().sxref(),
+           Function::try_from("(lambda () (()))").unwrap().into(),
         );
 
         ret.insert(

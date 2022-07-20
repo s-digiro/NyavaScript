@@ -116,25 +116,25 @@ impl McCarthyScope {
 
         ret.insert(
             "null".to_string(),
-            Function::try_from("(lambda (x) (equal x ()))").unwrap().sxref(),
+            Function::try_from("(lambda (x) (equal x ()))").unwrap().into(),
         );
 
         ret.insert(
             "and".to_string(),
-            Function::try_from("(lambda (p q) (cond (p q)))").unwrap().sxref(),
+            Function::try_from("(lambda (p q) (cond (p q)))").unwrap().into(),
         );
 
         ret.insert(
             "or".to_string(),
             Function::try_from("(lambda (p q) (cond (p 1) (q 1)))")
                 .unwrap()
-                .sxref(),
+                .into(),
         );
 
         ret.insert(
             "not".to_string(),
             Function::try_from("(lambda (x) (cond (x ()) (1 1)))").unwrap()
-                .sxref(),
+                .into(),
         );
 
         ret.insert(

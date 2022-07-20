@@ -21,10 +21,6 @@ impl Function {
     pub fn definition(&self) -> SXRef {
         SXRef::clone(&self.definition)
     }
-
-    pub fn sxref(self) -> SXRef {
-        SXRef::function(self)
-    }
 }
 
 impl TryFrom<&str> for Function {
