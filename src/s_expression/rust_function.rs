@@ -1,7 +1,7 @@
 use crate::evaluate::Environment;
-use crate::s_expression::{ SExpression, SExpressionRef };
+use crate::s_expression::SExpressionRef as SXRef;
 
-type Func = fn(SExpressionRef, &mut Environment) -> SExpressionRef;
+type Func = fn(SXRef, &mut Environment) -> SXRef;
 
 pub struct RustFunction(Func);
 
@@ -10,12 +10,12 @@ impl RustFunction {
         RustFunction(f)
     }
 
-    pub fn exec(&self, list: SExpressionRef, env: &mut Environment) -> SExpressionRef {
+    pub fn exec(&self, list: SXRef, env: &mut Environment) -> SXRef {
         self.0(list, env)
     }
 
-    pub fn from(f: Func) -> SExpressionRef {
-        SExpressionRef::rust_function(RustFunction::new(f))
+    pub fn from(f: Func) -> SXRef {
+        SXRef::rust_function(RustFunction::new(f))
     }
 }
 

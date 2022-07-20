@@ -1,25 +1,25 @@
 #[cfg(test)]
 mod test;
 
-use crate::s_expression::{ SExpression, SExpressionRef, List };
+use crate::s_expression::{ SExpressionRef as SXRef, List };
 use super::syntactic_analysis::Syntax;
 
-pub fn parse(tree: Syntax) -> SExpressionRef {
+pub fn parse(tree: Syntax) -> SXRef {
     match tree {
         Syntax::List(l) => parse_list(l),
-        Syntax::Number(n) => SExpressionRef::number(n),
-        Syntax::String(s) => SExpressionRef::string(s),
-        Syntax::Symbol(s) => SExpressionRef::symbol(s),
+        Syntax::Number(n) => SXRef::number(n),
+        Syntax::String(s) => SXRef::string(s),
+        Syntax::Symbol(s) => SXRef::symbol(s),
     }
 }
 
-fn parse_list(list: Vec<Syntax>) -> SExpressionRef {
+fn parse_list(list: Vec<Syntax>) -> SXRef {
     if list.len() == 0 {
         List::nil()
     } else {
         let children = list.into_iter()
             .map(|syn| parse(syn))
-            .collect::<Vec<SExpressionRef>>();
+            .collect::<Vec<SXRef>>();
 
         List::from(children)
     }

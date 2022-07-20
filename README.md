@@ -1,6 +1,6 @@
 # To Do
-[ ] Rename RustLambda to RustFunction for consistency
 [ ] Macro should be its own value, not a weird wrapper
+[ ] Move RustMacro outside of weird meta module.
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
 [ ] Passing lambdas to other lambdas is a lil weird... figure it out
@@ -61,3 +61,4 @@
     macro and actual data structure
 [*] Lambda should be its own value, not a weird wrapper
 [*] Try making SExpressionRef a singleton tuple that derefs to Rc
+[*] Rename RustLambda to RustFunction for consistency

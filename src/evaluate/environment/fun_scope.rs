@@ -38,7 +38,7 @@ impl FunScope {
 
         ret.insert(
             "println".into(),
-            RustLambda::from(
+            RustFunction::from(
                 |args, _env| {
                     match List::iter(&args).next() {
                         Some(val) => match &*val {

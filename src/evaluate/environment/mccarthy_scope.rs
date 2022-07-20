@@ -17,7 +17,7 @@ impl McCarthyScope {
 
         ret.insert(
             "cons".to_string(),
-            RustLambda::from(
+            RustFunction::from(
                 |e, _| {
                     List::cons(
                         &List::car(&e),
@@ -29,7 +29,7 @@ impl McCarthyScope {
 
         ret.insert(
             "car".to_string(),
-            RustLambda::from(
+            RustFunction::from(
                 |e, _| {
                     List::car(&List::car(&e))
                 }
@@ -38,7 +38,7 @@ impl McCarthyScope {
 
         ret.insert(
             "cdr".to_string(),
-            RustLambda::from(
+            RustFunction::from(
                 |e, _| {
                     List::cdr(&List::car(&e))
                 }
@@ -47,7 +47,7 @@ impl McCarthyScope {
 
         ret.insert(
             "atom".to_string(),
-            RustLambda::from(
+            RustFunction::from(
                 |e, _| {
                     let arg = List::car(&e);
 
@@ -64,7 +64,7 @@ impl McCarthyScope {
 
         ret.insert(
             "equal".to_string(),
-            RustLambda::from(
+            RustFunction::from(
                 |e, _| {
                     let arg1 = List::car(&e);
                     let arg2 = List::car(&List::cdr(&e));
