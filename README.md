@@ -59,6 +59,8 @@
 [ ] From inner for SX
 [ ] Better toString for Function
 [ ] Better toString for Macro
+[ ] Find a way to implement PartialEq on RustFunction
+[ ] Find a way to implement PartialEq on RustMacro
 [*] Rename lambda to function to make clearer the difference between lambda
     macro and actual data structure
 [*] Lambda should be its own value, not a weird wrapper
