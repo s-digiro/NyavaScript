@@ -1,6 +1,4 @@
 # To Do
-[*] Add from fn to RustFunction
-[*] Add from RustFunction to SXRef
 [ ] Add from fn to RustMacro
 [ ] Add from RustMacro to SXRef
 [ ] pass all args to macro
@@ -36,7 +34,7 @@
             [*] mod
         [*] function
         [*] macro
-        [ ] rust_function
+        [*] rust_function
         [ ] rust_macro
         [ ] list
         [ ] mod
@@ -74,3 +72,5 @@
 [*] Macro should be its own value, not a weird wrapper
 [*] From<SXRef> for Function
 [*] Move RustMacro outside of weird meta module.
+[*] Add from fn to RustFunction
+[*] Add from RustFunction to SXRef
