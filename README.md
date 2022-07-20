@@ -33,7 +33,7 @@
         [*] function
         [*] macro
         [*] rust_function
-        [ ] rust_macro
+        [*] rust_macro
         [ ] list
         [ ] mod
     [*] parse
