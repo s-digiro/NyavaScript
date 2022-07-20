@@ -19,6 +19,12 @@ impl RustFunction {
     }
 }
 
+impl From<Func> for RustFunction {
+    fn from(f: Func) -> RustFunction {
+        RustFunction::new(f)
+    }
+}
+
 impl PartialEq for RustFunction {
     fn eq(&self, _other: &Self) -> bool {
         panic!("Do not call PartialEq on a RustFunction.");
