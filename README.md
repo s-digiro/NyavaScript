@@ -30,8 +30,8 @@
         [*] cons_cell
             [*] iter
             [*] mod
-        [ ] function
-        [ ] macro
+        [*] function
+        [*] macro
         [ ] rust_function
         [ ] rust_macro
         [ ] list
