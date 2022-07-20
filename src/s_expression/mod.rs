@@ -7,14 +7,14 @@ pub use function::Function;
 mod list;
 pub use list::List;
 
-mod meta;
-pub use meta::RustMacro;
-
 mod r#macro;
 pub use r#macro::Macro;
 
 mod rust_function;
 pub use rust_function::RustFunction;
+
+mod rust_macro;
+pub use rust_macro::RustMacro;
 
 use std::rc::Rc;
 

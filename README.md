@@ -1,7 +1,6 @@
 # To Do
 [ ] pass all args to macro
 [ ] Pass env to macro
-[ ] Move RustMacro outside of weird meta module.
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
 [ ] Passing lambdas to other lambdas is a lil weird... figure it out
@@ -66,3 +65,4 @@
 [*] Move Macro outside of weird macro module
 [*] Macro should be its own value, not a weird wrapper
 [*] From<SXRef> for Function
+[*] Move RustMacro outside of weird meta module.
