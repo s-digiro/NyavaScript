@@ -1,5 +1,6 @@
 # To Do
-[ ] Macro should be its own value, not a weird wrapper
+[*] Move Macro outside of weird macro module
+[*] Macro should be its own value, not a weird wrapper
 [ ] Move RustMacro outside of weird meta module.
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
