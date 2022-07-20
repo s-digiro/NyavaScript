@@ -17,7 +17,7 @@ impl FunScope {
 
         ret.insert(
             "|>".into(),
-            RustMacro::from(
+            RustMacro::new(
                 |args, env| {
                     let mut last = SXRef::nil();
 
@@ -28,7 +28,7 @@ impl FunScope {
 
                     last
                 }
-            ),
+            ).into(),
         );
 
         ret.insert(

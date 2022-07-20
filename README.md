@@ -1,5 +1,4 @@
 # To Do
-[ ] Add from RustMacro to SXRef
 [ ] pass all args to macro
 [ ] Pass env to macro
 [ ] Add line and column to errors where applicable
@@ -74,3 +73,4 @@
 [*] Add from fn to RustFunction
 [*] Add from RustFunction to SXRef
 [*] Add from fn to RustMacro
+[*] Add from RustMacro to SXRef

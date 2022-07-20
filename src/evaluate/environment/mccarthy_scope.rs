@@ -80,16 +80,16 @@ impl McCarthyScope {
 
         ret.insert(
             "lambda".to_string(),
-            RustMacro::from(
+            RustMacro::new(
                 |e, _| {
                     SXRef::function(e.into())
                 }
-            )
+            ).into()
         );
 
         ret.insert(
             "cond".to_string(),
-            RustMacro::from(
+            RustMacro::new(
                 |e, env| {
                     for arg in List::iter(&e) {
                         let p = List::car(&arg);
@@ -102,16 +102,16 @@ impl McCarthyScope {
 
                     SXRef::nil()
                 }
-            )
+            ).into()
         );
 
         ret.insert(
             "quote".into(),
-            RustMacro::from(
+            RustMacro::new(
                 |args, _| {
                     SXRef::quote(List::car(&args))
                 }
-            )
+            ).into()
         );
 
         ret.insert(
@@ -139,7 +139,7 @@ impl McCarthyScope {
 
         ret.insert(
             "defun".to_string(),
-            RustMacro::from(
+            RustMacro::new(
                 |args, env| {
                     if let SX::Symbol(name) = &*List::car(&args) {
                         eprintln!("name: {}", name);
@@ -153,7 +153,7 @@ impl McCarthyScope {
 
                     SXRef::nil()
                 }
-            )
+            ).into(),
         );
 
         ret
