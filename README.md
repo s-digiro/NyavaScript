@@ -54,6 +54,11 @@
     decide.
 [ ] Invalid function calls should fail spectacularly rather than returning nil
 [ ] NIL keyword
+[ ] From SX for SXRef
+[ ] From inner for SXRef
+[ ] From inner for SX
+[ ] Better toString for Function
+[ ] Better toString for Macro
 [*] Rename lambda to function to make clearer the difference between lambda
     macro and actual data structure
 [*] Lambda should be its own value, not a weird wrapper
