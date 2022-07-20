@@ -61,16 +61,3 @@
 [ ] Better toString for Macro
 [ ] Find a way to implement PartialEq on RustFunction
 [ ] Find a way to implement PartialEq on RustMacro
-[*] Rename lambda to function to make clearer the difference between lambda
-    macro and actual data structure
-[*] Lambda should be its own value, not a weird wrapper
-[*] Try making SExpressionRef a singleton tuple that derefs to Rc
-[*] Rename RustLambda to RustFunction for consistency
-[*] Move Macro outside of weird macro module
-[*] Macro should be its own value, not a weird wrapper
-[*] From<SXRef> for Function
-[*] Move RustMacro outside of weird meta module.
-[*] Add from fn to RustFunction
-[*] Add from RustFunction to SXRef
-[*] Add from fn to RustMacro
-[*] Add from RustMacro to SXRef
