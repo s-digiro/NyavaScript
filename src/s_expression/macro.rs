@@ -1,26 +1,48 @@
-use crate::parse::parse;
+use crate::parse::{ parse, ParseError };
 use crate::s_expression::{ SExpressionRef as SXRef, List };
 
 #[derive(Debug, PartialEq)]
-pub struct Macro(SXRef);
+pub struct Macro {
+    definition: SXRef,
+    args: Vec<String>,
+}
 
 impl Macro {
-    pub fn new(v: SXRef) -> Macro {
-        Macro(v)
+    pub fn new(args: Vec<String>, definition: SXRef) -> Macro {
+        Macro {
+            definition,
+            args,
+        }
     }
 
-    pub fn args(&self) -> Vec<String> {
-        List::iter(&List::car(&List::cdr(&self.0)))
-            .map(|v| v.as_symbol().unwrap().to_owned())
-            .collect()
+    pub fn args(&self) -> &Vec<String> {
+        &self.args
     }
 
     pub fn definition(&self) -> SXRef {
-        List::car(&List::cdr(&List::cdr(&self.0)))
+        SXRef::clone(&self.definition)
     }
+}
 
-    pub fn from(s: &str) -> SXRef {
-        SXRef::r#macro(Macro(parse(s).unwrap()))
+impl TryFrom<&str> for Macro {
+    type Error = ParseError;
+
+    fn try_from(text: &str) -> Result<Self, Self::Error> {
+        let ast = parse(text)?;
+
+        Ok(ast.into())
+    }
+}
+
+impl From<SXRef> for Macro {
+    fn from(sx: SXRef) -> Self {
+        let args = List::iter(&List::car(&List::cdr(&sx)))
+            .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
+            .collect();
+
+        let definition = List::car(&List::cdr(&List::cdr(&sx)));
+
+        Macro::new(args, definition)
     }
 }
 
