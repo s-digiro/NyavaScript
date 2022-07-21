@@ -4,7 +4,7 @@ pub use environment::*;
 
 use crate::s_expression::{
     Function,
-    List,
+    list,
     Macro,
     SExpression,
     SExpressionRef as SXRef,
@@ -33,8 +33,8 @@ pub fn evaluate(valref: SXRef, env: &mut Env) -> SXRef {
 }
 
 fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
-    let first = evaluate(List::car(&list), env);
-    let rest = List::cdr(&list);
+    let first = evaluate(list::car(&list), env);
+    let rest = list::cdr(&list);
 
     match &*first {
         SExpression::Macro(m) => {
@@ -53,7 +53,7 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
         },
         _ => {
             let rest = SExpression::from_iter(
-                List::iter(&rest).map(|valref| evaluate(valref, env))
+                rest.iter().map(|valref| evaluate(valref, env))
             );
 
             match &*first {
@@ -75,7 +75,7 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
                 },
                 _ => {
                     println!("fn {} on args {} evaluated to nil!", first, rest);
-                    List::nil()
+                    SXRef::nil()
                 },
             }
         },
@@ -90,7 +90,7 @@ fn exec_lambda(
     eprintln!("exec function args ->");
     env.push(Scope::new());
 
-    for (key, val) in f.args().into_iter().zip(List::iter(&args)) {
+    for (key, val) in f.args().into_iter().zip(args.iter()) {
         eprintln!("    {} = {}", key, val);
         env.set(key.to_owned(), val);
     }
@@ -110,7 +110,7 @@ fn exec_macro(
     env.push(Scope::new());
 
     if let Some(key) = m.args().first() {
-        env.set(key.to_owned(), List::car(&args));
+        env.set(key.to_owned(), list::car(&args));
     }
 
     let ret = evaluate(m.definition(), env);

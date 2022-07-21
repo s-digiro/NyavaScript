@@ -4,7 +4,7 @@ use crate::s_expression::{
     SExpression as SX,
     SExpressionRef as SXRef,
     Function,
-    List,
+    list,
     RustFunction,
     RustMacro
 };
@@ -21,8 +21,8 @@ impl FunScope {
                 |args, env| {
                     let mut last = SXRef::nil();
 
-                    for arg in List::iter(&args) {
-                        let arg = List::push(&arg, &last);
+                    for arg in args.iter() {
+                        let arg = list::push(&arg, &last);
                         last = SXRef::quote(evaluate(arg, env))
                     }
 
@@ -40,7 +40,7 @@ impl FunScope {
             "println".into(),
             RustFunction::new(
                 |args, _env| {
-                    match List::iter(&args).next() {
+                    match args.iter().next() {
                         Some(val) => match &*val {
                             SX::Nil => println!(),
                             SX::Macro(_) => println!("[macro]"),

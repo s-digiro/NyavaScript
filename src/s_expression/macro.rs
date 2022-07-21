@@ -1,5 +1,5 @@
 use crate::parse::{ parse, ParseError };
-use crate::s_expression::{ SExpressionRef as SXRef, List };
+use crate::s_expression::{ SExpressionRef as SXRef, list };
 
 #[derive(Debug, PartialEq)]
 pub struct Macro {
@@ -36,11 +36,11 @@ impl TryFrom<&str> for Macro {
 
 impl From<SXRef> for Macro {
     fn from(sx: SXRef) -> Self {
-        let args = List::iter(&List::car(&List::cdr(&sx)))
+        let args = list::car(&list::cdr(&sx)).iter()
             .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
             .collect();
 
-        let definition = List::car(&List::cdr(&List::cdr(&sx)));
+        let definition = list::car(&list::cdr(&list::cdr(&sx)));
 
         Macro::new(args, definition)
     }

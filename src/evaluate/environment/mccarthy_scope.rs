@@ -4,7 +4,7 @@ use crate::s_expression::{
     SExpression as SX,
     SExpressionRef as SXRef,
     Function,
-    List,
+    list,
     RustFunction,
     RustMacro
 };
@@ -19,9 +19,9 @@ impl McCarthyScope {
             "cons".to_string(),
             RustFunction::new(
                 |e, _| {
-                    List::cons(
-                        &List::car(&e),
-                        &List::car(&List::cdr(&e)),
+                    list::cons(
+                        &list::car(&e),
+                        &list::car(&list::cdr(&e)),
                     )
                 }
             ).into(),
@@ -31,7 +31,7 @@ impl McCarthyScope {
             "car".to_string(),
             RustFunction::new(
                 |e, _| {
-                    List::car(&List::car(&e))
+                    list::car(&list::car(&e))
                 }
             ).into(),
         );
@@ -40,7 +40,7 @@ impl McCarthyScope {
             "cdr".to_string(),
             RustFunction::new(
                 |e, _| {
-                    List::cdr(&List::car(&e))
+                    list::cdr(&list::car(&e))
                 }
             ).into(),
         );
@@ -49,7 +49,7 @@ impl McCarthyScope {
             "atom".to_string(),
             RustFunction::new(
                 |e, _| {
-                    let arg = List::car(&e);
+                    let arg = list::car(&e);
 
                     match *arg {
                         SX::String(_)
@@ -66,8 +66,8 @@ impl McCarthyScope {
             "equal".to_string(),
             RustFunction::new(
                 |e, _| {
-                    let arg1 = List::car(&e);
-                    let arg2 = List::car(&List::cdr(&e));
+                    let arg1 = list::car(&e);
+                    let arg2 = list::car(&list::cdr(&e));
 
                     if arg1 == arg2 {
                         SXRef::number(1)
@@ -91,9 +91,9 @@ impl McCarthyScope {
             "cond".to_string(),
             RustMacro::new(
                 |e, env| {
-                    for arg in List::iter(&e) {
-                        let p = List::car(&arg);
-                        let e = List::car(&List::cdr(&arg));
+                    for arg in e.iter() {
+                        let p = list::car(&arg);
+                        let e = list::car(&list::cdr(&arg));
 
                         if SXRef::nil() != evaluate(p, env) {
                             return e
@@ -109,7 +109,7 @@ impl McCarthyScope {
             "quote".into(),
             RustMacro::new(
                 |args, _| {
-                    SXRef::quote(List::car(&args))
+                    SXRef::quote(list::car(&args))
                 }
             ).into()
         );
@@ -141,9 +141,9 @@ impl McCarthyScope {
             "defun".to_string(),
             RustMacro::new(
                 |args, env| {
-                    if let SX::Symbol(name) = &*List::car(&args) {
+                    if let SX::Symbol(name) = &*list::car(&args) {
                         eprintln!("name: {}", name);
-                        let rest = List::cdr(&args);
+                        let rest = list::cdr(&args);
 
                         env.set(
                             name.into(),

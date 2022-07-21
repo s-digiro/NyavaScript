@@ -1,5 +1,5 @@
 use super::*;
-use crate::s_expression::list::{ List, ListIter };
+use crate::s_expression::ListIter;
 
 impl<'a> IntoIterator for &'a ConsCell {
     type Item = SXRef;
@@ -37,7 +37,7 @@ impl<'a> Iterator for ConsCellIter<'a> {
             Current::Amp(e) => {
                 let ret = SXRef::clone(&e.car);
 
-                self.current = Current::Ref(List::iter(&e.cdr));
+                self.current = Current::Ref(e.cdr.iter());
 
                 Some(ret)
             },

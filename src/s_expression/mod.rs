@@ -4,8 +4,7 @@ pub use cons_cell::ConsCell;
 mod function;
 pub use function::Function;
 
-mod list;
-pub use list::List;
+pub mod list;
 
 mod r#macro;
 pub use r#macro::Macro;
@@ -15,6 +14,9 @@ pub use rust_function::RustFunction;
 
 mod rust_macro;
 pub use rust_macro::RustMacro;
+
+#[cfg(test)]
+mod test;
 
 use std::rc::Rc;
 
@@ -73,7 +75,7 @@ impl SExpression {
         // Probably a more efficient way to do this, but since cons aren't
         // double ended, just convert them to vecs for now
         for valref in i.into_iter().collect::<Vec<SExpressionRef>>().iter().rev() {
-            ret = List::cons(valref, &ret);
+            ret = list::cons(valref, &ret);
         }
 
         ret
@@ -115,6 +117,16 @@ impl SExpressionRef {
 
     pub fn function(function: Function) -> Self {
         Self::new(SExpression::Function(function))
+    }
+
+    pub fn iter(&self) -> ListIter {
+        ListIter {
+            current: Self::clone(self),
+        }
+    }
+
+    pub fn len(list: &Self) -> usize {
+        list.iter().count()
     }
 
     pub fn r#macro(m: Macro) -> Self {
@@ -171,5 +183,37 @@ impl From<RustFunction> for SExpressionRef {
 impl From<RustMacro> for SExpressionRef {
     fn from(f: RustMacro) -> Self {
         Self::rust_macro(f)
+    }
+}
+
+impl From<Vec<Self>> for SExpressionRef {
+    fn from(v: Vec<Self>) -> Self {
+        let mut ret = Self::nil();
+
+        for e in v.into_iter().rev() {
+            ret = list::cons(&e, &ret)
+        }
+
+        ret
+    }
+}
+
+pub struct ListIter {
+    current: SExpressionRef,
+}
+
+impl Iterator for ListIter {
+    type Item = SExpressionRef;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match *self.current {
+            SExpression::Nil => None,
+            _ => {
+                let ret = list::car(&self.current);
+
+                self.current = list::cdr(&self.current);
+                Some(ret)
+            }
+        }
     }
 }

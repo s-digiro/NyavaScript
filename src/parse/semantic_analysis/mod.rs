@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test;
 
-use crate::s_expression::{ SExpressionRef as SXRef, List };
+use crate::s_expression::SExpressionRef as SXRef;
 use super::syntactic_analysis::Syntax;
 
 pub fn parse(tree: Syntax) -> SXRef {
@@ -15,12 +15,12 @@ pub fn parse(tree: Syntax) -> SXRef {
 
 fn parse_list(list: Vec<Syntax>) -> SXRef {
     if list.len() == 0 {
-        List::nil()
+        SXRef::nil()
     } else {
         let children = list.into_iter()
             .map(|syn| parse(syn))
             .collect::<Vec<SXRef>>();
 
-        List::from(children)
+        SXRef::from(children)
     }
 }

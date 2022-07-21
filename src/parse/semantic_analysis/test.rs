@@ -19,12 +19,12 @@ fn parse_empty_list() {
 #[test]
 fn parse_string() {
     assert_eq!(
-        List::from(vec![
-            List::from(vec![
+        SXRef::from(vec![
+            SXRef::from(vec![
                 SXRef::string("foo".into()),
                 SXRef::string("bar".into()),
             ]),
-            List::new(),
+            SXRef::nil(),
         ]),
         parse(
             Syntax::List(vec![
@@ -41,12 +41,12 @@ fn parse_string() {
 #[test]
 fn parse_number() {
     assert_eq!(
-        List::from(vec![
-            List::from(vec![
+        SXRef::from(vec![
+            SXRef::from(vec![
                 SXRef::number(105),
                 SXRef::number(-87)
             ]),
-            List::new(),
+            SXRef::nil(),
         ]),
         parse(
             Syntax::List(vec![
@@ -63,11 +63,11 @@ fn parse_number() {
 #[test]
 fn parse_symbol() {
     assert_eq!(
-        List::from(vec![
-            List::from(vec![
+        SXRef::from(vec![
+            SXRef::from(vec![
                 SXRef::symbol("foo".into()),
             ]),
-            List::new(),
+            SXRef::nil(),
         ]),
         parse(
             Syntax::List(vec![

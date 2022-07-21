@@ -1,5 +1,5 @@
 use crate::parse::{ parse, ParseError };
-use crate::s_expression::List;
+use crate::s_expression::list;
 use std::convert::TryFrom;
 use super::SExpressionRef as SXRef;
 
@@ -35,11 +35,11 @@ impl TryFrom<&str> for Function {
 
 impl From<SXRef> for Function {
     fn from(sx: SXRef) -> Self {
-        let args = List::iter(&List::car(&List::cdr(&sx)))
+        let args = list::car(&list::cdr(&sx)).iter()
             .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
             .collect();
 
-        let definition = List::car(&List::cdr(&List::cdr(&sx)));
+        let definition = list::car(&list::cdr(&list::cdr(&sx)));
 
         Function { args, definition }
     }
