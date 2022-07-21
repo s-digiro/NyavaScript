@@ -86,6 +86,12 @@ impl std::fmt::Display for SExpressionRef {
     }
 }
 
+impl From<ConsCell> for SExpressionRef {
+    fn from(c: ConsCell) -> Self {
+        Self::cons_cell(c)
+    }
+}
+
 impl From<Function> for SExpressionRef {
     fn from(f: Function) -> Self {
         Self::function(f)

@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod test;
+
 use super::Scope;
 use crate::evaluate::evaluate;
 use crate::s_expression::{

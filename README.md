@@ -1,5 +1,6 @@
 # To Do
 [ ] pass all args to macro
+[ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
 [ ] Add line and column to errors where applicable
 [ ] (quote (1 2)) behaves differently from ('(1 2)) and it shouldn't
