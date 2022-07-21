@@ -31,7 +31,11 @@ impl McCarthyScope {
     }
 
     pub fn car(args: SXRef, _env: &mut Env) -> SXRef {
-        util::car(&util::car(&args))
+        util::car(&args)
+    }
+
+    pub fn cdr(args: SXRef, _env: &mut Env) -> SXRef {
+        util::cdr(&args)
     }
 
     pub fn cond(sx: SXRef, env: &mut Env) -> SXRef {
@@ -52,10 +56,6 @@ impl McCarthyScope {
             &util::car(&args),
             &util::car(&util::cdr(&args)),
         )
-    }
-
-    pub fn cdr(args: SXRef, _env: &mut Env) -> SXRef {
-        util::cdr(&util::car(&args))
     }
 
     pub fn defun(sx: SXRef, env: &mut Env) -> SXRef {
