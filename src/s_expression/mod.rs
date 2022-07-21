@@ -4,8 +4,6 @@ pub use cons_cell::ConsCell;
 mod function;
 pub use function::Function;
 
-pub mod list;
-
 mod r#macro;
 pub use r#macro::Macro;
 
@@ -17,6 +15,8 @@ pub use rust_macro::RustMacro;
 
 #[cfg(test)]
 mod test;
+
+pub mod util;
 
 use std::rc::Rc;
 
@@ -75,7 +75,7 @@ impl SExpression {
         // Probably a more efficient way to do this, but since cons aren't
         // double ended, just convert them to vecs for now
         for valref in i.into_iter().collect::<Vec<SExpressionRef>>().iter().rev() {
-            ret = list::cons(valref, &ret);
+            ret = util::cons(valref, &ret);
         }
 
         ret
@@ -191,7 +191,7 @@ impl From<Vec<Self>> for SExpressionRef {
         let mut ret = Self::nil();
 
         for e in v.into_iter().rev() {
-            ret = list::cons(&e, &ret)
+            ret = util::cons(&e, &ret)
         }
 
         ret
@@ -209,9 +209,9 @@ impl Iterator for ListIter {
         match *self.current {
             SExpression::Nil => None,
             _ => {
-                let ret = list::car(&self.current);
+                let ret = util::car(&self.current);
 
-                self.current = list::cdr(&self.current);
+                self.current = util::cdr(&self.current);
                 Some(ret)
             }
         }

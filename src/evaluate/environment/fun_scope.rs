@@ -1,12 +1,12 @@
 use super::Scope;
 use crate::evaluate::evaluate;
 use crate::s_expression::{
+    Function,
+    RustFunction,
+    RustMacro,
     SExpression as SX,
     SExpressionRef as SXRef,
-    Function,
-    list,
-    RustFunction,
-    RustMacro
+    util,
 };
 
 pub struct FunScope;
@@ -22,7 +22,7 @@ impl FunScope {
                     let mut last = SXRef::nil();
 
                     for arg in args.iter() {
-                        let arg = list::push(&arg, &last);
+                        let arg = util::push(&arg, &last);
                         last = SXRef::quote(evaluate(arg, env))
                     }
 

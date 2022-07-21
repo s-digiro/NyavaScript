@@ -4,10 +4,10 @@ pub use environment::*;
 
 use crate::s_expression::{
     Function,
-    list,
     Macro,
     SExpression,
     SExpressionRef as SXRef,
+    util,
 };
 
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -33,8 +33,8 @@ pub fn evaluate(valref: SXRef, env: &mut Env) -> SXRef {
 }
 
 fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
-    let first = evaluate(list::car(&list), env);
-    let rest = list::cdr(&list);
+    let first = evaluate(util::car(&list), env);
+    let rest = util::cdr(&list);
 
     match &*first {
         SExpression::Macro(m) => {
@@ -110,7 +110,7 @@ fn exec_macro(
     env.push(Scope::new());
 
     if let Some(key) = m.args().first() {
-        env.set(key.to_owned(), list::car(&args));
+        env.set(key.to_owned(), util::car(&args));
     }
 
     let ret = evaluate(m.definition(), env);

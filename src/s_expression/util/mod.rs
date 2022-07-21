@@ -26,14 +26,14 @@ pub fn cons(car: &SXRef, cdr: &SXRef) -> SXRef {
 
 pub fn push(list: &SXRef, item: &SXRef) -> SXRef {
     if list.is_nil() {
-        list::cons(item, &SXRef::nil())
+        util::cons(item, &SXRef::nil())
     } else {
-        let head = list::car(&list);
-        let tail = list::cdr(&list);
+        let head = util::car(&list);
+        let tail = util::cdr(&list);
 
-        list::cons(
+        util::cons(
             &head,
-            &list::push(&tail, item),
+            &util::push(&tail, item),
         )
     }
 }
@@ -50,7 +50,7 @@ mod test {
                 SXRef::number(1),
                 SXRef::number(2),
             )),
-            list::cons(&SXRef::number(1), &SXRef::number(2)),
+            util::cons(&SXRef::number(1), &SXRef::number(2)),
         );
     }
 
@@ -63,7 +63,7 @@ mod test {
 
         assert_eq!(
             SXRef::number(1),
-            list::car(&subject),
+            util::car(&subject),
         );
     }
 
@@ -76,7 +76,7 @@ mod test {
 
         assert_eq!(
             SXRef::number(2),
-            list::cdr(&subject),
+            util::cdr(&subject),
         );
     }
 }
