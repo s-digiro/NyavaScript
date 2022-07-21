@@ -26,7 +26,7 @@
             [ ] mccarthy_scope
             [ ] mod
         [ ] mod
-    [ ] s_expression
+    [*] s_expression
         [*] cons_cell
             [*] iter
             [*] mod
@@ -34,8 +34,8 @@
         [*] macro
         [*] rust_function
         [*] rust_macro
-        [ ] list
-        [ ] mod
+        [*] list
+        [*] mod
     [*] parse
     [ ] lib
 [ ] Lisp macro should only recieve one arg, which is arg list
