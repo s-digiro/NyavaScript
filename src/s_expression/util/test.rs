@@ -2,13 +2,121 @@ use super::*;
 use super::SXRef as SXRef;
 
 #[test]
-fn cons_works() {
+fn cons_works_on_numbers() {
     assert_eq!(
         SXRef::cons_cell(ConsCell::new(
             SXRef::number(1),
             SXRef::number(2),
         )),
         util::cons(&SXRef::number(1), &SXRef::number(2)),
+    );
+}
+
+#[test]
+fn cons_number_appended_to_nil() {
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(1),
+            SXRef::nil(),
+        )),
+        util::cons(&SXRef::number(1), &SXRef::nil()),
+    );
+}
+
+#[test]
+fn cons_number_appended_to_cons_cell() {
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(1),
+            SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(2),
+                    SXRef::cons_cell(ConsCell::new(
+                            SXRef::number(3),
+                            SXRef::nil(),
+                    )),
+            )),
+        )),
+        util::cons(
+            &SXRef::number(1),
+            &SXRef::cons_cell(ConsCell::new(
+                SXRef::number(2),
+                SXRef::cons_cell(ConsCell::new(
+                        SXRef::number(3),
+                        SXRef::nil(),
+                )),
+            )),
+        ),
+    );
+}
+
+#[test]
+fn cons_appends_list_to_list() {
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(1),
+                    SXRef::cons_cell(ConsCell::new(
+                            SXRef::number(2),
+                            SXRef::nil(),
+                    )),
+            )),
+            SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(3),
+                    SXRef::nil(),
+            )),
+        )),
+        util::cons(
+            &SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(1),
+                    SXRef::cons_cell(ConsCell::new(
+                            SXRef::number(2),
+                            SXRef::nil(),
+                    )),
+            )),
+            &SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(3),
+                    SXRef::nil(),
+            )),
+        ),
+    );
+}
+
+#[test]
+fn cons_can_append_nil_to_nil() {
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::nil(),
+            SXRef::nil(),
+        )),
+        util::cons(
+            &SXRef::nil(),
+            &SXRef::nil(),
+        ),
+    );
+}
+#[test]
+fn cons_can_append_nil_to_list() {
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::nil(),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(1),
+                SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(2),
+                    SXRef::nil(),
+                )),
+            )),
+        )),
+        util::cons(
+            &SXRef::nil(),
+            &SXRef::cons_cell(ConsCell::new(
+                SXRef::number(1),
+                SXRef::cons_cell(ConsCell::new(
+                    SXRef::number(2),
+                    SXRef::nil(),
+                )),
+            )),
+        ),
     );
 }
 
