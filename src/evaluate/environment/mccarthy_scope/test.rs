@@ -5,11 +5,15 @@ use crate::s_expression::{
     SExpressionRef as SXRef,
 };
 
+pub fn dummy(_: SXRef, _: &mut Env) -> SXRef {
+    SXRef::nil()
+}
+
 #[test]
 pub fn atom_returns_1_when_called_on_nil() {
     let mut env = Env::new();
 
-    let subject = SXRef::nil();
+    let subject = SXRef::from(vec![SXRef::nil()]);
 
     let expected = SXRef::number(1);
 
@@ -20,47 +24,134 @@ pub fn atom_returns_1_when_called_on_nil() {
 
 #[test]
 pub fn atom_returns_1_when_called_on_symbol() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![SXRef::symbol("foo".into())]);
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_1_when_called_on_number() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![SXRef::number(1)]);
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_1_when_called_on_string() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![SXRef::string("foo".into())]);
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_nil_when_called_on_list() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(1),
+        ])
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_nil_when_called_on_quote() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::quote(SXRef::number(1)),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
-pub fn atom_returns_nil_when_called_on_lambda() {
-    panic!("FAIL")
+pub fn atom_returns_nil_when_called_on_function() {
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::function("()".try_into().unwrap()),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_nil_when_called_on_macro() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::r#macro("()".try_into().unwrap()),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_nil_when_called_on_rust_lambda() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::rust_function(RustFunction::new(dummy))
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn atom_returns_nil_when_called_on_rust_macro() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::rust_macro(RustMacro::new(dummy)),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
