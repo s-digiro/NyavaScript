@@ -6,6 +6,64 @@ use crate::s_expression::{
 };
 
 #[test]
+pub fn atom_returns_1_when_called_on_nil() {
+    let mut env = Env::new();
+
+    let subject = SXRef::nil();
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::atom(subject, &mut env);
+
+    assert_eq!(expected, actual)
+}
+
+#[test]
+pub fn atom_returns_1_when_called_on_symbol() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_1_when_called_on_number() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_1_when_called_on_string() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_list() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_quote() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_lambda() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_macro() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_rust_lambda() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn atom_returns_nil_when_called_on_rust_macro() {
+    panic!("FAIL")
+}
+
+#[test]
 pub fn cons_creates_new_cons_cell_from_args() {
     let mut env = Env::new();
 
