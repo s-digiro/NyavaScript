@@ -1,8 +1,5 @@
 use super::*;
-use crate::evaluate::{
-    Environment as Env,
-    evaluate as eval,
-};
+use crate::evaluate::Environment as Env;
 use crate::s_expression::{
     ConsCell,
     SExpressionRef as SXRef,
@@ -266,6 +263,22 @@ pub fn car_returns_nil_from_atom() {
 }
 
 #[test]
+pub fn car_returns_item_in_car_slot_when_called_on_cons_cell() {
+    let mut env = Env::new();
+
+    let subject = SXRef::from(ConsCell::new(
+        SXRef::number(1),
+        SXRef::number(2),
+    ));
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::car(subject, &mut env);
+
+    assert_eq!(expected, actual)
+}
+
+#[test]
 pub fn cdr_returns_nil_when_called_on_nil() {
     let mut env = Env::new();
 
@@ -296,25 +309,82 @@ pub fn cdr_returns_list_of_1_nil_when_called_on_list_of_2_nils() {
 
 #[test]
 pub fn cdr_returns_nil_when_called_on_atom() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::number(1);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::cdr(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cdr_returns_nil_when_called_on_list_of_1() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::number(1),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::cdr(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cdr_returns_list_of_last_item_when_called_on_list_of_2() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+    ]);
+
+    let expected = SXRef::from(vec![
+        SXRef::number(2),
+    ]);
+
+    let actual = McCarthyScope::cdr(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cdr_returns_list_of_2_last_items_when_called_on_list_of_3() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+        SXRef::number(3),
+    ]);
+
+    let expected = SXRef::from(vec![
+        SXRef::number(2),
+        SXRef::number(3),
+    ]);
+
+    let actual = McCarthyScope::cdr(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cdr_returns_item_in_cdr_slot_when_called_on_cons_cell() {
-    panic!("FAIL")
+    let mut env = Env::new();
+
+    let subject = SXRef::from(ConsCell::new(
+        SXRef::number(1),
+        SXRef::number(2),
+    ));
+
+    let expected = SXRef::number(2);
+
+    let actual = McCarthyScope::cdr(subject, &mut env);
+
+    assert_eq!(expected, actual)
 }
