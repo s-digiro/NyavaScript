@@ -215,6 +215,29 @@ pub fn car_returns_first_item_in_list_of_1() {
 }
 
 #[test]
+pub fn car_returns_first_item_in_list_of_3() {
+    let mut env = Env::new();
+    env.push(McCarthyScope::new());
+
+    let subject = SXRef::from(vec![
+        SXRef::symbol("car".into()),
+        SXRef::quote(
+            SXRef::from(vec![
+                SXRef::number(1),
+                SXRef::number(2),
+                SXRef::number(3),
+            ]),
+        ),
+    ]);
+
+    let expected =  SXRef::number(1);
+
+    let actual = eval(subject, &mut env);
+
+    assert_eq!(expected, actual)
+}
+
+#[test]
 pub fn car_returns_nil_from_nil() {
     let mut env = Env::new();
     env.push(McCarthyScope::new());
@@ -268,17 +291,17 @@ pub fn car_returns_nil_from_list_starting_with_nil() {
         SXRef::symbol("car".into()),
         SXRef::quote(
             SXRef::from(vec![
+                SXRef::nil(),
                 SXRef::number(1),
-                SXRef::number(2),
             ]),
         ),
     ]);
 
-    let expected =  SXRef::number(1);
+    let expected =  SXRef::nil();
 
     let actual = eval(subject, &mut env);
 
-    assert_eq!(true, false)
+    assert_eq!(expected, actual)
 }
 
 #[test]
@@ -288,17 +311,12 @@ pub fn car_returns_nil_from_atom() {
 
     let subject = SXRef::from(vec![
         SXRef::symbol("car".into()),
-        SXRef::quote(
-            SXRef::from(vec![
-                SXRef::number(1),
-                SXRef::number(2),
-            ]),
-        ),
+        SXRef::number(1),
     ]);
 
-    let expected =  SXRef::number(1);
+    let expected =  SXRef::nil();
 
     let actual = eval(subject, &mut env);
 
-    assert_eq!(true, false)
+    assert_eq!(expected, actual)
 }
