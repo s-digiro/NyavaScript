@@ -320,3 +320,33 @@ pub fn car_returns_nil_from_atom() {
 
     assert_eq!(expected, actual)
 }
+
+#[test]
+pub fn cdr_returns_nil_when_called_without_args() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cdr_returns_nil_when_called_on_nil() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cdr_returns_nil_when_called_on_atom() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cdr_returns_nil_when_called_on_list_of_1() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cdr_returns_list_of_last_item_when_called_on_list_of_2() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cdr_returns_list_of_2_last_items_when_called_on_list_of_3() {
+    panic!("FAIL")
+}
