@@ -1,17 +1,21 @@
+#[cfg(test)]
+mod test;
+
 use crate::parse::{ parse, ParseError };
-use crate::s_expression::util;
-use std::convert::TryFrom;
-use super::SExpressionRef as SXRef;
+use crate::s_expression::{ SExpressionRef as SXRef, util };
 
 #[derive(Debug, PartialEq)]
-pub struct Function {
-    args: Vec<String>,
+pub struct Macro {
     definition: SXRef,
+    args: Vec<String>,
 }
 
-impl Function {
-    pub fn new(args: Vec<String>, definition: SXRef) -> Function {
-        Function { args, definition }
+impl Macro {
+    pub fn new(args: Vec<String>, definition: SXRef) -> Macro {
+        Macro {
+            definition,
+            args,
+        }
     }
 
     pub fn args(&self) -> &Vec<String> {
@@ -23,7 +27,7 @@ impl Function {
     }
 }
 
-impl TryFrom<&str> for Function {
+impl TryFrom<&str> for Macro {
     type Error = ParseError;
 
     fn try_from(text: &str) -> Result<Self, Self::Error> {
@@ -33,7 +37,7 @@ impl TryFrom<&str> for Function {
     }
 }
 
-impl From<SXRef> for Function {
+impl From<SXRef> for Macro {
     fn from(sx: SXRef) -> Self {
         let args = util::car(&util::cdr(&sx)).iter()
             .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
@@ -41,12 +45,12 @@ impl From<SXRef> for Function {
 
         let definition = util::car(&util::cdr(&util::cdr(&sx)));
 
-        Function { args, definition }
+        Macro::new(args, definition)
     }
 }
 
-impl std::fmt::Display for Function {
+impl std::fmt::Display for Macro {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[Function]")
+        write!(f, "[Macro]")
     }
 }

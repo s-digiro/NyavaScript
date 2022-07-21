@@ -20,19 +20,16 @@ pub mod util;
 
 #[derive(Debug, PartialEq)]
 pub enum SExpression {
-    // Basic
     ConsCell(ConsCell),
-    Number(isize),
-    String(String),
-    Symbol(String),
-    Nil,
-
-    // Higher level abstraction
     Function(Function),
     Macro(Macro),
+    Nil,
+    Number(isize),
+    Quote(SExpressionRef),
     RustFunction(RustFunction),
     RustMacro(RustMacro),
-    Quote(SExpressionRef),
+    String(String),
+    Symbol(String),
 }
 
 impl std::fmt::Display for SExpression {
