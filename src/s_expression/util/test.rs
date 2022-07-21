@@ -216,7 +216,7 @@ fn car_works_on_nil() {
 }
 
 #[test]
-fn cdr_works() {
+fn cdr_works_on_list_of_2() {
     let subject = SXRef::cons_cell(ConsCell::new(
         SXRef::number(1),
         SXRef::number(2),
@@ -224,6 +224,64 @@ fn cdr_works() {
 
     assert_eq!(
         SXRef::number(2),
+        util::cdr(&subject),
+    );
+}
+
+#[test]
+fn cdr_works_on_nil() {
+    let subject = SXRef::nil();
+
+    assert_eq!(
+        SXRef::nil(),
+        util::cdr(&subject),
+    );
+}
+
+#[test]
+fn cdr_works_on_list_of_1() {
+    let subject = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        SXRef::nil(),
+    ));
+
+    assert_eq!(
+        SXRef::nil(),
+        util::cdr(&subject),
+    );
+}
+
+#[test]
+fn cdr_works_on_list_of_3() {
+    let subject = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(2),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(3),
+                SXRef::nil(),
+            ))
+        )),
+    ));
+
+    assert_eq!(
+        SXRef::cons_cell(ConsCell::new(
+            SXRef::number(2),
+            SXRef::cons_cell(ConsCell::new(
+                SXRef::number(3),
+                SXRef::nil(),
+            ))
+        )),
+        util::cdr(&subject),
+    );
+}
+
+#[test]
+fn cdr_works_on_atom() {
+    let subject = SXRef::number(1);
+
+    assert_eq!(
+        SXRef::nil(),
         util::cdr(&subject),
     );
 }
