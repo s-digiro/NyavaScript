@@ -323,6 +323,12 @@ pub fn car_returns_nil_from_atom() {
 
 #[test]
 pub fn cdr_returns_nil_when_called_without_args() {
+    let mut env = Env::new();
+    env.push(McCarthyScope::new());
+
+    let subject = SXRef::from(vec![
+        
+    ]);
     panic!("FAIL")
 }
 

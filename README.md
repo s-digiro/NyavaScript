@@ -1,4 +1,5 @@
 # To Do
+[ ] Move closures in scopes to their own functions?
 [ ] pass all args to macro
 [ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
@@ -62,3 +63,4 @@
 [ ] Better toString for Macro
 [ ] Find a way to implement PartialEq on RustFunction
 [ ] Find a way to implement PartialEq on RustMacro
+[*] Move closures in McCarthyScope to their own functions?
