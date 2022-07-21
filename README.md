@@ -1,5 +1,7 @@
 # To Do
-[ ] Move closures in scopes to their own functions?
+[ ] Make RustFn take Vec of SXRef, with each SXRef being an argument skipping function name
+[ ] Make sure RustMacro takes SXRef as arg, and that this SXRef includes macro itself as first arg
+[ ] Move closures in FunScope to their own functions?
 [ ] pass all args to macro
 [ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
