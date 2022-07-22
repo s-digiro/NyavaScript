@@ -959,15 +959,51 @@ pub fn cond_considers_quote_to_be_truthy() {
 
 #[test]
 pub fn cond_returns_nil_when_truthy_predicate_does_not_have_expression_following_it() {
-    panic!("FAIL")
+    let subject = SXRef::from(vec![
+        SXRef::symbol("cond".into()),
+        SXRef::from(vec![
+            SXRef::number(1),
+        ]),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::cond(subject, &mut Env::new());
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cond_returns_nil_when_truthy_predicate_has_expression_that_returns_nil() {
-    panic!("FAIL")
+    let subject = SXRef::from(vec![
+        SXRef::symbol("cond".into()),
+        SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::nil(),
+        ]),
+    ]);
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::cond(subject, &mut Env::new());
+
+    assert_eq!(expected, actual)
 }
 
 #[test]
 pub fn cond_returns_second_arg_expression_value_when_truthy_predicate_is_followed_by_multiple_arguments() {
-    panic!("FAIL")
+    let subject = SXRef::from(vec![
+        SXRef::symbol("cond".into()),
+        SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(2),
+            SXRef::number(3),
+        ]),
+    ]);
+
+    let expected = SXRef::number(2);
+
+    let actual = McCarthyScope::cond(subject, &mut Env::new());
+
+    assert_eq!(expected, actual)
 }
