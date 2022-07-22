@@ -956,3 +956,18 @@ pub fn cond_considers_quote_to_be_truthy() {
 
     assert_eq!(expected, actual)
 }
+
+#[test]
+pub fn cond_returns_nil_when_truthy_predicate_does_not_have_expression_following_it() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cond_returns_nil_when_truthy_predicate_has_expression_that_returns_nil() {
+    panic!("FAIL")
+}
+
+#[test]
+pub fn cond_returns_second_arg_expression_value_when_truthy_predicate_is_followed_by_multiple_arguments() {
+    panic!("FAIL")
+}
