@@ -8,7 +8,7 @@ use std::rc::Rc;
 use super::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct SExpressionRef(Rc<SExpression>);
+pub struct SExpressionRef(pub Rc<SExpression>);
 
 use std::ops::Deref;
 

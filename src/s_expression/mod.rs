@@ -18,7 +18,7 @@ pub use s_expression_ref::{ SExpressionRef, ListIter };
 
 pub mod util;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum SExpression {
     ConsCell(ConsCell),
     Function(Function),

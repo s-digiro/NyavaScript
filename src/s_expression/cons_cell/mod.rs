@@ -6,7 +6,7 @@ use iter::ConsCellIter;
 #[cfg(test)]
 mod test;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct ConsCell {
     pub car: SXRef,
     pub cdr: SXRef,

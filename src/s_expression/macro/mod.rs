@@ -4,7 +4,7 @@ mod test;
 use crate::parse::{ parse, ParseError };
 use crate::s_expression::{ SExpressionRef as SXRef, util };
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Macro {
     definition: SXRef,
     args: Vec<String>,

@@ -3,6 +3,7 @@ use crate::s_expression::SExpressionRef as SXRef;
 
 type Func = fn(&Vec<SXRef>, &mut Environment) -> SXRef;
 
+#[derive(Clone)]
 pub struct RustFunction(Func);
 
 impl RustFunction {

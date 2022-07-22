@@ -71,13 +71,30 @@ impl McCarthyScope {
     }
 
     pub fn defun(sx: SXRef, env: &mut Env) -> SXRef {
-        if let SX::Symbol(name) = &*util::car(&sx) {
-            let rest = util::cdr(&sx);
+        let mut macro_args = sx.iter();
 
-            env.set(
-                name.into(),
-                SXRef::function(rest.into()),
-            );
+        let _ = macro_args.next(); // skip arg 0
+
+        let name = macro_args.next()
+            .map(|sx| match &*sx {
+                SX::Symbol(s) => Some(s.to_owned()),
+                _ => None,
+            }).flatten();
+
+        let args = macro_args.next() // 2nd arg
+            .unwrap_or(SXRef::nil())
+            .iter()
+            .filter_map(|sx| match &*sx {
+                SX::Symbol(s) => Some(s.to_owned()),
+                _ => None,
+            }).collect();
+
+        let definition = macro_args.next().unwrap_or(SXRef::nil()); // arg 3
+
+        if let Some(name) = name {
+            let f = SXRef::function(Function::new(args, definition));
+
+            env.set(name.into(), f);
         }
 
         SXRef::nil()

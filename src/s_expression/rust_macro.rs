@@ -3,6 +3,7 @@ use crate::s_expression::SExpressionRef as SXRef;
 
 type MacroFunc = fn(SXRef, &mut Environment) -> SXRef;
 
+#[derive(Clone)]
 pub struct RustMacro(MacroFunc);
 
 impl RustMacro {

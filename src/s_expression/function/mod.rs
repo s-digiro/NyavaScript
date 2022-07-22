@@ -6,7 +6,7 @@ use crate::s_expression::util;
 use std::convert::TryFrom;
 use super::SExpressionRef as SXRef;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Function {
     args: Vec<String>,
     definition: SXRef,
