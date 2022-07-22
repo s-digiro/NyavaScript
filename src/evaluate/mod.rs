@@ -67,7 +67,8 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
                 },
                 SExpression::RustFunction(l) => {
                     println!("RustFunction in: {}", rest);
-                    let ret = l.exec(rest, env);
+                    let args = rest.iter().collect();
+                    let ret = l.exec(&args, env);
                     println!("RustFunction out: {}", ret);
                     println!();
 

@@ -40,8 +40,8 @@ impl FunScope {
             "println".into(),
             RustFunction::new(
                 |args, _env| {
-                    match args.iter().next() {
-                        Some(val) => match &*val {
+                    match args.get(0) {
+                        Some(sx) => match &**sx {
                             SX::Nil => println!(),
                             SX::Macro(_) => println!("[macro]"),
                             SX::Function(_) => println!("[lambda]"),

@@ -18,28 +18,31 @@ use crate::s_expression::{
 pub struct McCarthyScope;
 
 impl McCarthyScope {
-    pub fn atom(args: SXRef, _env: &mut Env) -> SXRef {
-        let arg = util::car(&args);
-
-        match *arg {
-            SX::String(_)
-            | SX::Symbol(_)
-            | SX::Number(_)
-            | SX::Nil => SXRef::number(1),
-            _ => SXRef::nil(),
+    pub fn atom(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+        match args.get(0) {
+            None => SXRef::number(1),
+            Some(sx) => match **sx {
+                SX::String(_)
+                | SX::Symbol(_)
+                | SX::Number(_)
+                | SX::Nil => SXRef::number(1),
+                _ => SXRef::nil(),
+            }
         }
     }
 
-    pub fn car(args: SXRef, _env: &mut Env) -> SXRef {
-        let arg1 = util::car(&args);
-
-        util::car(&arg1)
+    pub fn car(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+        match args.get(0) {
+            Some(sx) => util::car(&sx),
+            None => SXRef::nil(),
+        }
     }
 
-    pub fn cdr(args: SXRef, _env: &mut Env) -> SXRef {
-        let arg1 = util::car(&args);
-
-        util::cdr(&arg1)
+    pub fn cdr(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+        match args.get(0) {
+            Some(sx) => util::cdr(&sx),
+            None => SXRef::nil(),
+        }
     }
 
     pub fn cond(sx: SXRef, env: &mut Env) -> SXRef {
@@ -55,9 +58,11 @@ impl McCarthyScope {
         SXRef::nil()
     }
 
-    pub fn cons(args: SXRef, _env: &mut Env) -> SXRef {
-        let arg1 = util::car(&args);
-        let arg2 = util::car(&util::cdr(&args));
+    pub fn cons(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+        let nil = SXRef::nil();
+
+        let arg1 = args.get(0).unwrap_or(&nil);
+        let arg2 = args.get(1).unwrap_or(&nil);
 
         util::cons(
             &arg1,
@@ -78,9 +83,10 @@ impl McCarthyScope {
         SXRef::nil()
     }
 
-    pub fn equal(args: SXRef, _env: &mut Env) -> SXRef {
-        let arg1 = util::car(&args);
-        let arg2 = util::car(&util::cdr(&args));
+    pub fn equal(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+        let nil = SXRef::nil();
+        let arg1 = args.get(0).unwrap_or(&nil);
+        let arg2 = args.get(1).unwrap_or(&nil);
 
         if arg1 == arg2 {
             SXRef::number(1)
