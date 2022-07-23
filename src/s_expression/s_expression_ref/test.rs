@@ -42,3 +42,14 @@ pub fn len_works_on_non_list() {
 
     assert_eq!(sx.len(), 0);
 }
+
+#[test]
+pub fn sxref_from_empty_list_is_nil() {
+    let subject: Vec<SXRef> = Vec::new();
+
+    let expected = SXRef::nil();
+
+    let actual = SXRef::from(subject);
+
+    assert_eq!(expected, actual);
+}

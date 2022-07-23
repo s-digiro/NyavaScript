@@ -203,6 +203,8 @@ impl McCarthyScope {
     }
 
     pub fn quote(sx: SXRef, _env: &mut Env) -> SXRef {
-        SXRef::quote(util::car(&sx))
+        let arg1 = util::car(&util::cdr(&sx));
+
+        SXRef::quote(arg1)
     }
 }

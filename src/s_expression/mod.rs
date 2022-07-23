@@ -16,6 +16,9 @@ pub use rust_macro::RustMacro;
 mod s_expression_ref;
 pub use s_expression_ref::{ SExpressionRef, ListIter };
 
+#[cfg(test)]
+mod test;
+
 pub mod util;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -77,9 +80,54 @@ impl SExpression {
     }
 
     pub fn is_nil(&self) -> bool {
-        match self {
-            Self::Nil => true,
-            _ => false,
+        matches!(self, Self::Nil)
+    }
+
+    pub fn is_rust_function(&self) -> bool {
+        matches!(self, Self::RustFunction(_))
+    }
+
+    pub fn is_rust_macro(&self) -> bool {
+        matches!(self, Self::RustMacro(_))
+    }
+}
+
+
+impl From<ConsCell> for SExpression {
+    fn from(c: ConsCell) -> Self {
+        Self::ConsCell(c)
+    }
+}
+
+impl From<Function> for SExpression {
+    fn from(f: Function) -> Self {
+        Self::Function(f)
+    }
+}
+
+impl From<RustFunction> for SExpression {
+    fn from(f: RustFunction) -> Self {
+        Self::RustFunction(f)
+    }
+}
+
+impl From<RustMacro> for SExpression {
+    fn from(f: RustMacro) -> Self {
+        Self::RustMacro(f)
+    }
+}
+
+impl From<Vec<SExpressionRef>> for SExpression {
+    fn from(v: Vec<SExpressionRef>) -> Self {
+        let mut ret = SExpression::Nil;
+
+        for e in v.into_iter().rev() {
+            ret = SExpression::ConsCell(ConsCell::new(
+                e,
+                SExpressionRef::new(ret),
+            ));
         }
+
+        ret
     }
 }

@@ -14,6 +14,7 @@ mod cons;
 mod defun;
 mod equal;
 mod lambda;
+mod quote;
 
 pub fn dummy_fn(_: &Vec<SXRef>, _: &mut Env) -> SXRef {
     SXRef::nil()
