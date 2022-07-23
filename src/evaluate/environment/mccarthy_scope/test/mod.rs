@@ -6,6 +6,7 @@ use crate::s_expression::{
 use std::rc::Rc;
 use super::*;
 
+mod and;
 mod atom;
 mod car;
 mod cdr;
