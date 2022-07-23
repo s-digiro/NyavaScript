@@ -409,3 +409,55 @@ pub fn equal_ignores_args_past_2nd() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+pub fn equal_returns_1_when_passed_2_samey_lists() {
+    let subject = vec![
+        SXRef::from(vec![
+            SXRef::symbol("car".into()),
+            SXRef::quote(SXRef::from(vec![
+                SXRef::number(1),
+                SXRef::number(2),
+            ]))
+        ]),
+        SXRef::from(vec![
+            SXRef::symbol("car".into()),
+            SXRef::quote(SXRef::from(vec![
+                SXRef::number(1),
+                SXRef::number(2),
+            ]))
+        ]),
+    ];
+
+    let expected = SXRef::number(1);
+
+    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+
+    assert_eq!(expected, actual)
+}
+
+#[test]
+pub fn equal_returns_nil_when_passed_2_different_lists() {
+    let subject = vec![
+        SXRef::from(vec![
+            SXRef::symbol("car".into()),
+            SXRef::quote(SXRef::from(vec![
+                SXRef::number(1),
+                SXRef::number(2),
+            ]))
+        ]),
+        SXRef::from(vec![
+            SXRef::symbol("cdr".into()),
+            SXRef::quote(SXRef::from(vec![
+                SXRef::number(1),
+                SXRef::number(2),
+            ]))
+        ]),
+    ];
+
+    let expected = SXRef::nil();
+
+    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+
+    assert_eq!(expected, actual)
+}
