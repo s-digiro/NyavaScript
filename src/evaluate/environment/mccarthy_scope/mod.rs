@@ -17,6 +17,7 @@ use crate::s_expression::{
 
 static AND: &'static str = "(lambda (p q) (cond (p q)))";
 static NULL: &'static str = "(lambda (x) (equal x ()))";
+static OR: &'static str = "(lambda (p q) (cond (p p) (q q)))";
 
 pub struct McCarthyScope;
 
@@ -186,9 +187,7 @@ impl McCarthyScope {
 
         ret.insert(
             "or".to_string(),
-            Function::try_from("(lambda (p q) (cond (p 1) (q 1)))")
-                .unwrap()
-                .into(),
+            Function::try_from(OR).unwrap().into(),
         );
 
         ret.insert(

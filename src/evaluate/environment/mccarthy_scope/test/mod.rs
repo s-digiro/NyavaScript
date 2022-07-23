@@ -16,6 +16,7 @@ mod defun;
 mod equal;
 mod lambda;
 mod null;
+mod or;
 mod quote;
 
 fn dummy_fn(_: &Vec<SXRef>, _: &mut Env) -> SXRef {
