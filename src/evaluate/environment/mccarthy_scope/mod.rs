@@ -16,6 +16,7 @@ use crate::s_expression::{
 };
 
 static AND: &'static str = "(lambda (p q) (cond (p q)))";
+static NOT: &'static str = "(lambda (x) (cond (x ()) (1 1)))";
 static NULL: &'static str = "(lambda (x) (equal x ()))";
 static OR: &'static str = "(lambda (p q) (cond (p p) (q q)))";
 
@@ -192,8 +193,7 @@ impl McCarthyScope {
 
         ret.insert(
             "not".to_string(),
-            Function::try_from("(lambda (x) (cond (x ()) (1 1)))").unwrap()
-                .into(),
+            Function::try_from(NOT).unwrap().into(),
         );
 
         ret.insert(

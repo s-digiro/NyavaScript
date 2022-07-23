@@ -15,6 +15,7 @@ mod cons;
 mod defun;
 mod equal;
 mod lambda;
+mod not;
 mod null;
 mod or;
 mod quote;
