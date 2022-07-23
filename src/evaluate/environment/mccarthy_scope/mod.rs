@@ -105,10 +105,22 @@ impl McCarthyScope {
         let arg1 = args.get(0).unwrap_or(&nil);
         let arg2 = args.get(1).unwrap_or(&nil);
 
-        if arg1 == arg2 {
-            SXRef::number(1)
-        } else {
-            SXRef::nil()
+        match (&**arg1, &**arg2) {
+            (SX::Function(_), _)
+            | (_, SX::Function(_))
+            | (SX::Macro(_), _)
+            | (_, SX::Macro(_))
+            | (SX::RustFunction(_), _)
+            | (_, SX::RustFunction(_))
+            | (SX::RustMacro(_), _)
+            | (_, SX::RustMacro(_)) => SXRef::nil(),
+            _ => {
+                if arg1 == arg2 {
+                    SXRef::number(1)
+                } else {
+                    SXRef::nil()
+                }
+            },
         }
     }
 
