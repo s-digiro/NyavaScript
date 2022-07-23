@@ -1,6 +1,11 @@
 #[cfg(test)]
 mod test;
 
+use crate::evaluate::{
+    Environment as Env,
+    Scope,
+    evaluate as eval,
+};
 use crate::parse::{ parse, ParseError };
 use crate::s_expression::util;
 use std::convert::TryFrom;
@@ -23,6 +28,22 @@ impl Function {
 
     pub fn definition(&self) -> SXRef {
         SXRef::clone(&self.definition)
+    }
+
+    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> SXRef {
+        eprintln!("exec function args ->");
+        env.push(Scope::new());
+
+        for (key, val) in self.args().iter().zip(args.into_iter()) {
+            eprintln!("    {} = {}", key, val);
+            env.set(key.to_owned(), val);
+        }
+
+        let ret = eval(self.definition(), env);
+
+        env.pop();
+
+        ret
     }
 }
 

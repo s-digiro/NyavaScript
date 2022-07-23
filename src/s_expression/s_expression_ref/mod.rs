@@ -98,6 +98,12 @@ impl From<Function> for SExpressionRef {
     }
 }
 
+impl From<Macro> for SExpressionRef {
+    fn from(f: Macro) -> Self {
+        Self::r#macro(f)
+    }
+}
+
 impl From<RustFunction> for SExpressionRef {
     fn from(f: RustFunction) -> Self {
         Self::rust_function(f)

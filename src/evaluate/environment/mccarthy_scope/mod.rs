@@ -15,6 +15,8 @@ use crate::s_expression::{
     util,
 };
 
+static NULL: &'static str = "(lambda (x) (equal x ()))";
+
 pub struct McCarthyScope;
 
 impl McCarthyScope {
@@ -173,7 +175,7 @@ impl McCarthyScope {
 
         ret.insert(
             "null".to_string(),
-            Function::try_from("(lambda (x) (equal x ()))").unwrap().into(),
+            Function::try_from(NULL).unwrap().into(),
         );
 
         ret.insert(
@@ -201,6 +203,7 @@ impl McCarthyScope {
 
         ret
     }
+
 
     pub fn quote(sx: SXRef, _env: &mut Env) -> SXRef {
         let arg1 = util::car(&util::cdr(&sx));

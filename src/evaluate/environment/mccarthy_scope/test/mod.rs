@@ -14,14 +14,21 @@ mod cons;
 mod defun;
 mod equal;
 mod lambda;
+mod null;
 mod quote;
 
-pub fn dummy_fn(_: &Vec<SXRef>, _: &mut Env) -> SXRef {
+fn dummy_fn(_: &Vec<SXRef>, _: &mut Env) -> SXRef {
     SXRef::nil()
 }
 
-pub fn dummy_macro(_: SXRef, _: &mut Env) -> SXRef {
+fn dummy_macro(_: SXRef, _: &mut Env) -> SXRef {
     SXRef::nil()
 }
 
+fn mc_env() -> Env {
+    let mut ret = Env::new();
 
+    ret.push(McCarthyScope::new());
+
+    ret
+}
