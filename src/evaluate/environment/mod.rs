@@ -74,6 +74,10 @@ impl Environment {
         self.stack.last_mut().unwrap().insert(key, val);
     }
 
+    pub fn delete(&mut self, key: &str) {
+        self.stack.last_mut().unwrap().remove(key);
+    }
+
     pub fn defun(&mut self, key: String, val: SXRef) {
         self.global.insert(key, val);
     }
