@@ -99,7 +99,7 @@ impl McCarthyScope {
         if let Some(name) = name {
             let f = SXRef::function(Function::new(args, definition));
 
-            env.set(name.into(), f);
+            env.defun(name.into(), f);
         }
 
         SXRef::nil()

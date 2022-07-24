@@ -7,20 +7,33 @@ pub use mccarthy_scope::McCarthyScope;
 mod fun_scope;
 pub use fun_scope::FunScope;
 
+#[cfg(test)]
+mod test;
+
 pub type Scope = HashMap<String, SXRef>;
 
 #[derive(Debug)]
 pub struct Environment {
+    global: Scope,
+    lib: Vec<Scope>,
     stack: Vec<Scope>,
 }
 
 impl Environment {
     pub fn new() -> Environment {
         Environment {
-            stack: vec![
-                Scope::new(),
-            ],
+            stack: vec![Scope::new()],
+            lib: vec![],
+            global: Scope::new(),
         }
+    }
+
+    pub fn pop_lib(&mut self) -> Scope {
+        self.lib.pop().unwrap()
+    }
+
+    pub fn push_lib(&mut self, c: Scope) {
+        self.lib.push(c);
     }
 
     pub fn has(&self, key: &str) -> bool {
@@ -28,9 +41,25 @@ impl Environment {
     }
 
     pub fn get(&self, key: &str) -> SXRef {
-        self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)))
-            .unwrap_or(SXRef::nil())
+        let local = self.stack.iter().rev()
+            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+
+        if let Some(local) = local {
+            return local
+        }
+
+        let lib = self.lib.iter().rev()
+            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+
+        if let Some(lib) = lib {
+            return lib
+        }
+
+        if let Some(global) = self.global.get(key) {
+            return SXRef::clone(global)
+        }
+
+        SXRef::nil()
     }
 
     pub fn pop(&mut self) -> Scope {
@@ -43,5 +72,9 @@ impl Environment {
 
     pub fn set(&mut self, key: String, val: SXRef) {
         self.stack.last_mut().unwrap().insert(key, val);
+    }
+
+    pub fn defun(&mut self, key: String, val: SXRef) {
+        self.global.insert(key, val);
     }
 }
