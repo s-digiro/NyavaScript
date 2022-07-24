@@ -60,17 +60,17 @@ impl FunScope {
     }
 
     pub fn pipe(sx: SXRef, env: &mut Env) -> SXRef {
-        println!("{:?}", env);
         let mut it = sx.iter().skip(1);
 
         if let Some(first) = it.next() {
+            println!("first pre eval: {:?}", first);
             let first = evaluate(first, env);
+            println!("first post eval: {:?}", first);
 
             let mut last = first;
 
             for arg in it {
                 println!("pipe arg: {:?}", arg);
-                let arg = SXRef::from(vec![arg]);
                 let arg = util::push(&arg, &SXRef::quote(last));
                 println!("final: {:?}", arg);
                 last = evaluate(arg, env);

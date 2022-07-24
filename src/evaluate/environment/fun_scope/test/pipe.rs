@@ -68,7 +68,9 @@ pub fn pipe_works() {
             SXRef::number(1),
             SXRef::number(2),
         ])),
-        SXRef::symbol("car".into()),
+        SXRef::from(vec![
+            SXRef::symbol("car".into()),
+        ]),
     ]);
 
     let expected =  SXRef::number(1);

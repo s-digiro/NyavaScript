@@ -36,6 +36,8 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
     let first = evaluate(util::car(&list), env);
     let rest = util::cdr(&list);
 
+    let all = util::cons(&first, &rest);
+
     match &*first {
         SExpression::Macro(m) => {
             println!("Macro in: {}", rest);
@@ -46,7 +48,7 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
         },
         SExpression::RustMacro(m) => {
             println!("RustMacro in: {}", rest);
-            let ret = m.exec(rest, env);
+            let ret = m.exec(all, env);
             println!("RustMacro out: {}", ret);
             println!();
             evaluate(ret, env)
