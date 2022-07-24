@@ -27,7 +27,8 @@
 [ ] Add tests
     [ ] evaluate
         [ ] environment
-            [ ] mccarthy_scope
+            [*] mccarthy_scope
+            [ ] fun_scope
             [ ] mod
         [ ] mod
     [*] s_expression

@@ -79,6 +79,10 @@ impl SExpression {
         ret
     }
 
+    pub fn is_cons_cell(&self) -> bool {
+        matches!(self, Self::ConsCell(_))
+    }
+
     pub fn is_nil(&self) -> bool {
         matches!(self, Self::Nil)
     }

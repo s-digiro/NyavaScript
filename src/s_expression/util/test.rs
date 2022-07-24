@@ -285,3 +285,74 @@ fn cdr_works_on_atom() {
         util::cdr(&subject),
     );
 }
+
+#[test]
+fn push_appends_item_to_nil() {
+    let expected = SXRef::from(vec![SXRef::number(1)]);
+
+    let actual = util::push(
+        &SXRef::nil(),
+        &SXRef::number(1),
+    );
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn push_appends_item_to_atom_as_new_list() {
+    let expected = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+    ]);
+
+    let actual = util::push(
+        &SXRef::number(1),
+        &SXRef::number(2),
+    );
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn push_appends_item_to_list() {
+    let expected = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+        SXRef::number(3)
+    ]);
+
+    let actual = util::push(
+        &SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(2),
+        ]),
+        &SXRef::number(3)
+    );
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn push_appends_list_to_list() {
+    let expected = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+        SXRef::from(vec![
+            SXRef::number(3),
+            SXRef::number(4),
+        ]),
+    ]);
+
+    let actual = util::push(
+        &SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(2),
+        ]),
+        &SXRef::from(vec![
+            SXRef::number(3),
+            SXRef::number(4),
+        ]),
+    );
+
+    assert_eq!(expected, actual);
+}

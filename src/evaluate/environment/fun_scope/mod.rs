@@ -1,5 +1,11 @@
+#[cfg(test)]
+mod test;
+
 use super::Scope;
-use crate::evaluate::evaluate;
+use crate::evaluate::{
+    evaluate,
+    Environment as Env,
+};
 use crate::s_expression::{
     Function,
     RustFunction,
@@ -17,18 +23,7 @@ impl FunScope {
 
         ret.insert(
             "|>".into(),
-            RustMacro::new(
-                |args, env| {
-                    let mut last = SXRef::nil();
-
-                    for arg in args.iter() {
-                        let arg = util::push(&arg, &last);
-                        last = SXRef::quote(evaluate(arg, env))
-                    }
-
-                    last
-                }
-            ).into(),
+            RustMacro::new(Self::pipe).into(),
         );
 
         ret.insert(
@@ -62,5 +57,28 @@ impl FunScope {
         );
 
         ret
+    }
+
+    pub fn pipe(sx: SXRef, env: &mut Env) -> SXRef {
+        println!("{:?}", env);
+        let mut it = sx.iter().skip(1);
+
+        if let Some(first) = it.next() {
+            let first = evaluate(first, env);
+
+            let mut last = first;
+
+            for arg in it {
+                println!("pipe arg: {:?}", arg);
+                let arg = SXRef::from(vec![arg]);
+                let arg = util::push(&arg, &SXRef::quote(last));
+                println!("final: {:?}", arg);
+                last = evaluate(arg, env);
+            }
+
+            last
+        } else {
+            SXRef::nil()
+        }
     }
 }

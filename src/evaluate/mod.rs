@@ -52,22 +52,21 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
             evaluate(ret, env)
         },
         _ => {
-            let rest = SExpression::from_iter(
-                rest.iter().map(|valref| evaluate(valref, env))
-            );
+            let args: Vec<SXRef> = rest.iter()
+                .map(|sx| evaluate(sx, env))
+                .collect();
 
             match &*first {
                 SExpression::Function(l) => {
-                    println!("Function in: {}", rest);
-                    let ret = exec_lambda(&l, rest, env);
+                    println!("Function in: {:?}", args);
+                    let ret = l.execute(args, env);
                     println!("Function out: {}", ret);
                     println!();
 
                     ret
                 },
                 SExpression::RustFunction(l) => {
-                    println!("RustFunction in: {}", rest);
-                    let args = rest.iter().collect();
+                    println!("RustFunction in: {:?}", args);
                     let ret = l.exec(&args, env);
                     println!("RustFunction out: {}", ret);
                     println!();
@@ -81,26 +80,6 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
             }
         },
     }
-}
-
-fn exec_lambda(
-    f: &Function,
-    args: SXRef,
-    env: &mut Env
-) -> SXRef {
-    eprintln!("exec function args ->");
-    env.push(Scope::new());
-
-    for (key, val) in f.args().into_iter().zip(args.iter()) {
-        eprintln!("    {} = {}", key, val);
-        env.set(key.to_owned(), val);
-    }
-
-    let ret = evaluate(f.definition(), env);
-
-    env.pop();
-
-    ret
 }
 
 fn exec_macro(

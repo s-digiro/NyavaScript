@@ -30,13 +30,18 @@ pub fn cons(car: &SXRef, cdr: &SXRef) -> SXRef {
 pub fn push(list: &SXRef, item: &SXRef) -> SXRef {
     if list.is_nil() {
         util::cons(item, &SXRef::nil())
-    } else {
+    } else if list.is_cons_cell() {
         let head = util::car(&list);
         let tail = util::cdr(&list);
 
         util::cons(
             &head,
             &util::push(&tail, item),
+        )
+    } else {
+        util::cons(
+            list,
+            &util::cons(item, &SXRef::nil()),
         )
     }
 }
