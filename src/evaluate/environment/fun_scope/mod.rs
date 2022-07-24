@@ -15,6 +15,8 @@ use crate::s_expression::{
     util,
 };
 
+static PROCEDURAL: &'static str = "(lambda () (()))";
+
 pub struct FunScope;
 
 impl FunScope {
@@ -28,7 +30,7 @@ impl FunScope {
 
         ret.insert(
             ";".into(),
-           Function::try_from("(lambda () (()))").unwrap().into(),
+           Function::try_from(PROCEDURAL).unwrap().into(),
         );
 
         ret.insert(

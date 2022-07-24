@@ -1,4 +1,5 @@
 mod pipe;
+mod procedural;
 
 use super::*;
 use crate::s_expression::SExpressionRef as SXRef;

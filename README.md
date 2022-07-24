@@ -1,5 +1,6 @@
 # To Do
-[ ] Make RustFn take Vec of SXRef, with each SXRef being an argument skipping function name
+[ ] Consider returning data type errors rather than evaluating errors to nil
+[ ] Make RustFn take Vec of SXRef, with each SXRef being an argument skippingfunction name
 [ ] Make sure RustMacro takes SXRef as arg, and that this SXRef includes macro itself as first arg
 [ ] Move closures in FunScope to their own functions?
 [ ] pass all args to macro
