@@ -27,10 +27,6 @@ impl Environment {
         self.stack.iter().any(|s| s.contains_key(key))
     }
 
-    pub fn has_macro(&self, _key: &str) -> bool {
-        false
-    }
-
     pub fn get(&self, key: &str) -> SXRef {
         self.stack.iter().rev()
             .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)))

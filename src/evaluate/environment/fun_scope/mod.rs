@@ -15,8 +15,6 @@ use crate::s_expression::{
     util,
 };
 
-static PROCEDURAL: &'static str = "(lambda () (()))";
-
 pub struct FunScope;
 
 impl FunScope {
@@ -30,7 +28,7 @@ impl FunScope {
 
         ret.insert(
             ";".into(),
-           Function::try_from(PROCEDURAL).unwrap().into(),
+            RustMacro::new(Self::procedural).into(),
         );
 
         ret.insert(
@@ -82,5 +80,15 @@ impl FunScope {
         } else {
             SXRef::nil()
         }
+    }
+
+    pub fn procedural(sx: SXRef, env: &mut Env) -> SXRef {
+        let mut last = SXRef::nil();
+
+        for sx in sx.iter().skip(1) {
+            last = evaluate(sx, env);
+        }
+
+        last
     }
 }
