@@ -27,10 +27,10 @@
 [ ] Garbage collector
 [ ] Add tests
     [ ] evaluate
-        [ ] environment
+        [*] environment
             [*] mccarthy_scope
             [*] fun_scope
-            [ ] mod
+            [*] mod
         [ ] mod
     [*] s_expression
         [*] cons_cell
