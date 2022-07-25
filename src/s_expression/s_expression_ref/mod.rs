@@ -7,7 +7,6 @@ mod test;
 use std::rc::Rc;
 use super::*;
 use std::ops::Deref;
-use super::function::ScopeableRustFn;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SExpressionRef(pub Rc<SExpression>);

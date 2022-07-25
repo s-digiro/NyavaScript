@@ -7,7 +7,6 @@ use crate::evaluate::{
     Environment as Env,
 };
 use crate::s_expression::{
-    Function,
     RustFunction,
     RustMacro,
     SExpression as SX,

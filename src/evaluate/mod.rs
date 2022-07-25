@@ -6,8 +6,6 @@ pub use environment::*;
 mod test;
 
 use crate::s_expression::{
-    Function,
-    Macro,
     SExpression,
     SExpressionRef as SXRef,
     util,

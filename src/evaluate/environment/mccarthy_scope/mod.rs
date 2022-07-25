@@ -115,8 +115,6 @@ impl McCarthyScope {
             | (_, SX::Function(_))
             | (SX::Macro(_), _)
             | (_, SX::Macro(_))
-            | (SX::Function(_), _)
-            | (_, SX::Function(_))
             | (SX::RustMacro(_), _)
             | (_, SX::RustMacro(_)) => SXRef::nil(),
             _ => {
