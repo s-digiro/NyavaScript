@@ -53,3 +53,22 @@ pub fn sxref_from_empty_list_is_nil() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+fn from_iter_returns_args_in_correct_order() {
+    let subject = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+        SXRef::number(3),
+    ]);
+
+    let expected = SXRef::from(vec![
+        SXRef::number(1),
+        SXRef::number(2),
+        SXRef::number(3),
+    ]);
+
+    let actual = subject.iter().collect();
+
+    assert_eq!(expected, actual);
+}

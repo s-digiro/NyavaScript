@@ -17,10 +17,14 @@ pub enum Function {
 
 impl Function {
     pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> SXRef {
-        match self {
+        eprintln!("Running Function on: {}", SXRef::from(args.clone()));
+        let ret = match self {
             Self::Lisp(f) => f.execute(args, env),
             Self::Rust(f) => f.execute(args, env),
-        }
+        };
+        eprintln!("Function returning: {}", ret);
+
+        ret
     }
 
     pub fn lisp_function(args: Vec<String>, definition: SXRef) -> Function {

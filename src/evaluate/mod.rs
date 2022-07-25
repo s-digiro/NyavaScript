@@ -6,7 +6,7 @@ pub use environment::*;
 mod test;
 
 use crate::s_expression::{
-    SExpression,
+    SExpression as SX,
     SExpressionRef as SXRef,
     util,
 };
@@ -25,9 +25,9 @@ pub fn evaluate(sx: SXRef, env: &mut Env) -> SXRef {
     eprintln!("{} Evaluating: {}", id, sx);
 
     let ret = match &*sx {
-        SExpression::ConsCell(_) => eval_list(sx, env),
-        SExpression::Quote(r) => SXRef::clone(r),
-        SExpression::Symbol(s) => env.get(s),
+        SX::ConsCell(_) => eval_list(sx, env),
+        SX::Quote(r) => SXRef::clone(r),
+        SX::Symbol(s) => env.get(s),
         _ => sx,
     };
 
@@ -38,30 +38,17 @@ pub fn evaluate(sx: SXRef, env: &mut Env) -> SXRef {
 
 fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
     let first = evaluate(util::car(&list), env);
+
     let rest = util::cdr(&list);
 
-    let all = util::cons(&first, &rest);
+    let list = util::cons(&first, &rest);
 
     match &*first {
-        SExpression::Macro(m) => {
-            let ret = m.execute(all, env);
-            evaluate(ret, env)
+        SX::Macro(m) => evaluate(m.execute(list, env), env),
+        SX::Function(f) => {
+            let args = rest.iter().map(|sx| evaluate(sx, env)).collect();
+            f.execute(args, env)
         },
-        _ => {
-            let args: Vec<SXRef> = rest.iter()
-                .map(|sx| evaluate(sx, env))
-                .collect();
-
-            match &*first {
-                SExpression::Function(l) => {
-                    let ret = l.execute(args, env);
-
-                    ret
-                },
-                _ => {
-                    SXRef::nil()
-                },
-            }
-        },
+        _ => SXRef::nil(),
     }
 }

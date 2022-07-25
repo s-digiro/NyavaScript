@@ -130,3 +130,36 @@ impl From<Vec<Self>> for SExpressionRef {
         ret
     }
 }
+
+impl From<ListIter> for SExpressionRef {
+    fn from(v: ListIter) -> Self {
+        let mut ret = Self::nil();
+
+        let veced: Vec<SExpressionRef> = v.collect();
+
+        for e in veced.iter().rev() {
+            ret = util::cons(&e, &ret)
+        }
+
+        ret
+    }
+
+}
+
+impl FromIterator<SExpressionRef> for SExpressionRef {
+    fn from_iter<I: IntoIterator<Item=SExpressionRef>>(iter: I) -> Self {
+        let mut temp = Self::nil();
+
+        for e in iter {
+            temp = util::cons(&e, &temp)
+        }
+
+        let mut ret = Self::nil();
+
+        for e in temp.iter() {
+            ret = util::cons(&e, &ret)
+        }
+
+        ret
+    }
+}
