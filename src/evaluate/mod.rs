@@ -2,6 +2,9 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
+#[cfg(test)]
+mod test;
+
 use crate::s_expression::{
     Function,
     Macro,
