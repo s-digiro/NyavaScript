@@ -180,14 +180,17 @@ pub fn quote_macro_returns_quoted_macro() {
 pub fn quote_rust_function_returns_quoted_rust_function() {
     let subject = SXRef::from(vec![
         SXRef::symbol("quote".into()),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
     ]);
 
     let actual = McCarthyScope::quote(subject, &mut Env::new());
 
     match &*actual {
         SX::Quote(sx) => match &**sx {
-            SX::RustFunction(_) => (),
+            SX::Function(f) => match f {
+                Function::Rust(_) => (),
+                Function::Lisp(l) => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
+            },
             sx => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
         }
         sx => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),

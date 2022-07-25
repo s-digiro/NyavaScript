@@ -23,7 +23,7 @@ static OR: &'static str = "(lambda (p q) (cond (p p) (q q)))";
 pub struct McCarthyScope;
 
 impl McCarthyScope {
-    pub fn atom(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn atom(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
         match args.get(0) {
             None => SXRef::number(1),
             Some(sx) => match **sx {
@@ -36,14 +36,14 @@ impl McCarthyScope {
         }
     }
 
-    pub fn car(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn car(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
         match args.get(0) {
             Some(sx) => util::car(&sx),
             None => SXRef::nil(),
         }
     }
 
-    pub fn cdr(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn cdr(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
         match args.get(0) {
             Some(sx) => util::cdr(&sx),
             None => SXRef::nil(),
@@ -63,7 +63,7 @@ impl McCarthyScope {
         SXRef::nil()
     }
 
-    pub fn cons(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn cons(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
         let nil = SXRef::nil();
 
         let arg1 = args.get(0).unwrap_or(&nil);
@@ -97,15 +97,15 @@ impl McCarthyScope {
         let definition = macro_args.next().unwrap_or(SXRef::nil()); // arg 3
 
         if let Some(name) = name {
-            let f = SXRef::function(Function::new(args, definition));
+            let f = Function::lisp_function(args, definition);
 
-            env.defun(name.into(), f);
+            env.defun(name.into(), f.into());
         }
 
         SXRef::nil()
     }
 
-    pub fn equal(args: &Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn equal(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
         let nil = SXRef::nil();
         let arg1 = args.get(0).unwrap_or(&nil);
         let arg2 = args.get(1).unwrap_or(&nil);
@@ -115,8 +115,8 @@ impl McCarthyScope {
             | (_, SX::Function(_))
             | (SX::Macro(_), _)
             | (_, SX::Macro(_))
-            | (SX::RustFunction(_), _)
-            | (_, SX::RustFunction(_))
+            | (SX::Function(_), _)
+            | (_, SX::Function(_))
             | (SX::RustMacro(_), _)
             | (_, SX::RustMacro(_)) => SXRef::nil(),
             _ => {
@@ -153,12 +153,12 @@ impl McCarthyScope {
 
         ret.insert(
             "atom".to_string(),
-            RustFunction::new(Self::atom).into()
+            RustFunction::new(Self::atom).into(),
         );
 
         ret.insert(
             "equal".to_string(),
-            RustFunction::new(Self::equal).into()
+            RustFunction::new(Self::equal).into(),
         );
 
         ret.insert(

@@ -1,8 +1,5 @@
 # To Do
 [ ] Consider returning data type errors rather than evaluating errors to nil
-[ ] Make RustFn take Vec of SXRef, with each SXRef being an argument skippingfunction name
-[ ] Make sure RustMacro takes SXRef as arg, and that this SXRef includes macro itself as first arg
-[ ] Move closures in FunScope to their own functions?
 [ ] pass all args to macro
 [ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
@@ -25,25 +22,6 @@
     [ ] Stuff that isn't pure McCarthy
 [ ] . infix operator
 [ ] Garbage collector
-[ ] Add tests
-    [ ] evaluate
-        [*] environment
-            [*] mccarthy_scope
-            [*] fun_scope
-            [*] mod
-        [ ] mod
-    [*] s_expression
-        [*] cons_cell
-            [*] iter
-            [*] mod
-        [*] function
-        [*] macro
-        [*] rust_function
-        [*] rust_macro
-        [*] list
-        [*] mod
-    [*] parse
-    [ ] lib
 [ ] Lisp macro should only recieve one arg, which is arg list
 [ ] Lisp lambda should get args like normal
 [ ] Evaluate List should be refactored into more functions so its easier to read

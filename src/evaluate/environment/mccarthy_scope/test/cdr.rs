@@ -10,7 +10,7 @@ pub fn cdr_returns_nil_when_called_on_nil() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -28,7 +28,7 @@ pub fn cdr_returns_list_of_1_nil_when_called_on_list_of_2_nils() {
 
     let expected = SXRef::from(vec![SXRef::nil()]);
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -43,7 +43,7 @@ pub fn cdr_returns_nil_when_called_on_atom() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -60,7 +60,7 @@ pub fn cdr_returns_nil_when_called_on_list_of_1() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -80,7 +80,7 @@ pub fn cdr_returns_list_of_last_item_when_called_on_list_of_2() {
         SXRef::number(2),
     ]);
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -102,7 +102,7 @@ pub fn cdr_returns_list_of_2_last_items_when_called_on_list_of_3() {
         SXRef::number(3),
     ]);
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -120,7 +120,7 @@ pub fn cdr_returns_item_in_cdr_slot_when_called_on_cons_cell() {
 
     let expected = SXRef::number(2);
 
-    let actual = McCarthyScope::cdr(&subject, &mut env);
+    let actual = McCarthyScope::cdr(subject, &mut env);
 
     assert_eq!(expected, actual)
 }

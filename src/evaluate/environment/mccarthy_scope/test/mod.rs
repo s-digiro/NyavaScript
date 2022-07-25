@@ -20,7 +20,7 @@ mod null;
 mod or;
 mod quote;
 
-fn dummy_fn(_: &Vec<SXRef>, _: &mut Env) -> SXRef {
+fn dummy_fn(_: Vec<SXRef>, _: &mut Env) -> SXRef {
     SXRef::nil()
 }
 

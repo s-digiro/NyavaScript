@@ -10,7 +10,7 @@ pub fn equal_returns_1_when_comparing_two_same_symbols() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -24,7 +24,7 @@ pub fn equal_returns_nil_when_comparing_two_diff_symbols() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -37,7 +37,7 @@ pub fn equal_returns_nil_when_comparing_one_symbol() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -51,7 +51,7 @@ pub fn equal_returns_1_when_comparing_two_same_strings() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -65,7 +65,7 @@ pub fn equal_returns_nil_when_comparing_two_diff_strings() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -78,7 +78,7 @@ pub fn equal_returns_nil_when_comparing_one_string() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -92,7 +92,7 @@ pub fn equal_returns_1_when_comparing_two_nil() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -105,7 +105,7 @@ pub fn equal_returns_1_when_comparing_one_nil() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -117,7 +117,7 @@ pub fn equal_returns_1_when_called_with_no_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -131,7 +131,7 @@ pub fn equal_returns_1_when_comparing_two_same_numbers() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -145,7 +145,7 @@ pub fn equal_returns_nil_when_comparing_two_diff_numbers() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -158,7 +158,7 @@ pub fn equal_returns_nil_when_comparing_one_number() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -172,7 +172,7 @@ pub fn equal_returns_1_when_comparing_two_same_quote() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -186,7 +186,7 @@ pub fn equal_returns_nil_when_comparing_two_diff_quote() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -199,7 +199,7 @@ pub fn equal_returns_nil_when_comparing_one_quote() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -213,7 +213,7 @@ pub fn equal_returns_nil_when_first_or_second_arg_is_function() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -224,7 +224,7 @@ pub fn equal_returns_nil_when_first_or_second_arg_is_function() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -235,7 +235,7 @@ pub fn equal_returns_nil_when_first_or_second_arg_is_function() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -249,7 +249,7 @@ pub fn equal_returns_nil_when_called_on_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -260,7 +260,7 @@ pub fn equal_returns_nil_when_called_on_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -271,7 +271,7 @@ pub fn equal_returns_nil_when_called_on_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 }
@@ -285,7 +285,7 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -296,7 +296,7 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -307,7 +307,7 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 }
@@ -315,35 +315,35 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
 #[test]
 pub fn equal_returns_nil_when_called_on_rust_function() {
     let subject = vec![
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
         SXRef::quote(SXRef::number(1)),
     ];
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
     let subject = vec![
         SXRef::quote(SXRef::number(1)),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
     ];
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
     let subject = vec![
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
+        RustFunction::new(dummy_fn).into(),
     ];
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 }
@@ -357,7 +357,7 @@ pub fn equal_returns_nil_when_called_on_diff_types() {
         SXRef::quote(SXRef::string("foo".into())),
         SXRef::r#macro("(macro () \"foo\")".try_into().unwrap()),
         SXRef::function("(lambda () \"foo\")".try_into().unwrap()),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
         SXRef::rust_macro(RustMacro::new(dummy_macro)),
     ];
 
@@ -376,7 +376,7 @@ pub fn equal_returns_nil_when_called_on_diff_types() {
 
             let expected = SXRef::nil();
 
-            let actual = McCarthyScope::equal(&subject, &mut env);
+            let actual = McCarthyScope::equal(subject, &mut env);
 
             assert_eq!(expected, actual);
         }
@@ -393,7 +393,7 @@ pub fn equal_ignores_args_past_2nd() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 
@@ -405,7 +405,7 @@ pub fn equal_ignores_args_past_2nd() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual);
 }
@@ -431,7 +431,7 @@ pub fn equal_returns_1_when_passed_2_samey_lists() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }
@@ -457,7 +457,7 @@ pub fn equal_returns_nil_when_passed_2_different_lists() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::equal(&subject, &mut Env::new());
+    let actual = McCarthyScope::equal(subject, &mut Env::new());
 
     assert_eq!(expected, actual)
 }

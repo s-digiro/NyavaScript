@@ -1,17 +1,11 @@
 mod cons_cell;
 pub use cons_cell::ConsCell;
 
-mod function;
-pub use function::Function;
+pub mod function;
+pub use function::*;
 
 mod r#macro;
-pub use r#macro::Macro;
-
-mod rust_function;
-pub use rust_function::RustFunction;
-
-mod rust_macro;
-pub use rust_macro::RustMacro;
+pub use r#macro::*;
 
 mod s_expression_ref;
 pub use s_expression_ref::{ SExpressionRef, ListIter };
@@ -29,7 +23,6 @@ pub enum SExpression {
     Nil,
     Number(isize),
     Quote(SExpressionRef),
-    RustFunction(RustFunction),
     RustMacro(RustMacro),
     String(String),
     Symbol(String),
@@ -45,7 +38,6 @@ impl std::fmt::Display for SExpression {
             SExpression::Nil => write!(f, "NIL"),
             SExpression::Function(x) => write!(f, "{}", x),
             SExpression::Macro(x) => write!(f, "{}", x),
-            SExpression::RustFunction(x) => write!(f, "{}", x),
             SExpression::RustMacro(x) => write!(f, "{}", x),
             SExpression::Quote(x) => write!(f, "'{}", x),
         }
@@ -87,10 +79,6 @@ impl SExpression {
         matches!(self, Self::Nil)
     }
 
-    pub fn is_rust_function(&self) -> bool {
-        matches!(self, Self::RustFunction(_))
-    }
-
     pub fn is_rust_macro(&self) -> bool {
         matches!(self, Self::RustMacro(_))
     }
@@ -106,12 +94,6 @@ impl From<ConsCell> for SExpression {
 impl From<Function> for SExpression {
     fn from(f: Function) -> Self {
         Self::Function(f)
-    }
-}
-
-impl From<RustFunction> for SExpression {
-    fn from(f: RustFunction) -> Self {
-        Self::RustFunction(f)
     }
 }
 

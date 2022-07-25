@@ -14,7 +14,7 @@ pub fn lambda_with_1_arg_and_def_produces_function() {
         ]),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec!["x".into()],
         SXRef::from(vec![
             SXRef::symbol("equal".into()),
@@ -43,7 +43,7 @@ pub fn lambda_with_2_arg_and_def_produces_function() {
         ]),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -77,7 +77,7 @@ pub fn lambda_with_3_arg_and_def_produces_function() {
         ]),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into(),
@@ -111,7 +111,7 @@ pub fn lambda_with_0_arg_and_def_produces_function() {
 
     let empty: Vec<String> = Vec::new();
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty,
         SXRef::from(vec![
             SXRef::symbol("equal".into()),
@@ -137,7 +137,7 @@ pub fn lambda_with_2_arg_and_number_def_produces_function() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -161,7 +161,7 @@ pub fn lambda_with_2_arg_and_string_def_produces_function() {
         SXRef::string("foo".into()),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -185,7 +185,7 @@ pub fn lambda_with_2_arg_and_symbol_def_produces_function() {
         SXRef::symbol("foo".into()),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -209,7 +209,7 @@ pub fn lambda_with_2_arg_and_quote_def_produces_function() {
         SXRef::quote(SXRef::symbol("foo".into())),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -233,7 +233,7 @@ pub fn lambda_with_2_arg_and_nil_def_produces_function() {
         SXRef::nil(),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -257,7 +257,7 @@ pub fn lambda_with_2_arg_and_function_def_produces_function() {
         SXRef::function("()".try_into().unwrap()),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -281,7 +281,7 @@ pub fn lambda_with_2_arg_and_macro_def_produces_function() {
         SXRef::r#macro("()".try_into().unwrap()),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -302,7 +302,7 @@ pub fn lambda_with_2_arg_and_rust_function_def_produces_function() {
             SXRef::symbol("x".into()),
             SXRef::symbol("y".into()),
         ]),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
     ]);
 
     let expected_args: Vec<String> = vec![
@@ -313,10 +313,19 @@ pub fn lambda_with_2_arg_and_rust_function_def_produces_function() {
     let actual = McCarthyScope::lambda(subject, &mut Env::new());
 
     match &*actual {
-        SX::Function(f) => {
-            assert_eq!(&expected_args, f.args());
+        SX::Function(f) => match f {
+            Function::Lisp(f) => {
+                assert_eq!(&expected_args, f.args());
 
-            assert!(f.definition().is_rust_function());
+                match &*f.definition() {
+                    SX::Function(f) => match f {
+                        Function::Rust(_) => (),
+                        _ => panic!("Expected definition to be a RustFunction. Was {:?}", f),
+                    },
+                    _ => panic!("Expected definition to be a RustFunction. Was {:?}", f),
+                }
+            },
+            _ => panic!("Expected Function::Lisp. Recieved: {:?}", f),
         },
         _ => panic!("Expected SX::Function. Recieved: {:?}", actual),
     }
@@ -341,10 +350,16 @@ pub fn lambda_with_2_arg_and_rust_macro_def_produces_function() {
     let actual = McCarthyScope::lambda(subject, &mut Env::new());
 
     match &*actual {
-        SX::Function(f) => {
-            assert_eq!(&expected_args, f.args());
+        SX::Function(f) => match f {
+            Function::Lisp(f) => {
+                assert_eq!(&expected_args, f.args());
 
-            assert!(f.definition().is_rust_macro());
+                match &*f.definition() {
+                    SX::RustMacro(_) => (),
+                    x => panic!("Expected definition to be a RustMacro. Was {:?}", x),
+                }
+            },
+            _ => panic!("Expected Function::Lisp. Recieved: {:?}", f),
         },
         _ => panic!("Expected SX::Function. Recieved: {:?}", actual),
     }
@@ -360,7 +375,7 @@ pub fn lambda_with_2_arg_and_no_def_produces_function() {
         ]),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         vec![
             "x".into(),
             "y".into()
@@ -381,7 +396,7 @@ pub fn lambda_with_no_args_and_no_def_produces_function() {
 
     let empty: Vec<String> = Vec::new();
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty,
         SXRef::nil(),
     ));
@@ -401,7 +416,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -416,7 +431,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -431,7 +446,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -446,7 +461,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -461,7 +476,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -476,7 +491,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -487,11 +502,11 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
 
     let subject = SXRef::from(vec![
         SXRef::symbol("lambda".into()),
-        SXRef::rust_function(RustFunction::new(dummy_fn)),
+        RustFunction::new(dummy_fn).into(),
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));
@@ -506,7 +521,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ]);
 
-    let expected =  SXRef::function(Function::new(
+    let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
     ));

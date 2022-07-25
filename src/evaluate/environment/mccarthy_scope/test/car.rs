@@ -13,7 +13,7 @@ pub fn car_returns_first_item_in_list_of_2() {
 
     let expected =  SXRef::number(1);
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -30,7 +30,7 @@ pub fn car_returns_first_item_in_list_of_1() {
 
     let expected =  SXRef::number(1);
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -49,7 +49,7 @@ pub fn car_returns_first_item_in_list_of_3() {
 
     let expected =  SXRef::number(1);
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -64,7 +64,7 @@ pub fn car_returns_nil_from_nil() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -88,7 +88,7 @@ pub fn car_returns_first_item_in_list_starting_with_list() {
         SXRef::number(2),
     ]);
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -106,7 +106,7 @@ pub fn car_returns_nil_from_list_starting_with_nil() {
 
     let expected =  SXRef::nil();
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -121,7 +121,7 @@ pub fn car_returns_nil_from_atom() {
 
     let expected =  SXRef::nil();
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }
@@ -139,7 +139,7 @@ pub fn car_returns_item_in_car_slot_when_called_on_cons_cell() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::car(&subject, &mut env);
+    let actual = McCarthyScope::car(subject, &mut env);
 
     assert_eq!(expected, actual)
 }

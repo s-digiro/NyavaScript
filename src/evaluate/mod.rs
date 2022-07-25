@@ -21,16 +21,19 @@ fn get_id() -> usize {
 }
 
 
-pub fn evaluate(valref: SXRef, env: &mut Env) -> SXRef {
+pub fn evaluate(sx: SXRef, env: &mut Env) -> SXRef {
     let id = get_id();
-    eprintln!("{} - evaling: {}", id, valref);
-    let ret = match &*valref {
-        SExpression::ConsCell(_) => eval_list(valref, env),
+
+    eprintln!("{} Evaluating: {}", id, sx);
+
+    let ret = match &*sx {
+        SExpression::ConsCell(_) => eval_list(sx, env),
         SExpression::Quote(r) => SXRef::clone(r),
         SExpression::Symbol(s) => env.get(s),
-        _ => valref,
+        _ => sx,
     };
-    eprintln!("{} - returning: {}", id, ret);
+
+    eprintln!("{} Returning: {}", id, ret);
 
     ret
 }
@@ -43,17 +46,11 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
 
     match &*first {
         SExpression::Macro(m) => {
-            println!("Macro in: {}", rest);
-            let ret = exec_macro(&m, rest, env);
-            println!("Macro out: {}", ret);
-            println!();
+            let ret = m.execute(all, env);
             evaluate(ret, env)
         },
         SExpression::RustMacro(m) => {
-            println!("RustMacro in: {}", rest);
-            let ret = m.exec(all, env);
-            println!("RustMacro out: {}", ret);
-            println!();
+            let ret = m.execute(all, env);
             evaluate(ret, env)
         },
         _ => {
@@ -63,44 +60,14 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
 
             match &*first {
                 SExpression::Function(l) => {
-                    println!("Function in: {:?}", args);
                     let ret = l.execute(args, env);
-                    println!("Function out: {}", ret);
-                    println!();
-
-                    ret
-                },
-                SExpression::RustFunction(l) => {
-                    println!("RustFunction in: {:?}", args);
-                    let ret = l.exec(&args, env);
-                    println!("RustFunction out: {}", ret);
-                    println!();
 
                     ret
                 },
                 _ => {
-                    println!("fn {} on args {} evaluated to nil!", first, rest);
                     SXRef::nil()
                 },
             }
         },
     }
-}
-
-fn exec_macro(
-    m: &Macro,
-    args: SXRef,
-    env: &mut Env
-) -> SXRef {
-    env.push(Scope::new());
-
-    if let Some(key) = m.args().first() {
-        env.set(key.to_owned(), util::car(&args));
-    }
-
-    let ret = evaluate(m.definition(), env);
-
-    env.pop();
-
-    ret
 }

@@ -8,7 +8,7 @@ pub fn gets_correct_args_and_def_when_function_made_from_sxref() {
         SXRef::number(2),
     ]);
 
-    let actual = Macro::from(subject);
+    let actual = LispMacro::from(subject);
 
     assert_eq!(
         &vec!["a".to_owned(), "b".to_owned()],
@@ -26,7 +26,7 @@ pub fn args_is_none_when_passed_sxref_with_non_list_args() {
         SXRef::number(2),
     ]);
 
-    let actual = Macro::from(subject);
+    let actual = LispMacro::from(subject);
     let expected: Vec<String> = Vec::new();
 
     assert_eq!(&expected, actual.args());
@@ -42,7 +42,7 @@ pub fn args_is_none_when_passed_sxref_with_nil_args() {
         SXRef::number(2),
     ]);
 
-    let actual = Macro::from(subject);
+    let actual = LispMacro::from(subject);
     let expected: Vec<String> = Vec::new();
 
     assert_eq!(&expected, actual.args());
@@ -54,7 +54,7 @@ pub fn args_is_none_when_passed_sxref_with_nil_args() {
 pub fn from_string_works() {
     let subject = "(macro (x) (cons x '(x ())))";
 
-    let actual = Macro::try_from(subject).unwrap();
+    let actual = LispMacro::try_from(subject).unwrap();
 
     assert_eq!(&vec!["x".to_owned()], actual.args());
 
@@ -78,7 +78,7 @@ pub fn from_string_works() {
 pub fn str_that_are_missing_args_work() {
     let subject = "(macro)";
 
-    let actual = Macro::try_from(subject).unwrap();
+    let actual = LispMacro::try_from(subject).unwrap();
     let empty: Vec<String> = Vec::new();
 
     assert_eq!(&empty, actual.args());
@@ -92,5 +92,5 @@ pub fn str_that_are_missing_args_work() {
 pub fn bad_lisp_fails_to_become_macro() {
     let subject = "(macro";
 
-    Macro::try_from(subject).unwrap();
+    LispMacro::try_from(subject).unwrap();
 }

@@ -30,6 +30,12 @@ pub fn defun_adds_well_formed_function_to_global_scope() {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
     };
 
+    let f = if let Function::Lisp(l) = f {
+        l
+    } else {
+        panic!("Expected f to be a Function::Lisp. Instead it was {:?}", f)
+    };
+
     assert_eq!(
         f.args(),
         &vec!["x".to_owned()],
@@ -70,6 +76,12 @@ pub fn defun_adds_function_to_global_scope_with_nil_def_when_missing_def() {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
     };
 
+    let f = if let Function::Lisp(l) = f {
+        l
+    } else {
+        panic!("Expected f to be a Function::Lisp. Instead it was {:?}", f)
+    };
+
     assert_eq!(
         f.args(),
         &vec!["x".to_owned()],
@@ -102,6 +114,12 @@ pub fn defun_adds_function_with_nil_def_and_args_to_global_scope_when_missing_de
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
+    };
+
+    let f = if let Function::Lisp(l) = f {
+        l
+    } else {
+        panic!("Expected f to be a Function::Lisp. Instead it was {:?}", f)
     };
 
     let empty: Vec<String> = Vec::new();
@@ -165,6 +183,12 @@ pub fn defun_can_define_lambda_with_no_args() {
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
+    };
+
+    let f = if let Function::Lisp(l) = f {
+        l
+    } else {
+        panic!("Expected f to be a Function::Lisp. Instead it was {:?}", f)
     };
 
     let empty: Vec<String> = Vec::new();

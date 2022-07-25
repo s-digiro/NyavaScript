@@ -1,49 +1,62 @@
-#[cfg(test)]
-mod test;
+mod lisp_function;
+pub use lisp_function::LispFunction;
 
-use crate::evaluate::{
-    Environment as Env,
-    Scope,
-    evaluate as eval,
-};
-use crate::parse::{ parse, ParseError };
-use crate::s_expression::util;
-use std::convert::TryFrom;
-use super::SExpressionRef as SXRef;
+mod rust_function;
+pub use rust_function::ScopeableRustFn;
+pub use rust_function::RustFunction;
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Function {
-    args: Vec<String>,
-    definition: SXRef,
+use crate::s_expression::SExpressionRef as SXRef;
+use crate::evaluate::Environment as Env;
+use crate::parse::ParseError;
+
+#[derive(Clone)]
+pub enum Function {
+    Lisp(LispFunction),
+    Rust(RustFunction),
 }
 
 impl Function {
-    pub fn new(args: Vec<String>, definition: SXRef) -> Function {
-        Function { args, definition }
-    }
-
-    pub fn args(&self) -> &Vec<String> {
-        &self.args
-    }
-
-    pub fn definition(&self) -> SXRef {
-        SXRef::clone(&self.definition)
-    }
-
     pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> SXRef {
-        eprintln!("exec function args ->");
-        env.push(Scope::new());
-
-        for (key, val) in self.args().iter().zip(args.into_iter()) {
-            eprintln!("    {} = {}", key, val);
-            env.set(key.to_owned(), val);
+        match self {
+            Self::Lisp(f) => f.execute(args, env),
+            Self::Rust(f) => f.execute(args, env),
         }
+    }
 
-        let ret = eval(self.definition(), env);
+    pub fn lisp_function(args: Vec<String>, definition: SXRef) -> Function {
+        Self::Lisp(LispFunction::new(args, definition))
+    }
 
-        env.pop();
+    pub fn rust_function(f: RustFunction) -> Self {
+        Self::Rust(f)
+    }
+}
 
-        ret
+impl PartialEq for Function {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Lisp(l), Self::Lisp(o)) => l.eq(o),
+            (Self::Rust(r), Self::Rust(o)) => r.eq(o),
+            _ => false,
+        }
+    }
+}
+
+impl std::fmt::Debug  for Function {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Self::Lisp(l) => write!(f, "{:?}", l),
+            Self::Rust(r) => write!(f, "{:?}", r),
+        }
+    }
+}
+
+impl std::fmt::Display for Function {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Self::Lisp(l) => write!(f, "{}", l),
+            Self::Rust(r) => write!(f, "{}", r),
+        }
     }
 }
 
@@ -51,26 +64,26 @@ impl TryFrom<&str> for Function {
     type Error = ParseError;
 
     fn try_from(text: &str) -> Result<Self, Self::Error> {
-        let ast = parse(text)?;
+        let f = text.try_into()?;
 
-        Ok(ast.into())
+        Ok(Self::Lisp(f))
     }
 }
 
 impl From<SXRef> for Function {
     fn from(sx: SXRef) -> Self {
-        let args = util::car(&util::cdr(&sx)).iter()
-            .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
-            .collect();
-
-        let definition = util::car(&util::cdr(&util::cdr(&sx)));
-
-        Function { args, definition }
+        Self::Lisp(sx.into())
     }
 }
 
-impl std::fmt::Display for Function {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[Function]")
+impl From<RustFunction> for Function {
+    fn from(f: RustFunction) -> Self {
+        Self::Rust(f)
+    }
+}
+
+impl From<LispFunction> for Function {
+    fn from(l: LispFunction) -> Self {
+        Self::Lisp(l)
     }
 }

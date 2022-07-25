@@ -6,11 +6,11 @@ mod test;
 
 use std::rc::Rc;
 use super::*;
+use std::ops::Deref;
+use super::function::ScopeableRustFn;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SExpressionRef(pub Rc<SExpression>);
-
-use std::ops::Deref;
 
 impl Deref for SExpressionRef {
     type Target = SExpression;
@@ -63,10 +63,6 @@ impl SExpressionRef {
         Self::new(SExpression::Quote(v))
     }
 
-    pub fn rust_function(f: RustFunction) -> Self {
-        Self::new(SExpression::RustFunction(f))
-    }
-
     pub fn rust_macro(m: RustMacro) -> Self {
         Self::new(SExpression::RustMacro(m))
     }
@@ -98,15 +94,21 @@ impl From<Function> for SExpressionRef {
     }
 }
 
-impl From<Macro> for SExpressionRef {
-    fn from(f: Macro) -> Self {
-        Self::r#macro(f)
+impl From<RustFunction> for SExpressionRef {
+    fn from(f: RustFunction) -> Self {
+        Self::function(f.into())
     }
 }
 
-impl From<RustFunction> for SExpressionRef {
-    fn from(f: RustFunction) -> Self {
-        Self::rust_function(f)
+impl From<LispFunction> for SExpressionRef {
+    fn from(l: LispFunction) -> Self {
+        Self::function(l.into())
+    }
+}
+
+impl From<Macro> for SExpressionRef {
+    fn from(f: Macro) -> Self {
+        Self::r#macro(f)
     }
 }
 

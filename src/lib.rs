@@ -35,4 +35,18 @@ mod test {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn list_fns() {
+        let code = "(cons (car '(1 2)) (cdr '(3 4)))";
+
+        let expected = SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(4),
+        ]);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+    }
 }
