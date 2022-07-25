@@ -1,5 +1,7 @@
 use super::*;
 
+use crate::s_expression::Macro;
+
 #[test]
 pub fn lambda_with_1_arg_and_def_produces_function() {
     let subject = SXRef::from(vec![
@@ -339,7 +341,7 @@ pub fn lambda_with_2_arg_and_rust_macro_def_produces_function() {
             SXRef::symbol("x".into()),
             SXRef::symbol("y".into()),
         ]),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ]);
 
     let expected_args: Vec<String> = vec![
@@ -355,7 +357,10 @@ pub fn lambda_with_2_arg_and_rust_macro_def_produces_function() {
                 assert_eq!(&expected_args, f.args());
 
                 match &*f.definition() {
-                    SX::RustMacro(_) => (),
+                    SX::Macro(m) => match m {
+                        Macro::Rust(_) => (),
+                        Macro::Lisp(l) => panic!("Expected definition to be a RustMacro. Was {:?}", l)
+                    },
                     x => panic!("Expected definition to be a RustMacro. Was {:?}", x),
                 }
             },
@@ -517,7 +522,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
 
     let subject = SXRef::from(vec![
         SXRef::symbol("lambda".into()),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
         SXRef::number(1),
     ]);
 

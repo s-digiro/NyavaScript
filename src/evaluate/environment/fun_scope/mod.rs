@@ -44,7 +44,6 @@ impl FunScope {
                             SX::Symbol(s) => println!("{}", s),
                             SX::Quote(q) => println!("'{}", q),
                             SX::ConsCell(c) => println!("{}", c),
-                            SX::RustMacro(_) => println!("[rust macro]"),
                         },
                         None => println!(),
                     }

@@ -1,7 +1,7 @@
 use super::*;
 use crate::evaluate::Environment as Env;
 
-fn dummy_fn(mut args: Vec<SXRef>, env: &mut Env) -> SXRef {
+fn dummy_fn(mut args: Vec<SXRef>, _env: &mut Env) -> SXRef {
     args.remove(0)
 }
 

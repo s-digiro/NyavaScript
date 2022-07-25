@@ -47,7 +47,7 @@ fn null_returns_nil_when_passed_non_nil() {
         vec![SXRef::r#macro("()".try_into().unwrap())],
         vec![SXRef::number(1)],
         vec![SXRef::quote(SXRef::number(1))],
-        vec![SXRef::rust_macro(RustMacro::new(dummy_macro))],
+        vec![SXRef::r#macro(RustMacro::new(dummy_macro).into())],
         vec![SXRef::string("foo".into())],
         vec![SXRef::symbol("foo".into())],
     ];

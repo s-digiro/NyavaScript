@@ -62,10 +62,6 @@ impl SExpressionRef {
         Self::new(SExpression::Quote(v))
     }
 
-    pub fn rust_macro(m: RustMacro) -> Self {
-        Self::new(SExpression::RustMacro(m))
-    }
-
     pub fn string(s: String) -> Self {
         Self::new(SExpression::String(s))
     }
@@ -111,9 +107,15 @@ impl From<Macro> for SExpressionRef {
     }
 }
 
+impl From<LispMacro> for SExpressionRef {
+    fn from(f: LispMacro) -> Self {
+        Self::r#macro(f.into())
+    }
+}
+
 impl From<RustMacro> for SExpressionRef {
     fn from(f: RustMacro) -> Self {
-        Self::rust_macro(f)
+        Self::r#macro(f.into())
     }
 }
 

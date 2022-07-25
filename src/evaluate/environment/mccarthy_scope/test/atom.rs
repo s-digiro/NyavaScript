@@ -135,7 +135,7 @@ pub fn atom_returns_nil_when_called_on_rust_macro() {
     let mut env = Env::new();
 
     let subject = vec![
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ];
 
     let expected = SXRef::nil();

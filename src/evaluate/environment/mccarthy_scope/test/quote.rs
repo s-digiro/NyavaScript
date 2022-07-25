@@ -1,5 +1,7 @@
 use super::*;
 
+use crate::s_expression::Macro;
+
 #[test]
 pub fn quote_symbol_returns_quoted_symbol() {
     let subject = SXRef::from(vec![
@@ -189,7 +191,7 @@ pub fn quote_rust_function_returns_quoted_rust_function() {
         SX::Quote(sx) => match &**sx {
             SX::Function(f) => match f {
                 Function::Rust(_) => (),
-                Function::Lisp(l) => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
+                Function::Lisp(_) => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
             },
             sx => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
         }
@@ -201,14 +203,17 @@ pub fn quote_rust_function_returns_quoted_rust_function() {
 pub fn quote_rust_macro_returns_quoted_rust_macro() {
     let subject = SXRef::from(vec![
         SXRef::symbol("quote".into()),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ]);
 
     let actual = McCarthyScope::quote(subject, &mut Env::new());
 
     match &*actual {
         SX::Quote(sx) => match &**sx {
-            SX::RustMacro(_) => (),
+            SX::Macro(m) => match m {
+                Macro::Rust(_) => (),
+                Macro::Lisp(_) => panic!("Expected SX::Quote(SX::RustMacro). Recieved: {:?}", sx),
+            },
             sx => panic!("Expected SX::Quote(SX::RustMacro). Recieved: {:?}", sx),
         }
         sx => panic!("Expected SX::Quote(SX::RustMacro). Recieved: {:?}", sx),

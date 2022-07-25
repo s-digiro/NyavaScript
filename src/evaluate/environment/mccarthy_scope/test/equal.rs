@@ -279,7 +279,7 @@ pub fn equal_returns_nil_when_called_on_macro() {
 #[test]
 pub fn equal_returns_nil_when_called_on_rust_macro() {
     let subject = vec![
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
         SXRef::quote(SXRef::number(1)),
     ];
 
@@ -291,7 +291,7 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
 
     let subject = vec![
         SXRef::quote(SXRef::number(1)),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ];
 
     let expected = SXRef::nil();
@@ -301,8 +301,8 @@ pub fn equal_returns_nil_when_called_on_rust_macro() {
     assert_eq!(expected, actual);
 
     let subject = vec![
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ];
 
     let expected = SXRef::nil();
@@ -358,7 +358,7 @@ pub fn equal_returns_nil_when_called_on_diff_types() {
         SXRef::r#macro("(macro () \"foo\")".try_into().unwrap()),
         SXRef::function("(lambda () \"foo\")".try_into().unwrap()),
         RustFunction::new(dummy_fn).into(),
-        SXRef::rust_macro(RustMacro::new(dummy_macro)),
+        SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ];
 
     let mut env = Env::new();

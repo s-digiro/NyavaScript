@@ -47,10 +47,6 @@ fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
             let ret = m.execute(all, env);
             evaluate(ret, env)
         },
-        SExpression::RustMacro(m) => {
-            let ret = m.execute(all, env);
-            evaluate(ret, env)
-        },
         _ => {
             let args: Vec<SXRef> = rest.iter()
                 .map(|sx| evaluate(sx, env))

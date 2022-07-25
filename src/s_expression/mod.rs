@@ -10,9 +10,6 @@ pub use r#macro::*;
 mod s_expression_ref;
 pub use s_expression_ref::{ SExpressionRef, ListIter };
 
-#[cfg(test)]
-mod test;
-
 pub mod util;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -23,7 +20,6 @@ pub enum SExpression {
     Nil,
     Number(isize),
     Quote(SExpressionRef),
-    RustMacro(RustMacro),
     String(String),
     Symbol(String),
 }
@@ -38,7 +34,6 @@ impl std::fmt::Display for SExpression {
             SExpression::Nil => write!(f, "NIL"),
             SExpression::Function(x) => write!(f, "{}", x),
             SExpression::Macro(x) => write!(f, "{}", x),
-            SExpression::RustMacro(x) => write!(f, "{}", x),
             SExpression::Quote(x) => write!(f, "'{}", x),
         }
     }
@@ -78,10 +73,6 @@ impl SExpression {
     pub fn is_nil(&self) -> bool {
         matches!(self, Self::Nil)
     }
-
-    pub fn is_rust_macro(&self) -> bool {
-        matches!(self, Self::RustMacro(_))
-    }
 }
 
 
@@ -97,9 +88,9 @@ impl From<Function> for SExpression {
     }
 }
 
-impl From<RustMacro> for SExpression {
-    fn from(f: RustMacro) -> Self {
-        Self::RustMacro(f)
+impl From<Macro> for SExpression {
+    fn from(f: Macro) -> Self {
+        Self::Macro(f)
     }
 }
 
