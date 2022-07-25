@@ -23,7 +23,6 @@
 [ ] Evaluate List should be refactored into more functions so its easier to read
 [ ] Allow multiple lists in root, without tacking on a root list as a new
     function. Maybe as a vector of refvals
-[ ] Everything should be implementable in lisp, other than Mccarthy basics
 [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols?
     Pick one
 [ ] List macro
@@ -33,7 +32,7 @@
 [ ] Maybe mccarthy functions should be "specials", separate from macros?
     decide.
 [*] Invalid function calls should fail spectacularly rather than returning nil
-[ ] NIL keyword
+[*] NIL keyword
 [ ] From SX for SXRef
 [ ] From inner for SXRef
 [ ] From inner for SX
