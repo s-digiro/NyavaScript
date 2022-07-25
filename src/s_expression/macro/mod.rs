@@ -1,5 +1,8 @@
 use crate::s_expression::SExpressionRef as SXRef;
-use crate::evaluate::Environment as Env;
+use crate::evaluate::{
+    Environment as Env,
+    Result as EvalResult,
+};
 use crate::parse::ParseError;
 
 mod lisp_macro;
@@ -15,15 +18,17 @@ pub enum Macro {
 }
 
 impl Macro {
-    pub fn execute(&self, sx: SXRef, env: &mut Env) -> SXRef {
+    pub fn execute(&self, sx: SXRef, env: &mut Env) -> EvalResult {
         eprintln!("Running Macro on: {}", sx);
+
         let ret = match self {
-            Self::Lisp(f) => f.execute(sx, env),
-            Self::Rust(f) => f.execute(sx, env),
+            Self::Lisp(f) => f.execute(sx, env)?,
+            Self::Rust(f) => f.execute(sx, env)?,
         };
+
         eprintln!("Macro returning: {}", ret);
 
-        ret
+        Ok(ret)
     }
 
     pub fn lisp_macro(args: Vec<String>, definition: SXRef) -> Macro {

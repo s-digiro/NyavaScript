@@ -32,7 +32,7 @@
 [ ] arbitrary cdaddr function
 [ ] Maybe mccarthy functions should be "specials", separate from macros?
     decide.
-[ ] Invalid function calls should fail spectacularly rather than returning nil
+[*] Invalid function calls should fail spectacularly rather than returning nil
 [ ] NIL keyword
 [ ] From SX for SXRef
 [ ] From inner for SXRef

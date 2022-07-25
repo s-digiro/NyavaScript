@@ -17,7 +17,7 @@ fn not_returns_1_when_passed_no_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = not.execute(args, &mut mc_env());
+    let actual = not.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -32,7 +32,7 @@ fn not_returns_1_when_passed_nil_arg() {
 
     let expected = SXRef::number(1);
 
-    let actual = not.execute(args, &mut mc_env());
+    let actual = not.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -47,7 +47,7 @@ fn not_returns_nil_when_passed_non_nil_arg() {
 
     let expected = SXRef::nil();
 
-    let actual = not.execute(args, &mut mc_env());
+    let actual = not.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -63,7 +63,7 @@ fn not_ignnotes_extra_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = not.execute(args, &mut mc_env());
+    let actual = not.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -74,7 +74,7 @@ fn not_ignnotes_extra_args() {
 
     let expected = SXRef::nil();
 
-    let actual = not.execute(args, &mut mc_env());
+    let actual = not.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }

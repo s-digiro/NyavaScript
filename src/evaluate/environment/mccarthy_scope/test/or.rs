@@ -17,7 +17,7 @@ fn or_returns_nil_when_passed_no_args() {
 
     let expected = SXRef::nil();
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -32,7 +32,7 @@ fn or_returns_nil_when_passed_1_nil_args() {
 
     let expected = SXRef::nil();
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -47,7 +47,7 @@ fn or_returns_arg_when_passed_non_nil_arg() {
 
     let expected = SXRef::number(2);
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -63,7 +63,7 @@ fn or_returns_first_arg_when_passed_2_non_nil_args() {
 
     let expected = SXRef::number(2);
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -74,7 +74,7 @@ fn or_returns_first_arg_when_passed_2_non_nil_args() {
 
     let expected = SXRef::string("foo".into());
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -90,7 +90,7 @@ fn or_returns_first_arg_when_passed_1_non_nil_arg_and_1_nil() {
 
     let expected = SXRef::number(2);
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -106,7 +106,7 @@ fn or_returns_2nd_arg_when_passed_1_nil_arg_and_1_non_nil() {
 
     let expected = SXRef::string("foo".into());
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -123,7 +123,7 @@ fn or_ignores_extra_args() {
 
     let expected = SXRef::nil();
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -135,7 +135,7 @@ fn or_ignores_extra_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -147,7 +147,7 @@ fn or_ignores_extra_args() {
 
     let expected = SXRef::number(2);
 
-    let actual = or.execute(args, &mut mc_env());
+    let actual = or.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }

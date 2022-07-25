@@ -6,7 +6,10 @@ pub use rust_function::ScopeableRustFn;
 pub use rust_function::RustFunction;
 
 use crate::s_expression::SExpressionRef as SXRef;
-use crate::evaluate::Environment as Env;
+use crate::evaluate::{
+    Environment as Env,
+    Result as EvalResult,
+};
 use crate::parse::ParseError;
 
 #[derive(Clone)]
@@ -16,15 +19,17 @@ pub enum Function {
 }
 
 impl Function {
-    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> SXRef {
+    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
         eprintln!("Running Function on: {}", SXRef::from(args.clone()));
+
         let ret = match self {
-            Self::Lisp(f) => f.execute(args, env),
-            Self::Rust(f) => f.execute(args, env),
+            Self::Lisp(f) => f.execute(args, env)?,
+            Self::Rust(f) => f.execute(args, env)?,
         };
+
         eprintln!("Function returning: {}", ret);
 
-        ret
+        Ok(ret)
     }
 
     pub fn lisp_function(args: Vec<String>, definition: SXRef) -> Function {

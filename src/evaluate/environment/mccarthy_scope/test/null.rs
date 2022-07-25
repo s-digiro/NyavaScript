@@ -19,7 +19,7 @@ fn null_returns_1_when_passed_nil() {
 
     let expected = SXRef::number(1);
 
-    let actual = null.execute(args, &mut mc_env());
+    let actual = null.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -32,7 +32,7 @@ fn null_returns_1_when_passed_no_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = null.execute(args, &mut mc_env());
+    let actual = null.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -55,7 +55,7 @@ fn null_returns_nil_when_passed_non_nil() {
     let expected = SXRef::nil();
 
     for subject in subjects {
-        let actual = null.execute(subject, &mut mc_env());
+        let actual = null.execute(subject, &mut mc_env()).unwrap();
 
         assert_eq!(expected, actual);
     }
@@ -72,7 +72,7 @@ fn null_ignores_extra_args() {
 
     let expected = SXRef::number(1);
 
-    let actual = null.execute(args, &mut mc_env());
+    let actual = null.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -83,7 +83,7 @@ fn null_ignores_extra_args() {
 
     let expected = SXRef::nil();
 
-    let actual = null.execute(args, &mut mc_env());
+    let actual = null.execute(args, &mut mc_env()).unwrap();
 
     assert_eq!(expected, actual);
 }

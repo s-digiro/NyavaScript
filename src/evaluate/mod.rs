@@ -2,8 +2,13 @@ mod environment;
 use environment::Environment as Env;
 pub use environment::*;
 
+mod error;
+pub use error::*;
+
 #[cfg(test)]
 mod test;
+
+pub type Result = std::result::Result<SXRef, Error>;
 
 use crate::s_expression::{
     SExpression as SX,
@@ -19,13 +24,13 @@ fn get_id() -> usize {
 }
 
 
-pub fn evaluate(sx: SXRef, env: &mut Env) -> SXRef {
+pub fn evaluate(sx: SXRef, env: &mut Env) -> Result {
     let id = get_id();
 
     eprintln!("{} Evaluating: {}", id, sx);
 
     let ret = match &*sx {
-        SX::ConsCell(_) => eval_list(sx, env),
+        SX::ConsCell(_) => eval_list(sx, env)?,
         SX::Quote(r) => SXRef::clone(r),
         SX::Symbol(s) => env.get(s),
         _ => sx,
@@ -33,22 +38,31 @@ pub fn evaluate(sx: SXRef, env: &mut Env) -> SXRef {
 
     eprintln!("{} Returning: {}", id, ret);
 
-    ret
+    Ok(ret)
 }
 
-fn eval_list(list: SXRef, env: &mut Env) -> SXRef {
-    let first = evaluate(util::car(&list), env);
+fn eval_list(list: SXRef, env: &mut Env) -> Result {
+    let first = util::car(&list);
+
+    let proc = evaluate(SXRef::clone(&first), env)?;
 
     let rest = util::cdr(&list);
 
-    let list = util::cons(&first, &rest);
+    let list = util::cons(&proc, &rest);
 
-    match &*first {
-        SX::Macro(m) => evaluate(m.execute(list, env), env),
-        SX::Function(f) => {
-            let args = rest.iter().map(|sx| evaluate(sx, env)).collect();
-            f.execute(args, env)
+    match &*proc {
+        SX::Macro(m) => {
+            let new_list = m.execute(list, env)?;
+            let ret = evaluate(new_list, env)?;
+            Ok(ret)
         },
-        _ => SXRef::nil(),
+        SX::Function(f) => {
+            let args = rest.iter()
+                .map(|sx| evaluate(sx, env))
+                .collect::<std::result::Result<Vec<SXRef>, Error>>()?;
+            let ret = f.execute(args, env)?;
+            Ok(ret)
+        },
+        _ => Err(UnboundFnCallError::new(first).into()),
     }
 }

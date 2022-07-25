@@ -1,11 +1,12 @@
 #[cfg(test)]
 mod test;
 
-use super::{
+use crate::evaluate::{
+    evaluate as eval,
     Environment as Env,
     Scope,
+    Result as EvalResult,
 };
-use crate::evaluate::evaluate;
 use crate::s_expression::{
     Function,
     RustFunction,
@@ -23,8 +24,8 @@ static OR: &'static str = "(lambda (p q) (cond (p p) (q q)))";
 pub struct McCarthyScope;
 
 impl McCarthyScope {
-    pub fn atom(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
-        match args.get(0) {
+    pub fn atom(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let ret = match args.get(0) {
             None => SXRef::number(1),
             Some(sx) => match **sx {
                 SX::String(_)
@@ -33,49 +34,54 @@ impl McCarthyScope {
                 | SX::Nil => SXRef::number(1),
                 _ => SXRef::nil(),
             }
-        }
+        };
+
+        Ok(ret)
     }
 
-    pub fn car(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
-        match args.get(0) {
+    pub fn car(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let ret = match args.get(0) {
             Some(sx) => util::car(&sx),
             None => SXRef::nil(),
-        }
+        };
+
+        Ok(ret)
     }
 
-    pub fn cdr(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
-        match args.get(0) {
+    pub fn cdr(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let ret = match args.get(0) {
             Some(sx) => util::cdr(&sx),
             None => SXRef::nil(),
-        }
+        };
+
+        Ok(ret)
     }
 
-    pub fn cond(sx: SXRef, env: &mut Env) -> SXRef {
+    pub fn cond(sx: SXRef, env: &mut Env) -> EvalResult {
         for arg in sx.iter() {
             let p = util::car(&arg);
             let e = util::car(&util::cdr(&arg));
 
-            if SXRef::nil() != evaluate(p, env) {
-                return e
+            if SXRef::nil() != eval(p, env)? {
+                return Ok(e)
             }
         }
 
-        SXRef::nil()
+        Ok(SXRef::nil())
     }
 
-    pub fn cons(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn cons(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
         let nil = SXRef::nil();
 
         let arg1 = args.get(0).unwrap_or(&nil);
         let arg2 = args.get(1).unwrap_or(&nil);
 
-        util::cons(
-            &arg1,
-            &arg2,
-        )
+        let ret = util::cons(&arg1, &arg2);
+
+        Ok(ret)
     }
 
-    pub fn defun(sx: SXRef, env: &mut Env) -> SXRef {
+    pub fn defun(sx: SXRef, env: &mut Env) -> EvalResult {
         let mut macro_args = sx.iter();
 
         let _ = macro_args.next(); // skip arg 0
@@ -102,15 +108,15 @@ impl McCarthyScope {
             env.defun(name.into(), f.into());
         }
 
-        SXRef::nil()
+        Ok(SXRef::nil())
     }
 
-    pub fn equal(args: Vec<SXRef>, _env: &mut Env) -> SXRef {
+    pub fn equal(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
         let nil = SXRef::nil();
         let arg1 = args.get(0).unwrap_or(&nil);
         let arg2 = args.get(1).unwrap_or(&nil);
 
-        match (&**arg1, &**arg2) {
+        let ret = match (&**arg1, &**arg2) {
             (SX::Function(_), _)
             | (_, SX::Function(_))
             | (SX::Macro(_), _)
@@ -122,11 +128,13 @@ impl McCarthyScope {
                     SXRef::nil()
                 }
             },
-        }
+        };
+
+        Ok(ret)
     }
 
-    pub fn lambda(sx: SXRef, _env: &mut Env) -> SXRef {
-        SXRef::function(sx.into())
+    pub fn lambda(sx: SXRef, _env: &mut Env) -> EvalResult {
+        Ok(SXRef::function(sx.into()))
     }
 
     pub fn new() -> Scope {
@@ -200,9 +208,9 @@ impl McCarthyScope {
         ret
     }
 
-    pub fn quote(sx: SXRef, _env: &mut Env) -> SXRef {
+    pub fn quote(sx: SXRef, _env: &mut Env) -> EvalResult {
         let arg1 = util::car(&util::cdr(&sx));
 
-        SXRef::quote(arg1)
+        Ok(SXRef::quote(arg1))
     }
 }

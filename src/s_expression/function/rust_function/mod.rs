@@ -1,10 +1,13 @@
 #[cfg(test)]
 mod test;
 
-use crate::evaluate::Environment;
+use crate::evaluate::{
+    Environment as Env,
+    Result as EvalResult,
+};
 use crate::s_expression::SExpressionRef as SXRef;
 
-pub type ScopeableRustFn = fn(Vec<SXRef>, &mut Environment) -> SXRef;
+pub type ScopeableRustFn = fn(Vec<SXRef>, &mut Env) -> EvalResult;
 
 #[derive(Clone)]
 pub struct RustFunction(ScopeableRustFn);
@@ -14,7 +17,7 @@ impl RustFunction {
         RustFunction(f)
     }
 
-    pub fn execute(&self, args: Vec<SXRef>, env: &mut Environment) -> SXRef {
+    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
         self.0(args, env)
     }
 }

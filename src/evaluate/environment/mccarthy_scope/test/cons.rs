@@ -1,4 +1,5 @@
 use super::*;
+use crate::s_expression::ConsCell;
 
 #[test]
 pub fn cons_creates_new_cons_cell_from_args() {
@@ -14,7 +15,7 @@ pub fn cons_creates_new_cons_cell_from_args() {
         SXRef::number(2),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -32,7 +33,7 @@ pub fn cons_creates_new_cons_cell_from_single_arg() {
         SXRef::number(1),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -50,7 +51,7 @@ pub fn cons_creates_new_cons_cell_from_no_arg() {
         SXRef::nil(),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -69,7 +70,7 @@ pub fn cons_creates_new_cons_cell_when_first_arg_is_nil() {
         SXRef::number(2),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -96,7 +97,7 @@ pub fn cons_creates_new_cons_cell_when_first_arg_is_list() {
         SXRef::number(4),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -121,7 +122,7 @@ pub fn cons_creates_new_cons_cell_when_second_arg_is_list_of_multiple_items() {
         SXRef::number(4),
     ]);
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -140,7 +141,7 @@ pub fn cons_creates_new_cons_cell_when_second_arg_is_an_atom() {
         SXRef::number(2),
     ));
 
-    let actual = McCarthyScope::cons(subject, &mut env);
+    let actual = McCarthyScope::cons(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }

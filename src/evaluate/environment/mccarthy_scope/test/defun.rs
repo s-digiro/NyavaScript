@@ -1,4 +1,5 @@
 use super::*;
+use std::rc::Rc;
 
 #[test]
 pub fn defun_adds_well_formed_function_to_global_scope() {
@@ -18,7 +19,7 @@ pub fn defun_adds_well_formed_function_to_global_scope() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::defun(subject, &mut env);
+    let actual = McCarthyScope::defun(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -64,7 +65,7 @@ pub fn defun_adds_function_to_global_scope_with_nil_def_when_missing_def() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::defun(subject, &mut env);
+    let actual = McCarthyScope::defun(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -104,7 +105,7 @@ pub fn defun_adds_function_with_nil_def_and_args_to_global_scope_when_missing_de
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::defun(subject, &mut env);
+    let actual = McCarthyScope::defun(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -145,7 +146,7 @@ pub fn defun_does_nothing_when_missing_function_name() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::defun(subject, &mut env);
+    let actual = McCarthyScope::defun(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -173,7 +174,7 @@ pub fn defun_can_define_lambda_with_no_args() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::defun(subject, &mut env);
+    let actual = McCarthyScope::defun(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual);
 

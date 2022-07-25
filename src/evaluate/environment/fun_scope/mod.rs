@@ -5,6 +5,7 @@ use super::Scope;
 use crate::evaluate::{
     evaluate,
     Environment as Env,
+    Result as EvalResult,
 };
 use crate::s_expression::{
     RustFunction,
@@ -48,7 +49,7 @@ impl FunScope {
                         None => println!(),
                     }
 
-                    SXRef::nil()
+                    Ok(SXRef::nil())
                 }
             ).into(),
         );
@@ -56,32 +57,32 @@ impl FunScope {
         ret
     }
 
-    pub fn pipe(sx: SXRef, env: &mut Env) -> SXRef {
+    pub fn pipe(sx: SXRef, env: &mut Env) -> EvalResult {
         let mut it = sx.iter().skip(1);
 
         if let Some(first) = it.next() {
-            let first = evaluate(first, env);
+            let first = evaluate(first, env)?;
 
             let mut last = first;
 
             for arg in it {
                 let arg = util::push(&arg, &SXRef::quote(last));
-                last = evaluate(arg, env);
+                last = evaluate(arg, env)?;
             }
 
-            last
+            Ok(last)
         } else {
-            SXRef::nil()
+            Ok(SXRef::nil())
         }
     }
 
-    pub fn procedural(sx: SXRef, env: &mut Env) -> SXRef {
+    pub fn procedural(sx: SXRef, env: &mut Env) -> EvalResult {
         let mut last = SXRef::nil();
 
         for sx in sx.iter().skip(1) {
-            last = evaluate(sx, env);
+            last = evaluate(sx, env)?;
         }
 
-        last
+        Ok(last)
     }
 }

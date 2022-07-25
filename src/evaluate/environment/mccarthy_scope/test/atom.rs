@@ -8,7 +8,7 @@ pub fn atom_returns_1_when_called_on_nil() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -21,7 +21,7 @@ pub fn atom_returns_1_when_called_on_symbol() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -34,7 +34,7 @@ pub fn atom_returns_1_when_called_on_number() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -47,7 +47,7 @@ pub fn atom_returns_1_when_called_on_string() {
 
     let expected = SXRef::number(1);
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -65,7 +65,7 @@ pub fn atom_returns_nil_when_called_on_list() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -80,7 +80,7 @@ pub fn atom_returns_nil_when_called_on_quote() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -95,7 +95,7 @@ pub fn atom_returns_nil_when_called_on_function() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -110,7 +110,7 @@ pub fn atom_returns_nil_when_called_on_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -125,7 +125,7 @@ pub fn atom_returns_nil_when_called_on_rust_lambda() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -140,7 +140,7 @@ pub fn atom_returns_nil_when_called_on_rust_macro() {
 
     let expected = SXRef::nil();
 
-    let actual = McCarthyScope::atom(subject, &mut env);
+    let actual = McCarthyScope::atom(subject, &mut env).unwrap();
 
     assert_eq!(expected, actual)
 }

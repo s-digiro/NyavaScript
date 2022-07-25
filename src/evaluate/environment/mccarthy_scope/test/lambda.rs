@@ -25,7 +25,7 @@ pub fn lambda_with_1_arg_and_def_produces_function() {
         ]),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -57,7 +57,7 @@ pub fn lambda_with_2_arg_and_def_produces_function() {
         ]),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -93,7 +93,7 @@ pub fn lambda_with_3_arg_and_def_produces_function() {
         ]),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -123,7 +123,7 @@ pub fn lambda_with_0_arg_and_def_produces_function() {
         ]),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -147,7 +147,7 @@ pub fn lambda_with_2_arg_and_number_def_produces_function() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -171,7 +171,7 @@ pub fn lambda_with_2_arg_and_string_def_produces_function() {
         SXRef::string("foo".into()),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -195,7 +195,7 @@ pub fn lambda_with_2_arg_and_symbol_def_produces_function() {
         SXRef::symbol("foo".into()),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -219,7 +219,7 @@ pub fn lambda_with_2_arg_and_quote_def_produces_function() {
         SXRef::quote(SXRef::symbol("foo".into())),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -243,7 +243,7 @@ pub fn lambda_with_2_arg_and_nil_def_produces_function() {
         SXRef::nil(),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -267,7 +267,7 @@ pub fn lambda_with_2_arg_and_function_def_produces_function() {
         SXRef::function("()".try_into().unwrap()),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -291,7 +291,7 @@ pub fn lambda_with_2_arg_and_macro_def_produces_function() {
         SXRef::r#macro("()".try_into().unwrap()),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -312,7 +312,7 @@ pub fn lambda_with_2_arg_and_rust_function_def_produces_function() {
         "y".into()
     ];
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     match &*actual {
         SX::Function(f) => match f {
@@ -349,7 +349,7 @@ pub fn lambda_with_2_arg_and_rust_macro_def_produces_function() {
         "y".into()
     ];
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     match &*actual {
         SX::Function(f) => match f {
@@ -388,7 +388,7 @@ pub fn lambda_with_2_arg_and_no_def_produces_function() {
         SXRef::nil(),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -406,7 +406,7 @@ pub fn lambda_with_no_args_and_no_def_produces_function() {
         SXRef::nil(),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -426,7 +426,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -441,7 +441,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -456,7 +456,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -471,7 +471,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -486,7 +486,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -501,7 +501,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -516,7 +516,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -531,7 +531,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
         SXRef::number(1),
     ));
 
-    let actual = McCarthyScope::lambda(subject, &mut Env::new());
+    let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }

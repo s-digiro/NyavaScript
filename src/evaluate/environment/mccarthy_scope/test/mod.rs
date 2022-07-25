@@ -1,9 +1,8 @@
-use crate::evaluate::Environment as Env;
-use crate::s_expression::{
-    ConsCell,
-    SExpressionRef as SXRef,
+use crate::evaluate::{
+    Environment as Env,
+    Result as EvalResult,
 };
-use std::rc::Rc;
+use crate::s_expression::SExpressionRef as SXRef;
 use super::*;
 
 mod and;
@@ -20,12 +19,12 @@ mod null;
 mod or;
 mod quote;
 
-fn dummy_fn(_: Vec<SXRef>, _: &mut Env) -> SXRef {
-    SXRef::nil()
+fn dummy_fn(_: Vec<SXRef>, _: &mut Env) -> EvalResult {
+    Ok(SXRef::nil())
 }
 
-fn dummy_macro(_: SXRef, _: &mut Env) -> SXRef {
-    SXRef::nil()
+fn dummy_macro(_: SXRef, _: &mut Env) -> EvalResult {
+    Ok(SXRef::nil())
 }
 
 fn mc_env() -> Env {

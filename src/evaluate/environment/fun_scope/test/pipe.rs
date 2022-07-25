@@ -8,7 +8,7 @@ pub fn pipe_with_no_args_returns_nil() {
 
     let expected =  SXRef::nil();
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -22,7 +22,7 @@ pub fn pipe_returns_result_of_only_arg_when_arg_is_atom() {
 
     let expected = SXRef::number(1);
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -33,7 +33,7 @@ pub fn pipe_returns_result_of_only_arg_when_arg_is_atom() {
 
     let expected = SXRef::string("foo".into());
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -44,7 +44,7 @@ pub fn pipe_returns_result_of_only_arg_when_arg_is_atom() {
 
     let expected = SXRef::nil();
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual);
 
@@ -55,7 +55,7 @@ pub fn pipe_returns_result_of_only_arg_when_arg_is_atom() {
 
     let expected = SXRef::symbol("foo".into());
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -75,7 +75,7 @@ pub fn pipe_works() {
 
     let expected =  SXRef::number(1);
 
-    let actual = FunScope::pipe(subject, &mut env());
+    let actual = FunScope::pipe(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual)
 }

@@ -8,7 +8,7 @@ pub fn procedural_with_no_args_returns_nil() {
 
     let expected =  SXRef::nil();
 
-    let actual = FunScope::procedural(subject, &mut env());
+    let actual = FunScope::procedural(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual)
 }
@@ -35,7 +35,7 @@ pub fn procedural_returns_result_of_last_evaluated_list() {
 
     let expected = SXRef::from(vec![SXRef::number(2)]);
 
-    let actual = FunScope::procedural(subject, &mut env());
+    let actual = FunScope::procedural(subject, &mut env()).unwrap();
 
     assert_eq!(expected, actual)
 }

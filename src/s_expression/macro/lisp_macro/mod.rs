@@ -7,6 +7,7 @@ use crate::evaluate::{
     Environment as Env,
     Scope,
     evaluate as eval,
+    Result as EvalResult,
 };
 
 #[derive(Clone, Debug, PartialEq)]
@@ -31,7 +32,7 @@ impl LispMacro {
         SXRef::clone(&self.definition)
     }
 
-    pub fn execute(&self, args: SXRef, env: &mut Env) -> SXRef {
+    pub fn execute(&self, args: SXRef, env: &mut Env) -> EvalResult {
         env.push(Scope::new());
 
         if let Some(key) = self.args().first() {

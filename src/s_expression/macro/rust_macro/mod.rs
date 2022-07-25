@@ -1,7 +1,10 @@
-use crate::evaluate::Environment;
+use crate::evaluate::{
+    Environment as Env,
+    Result as EvalResult,
+};
 use crate::s_expression::SExpressionRef as SXRef;
 
-pub type MacroFunc = fn(SXRef, &mut Environment) -> SXRef;
+pub type MacroFunc = fn(SXRef, &mut Env) -> EvalResult;
 
 #[derive(Clone)]
 pub struct RustMacro(MacroFunc);
@@ -11,7 +14,7 @@ impl RustMacro {
         RustMacro(f)
     }
 
-    pub fn execute(&self, list: SXRef, env: &mut Environment) -> SXRef {
+    pub fn execute(&self, list: SXRef, env: &mut Env) -> EvalResult {
         self.0(list, env)
     }
 }

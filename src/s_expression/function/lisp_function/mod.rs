@@ -5,6 +5,7 @@ use crate::evaluate::{
     Environment as Env,
     Scope,
     evaluate as eval,
+    Result as EvalResult,
 };
 use crate::parse::{ parse, ParseError };
 use crate::s_expression::{
@@ -32,7 +33,7 @@ impl LispFunction {
         SXRef::clone(&self.definition)
     }
 
-    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> SXRef {
+    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
         env.push(Scope::new());
 
         for (key, val) in self.args().iter().zip(args.into_iter()) {

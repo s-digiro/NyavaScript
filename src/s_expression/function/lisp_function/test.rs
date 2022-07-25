@@ -106,7 +106,7 @@ pub fn execute_works() {
 
     let expected = SXRef::number(1);
 
-    let actual = subject.execute(args, &mut Env::new());
+    let actual = subject.execute(args, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }

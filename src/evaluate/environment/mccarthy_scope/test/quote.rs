@@ -11,7 +11,7 @@ pub fn quote_symbol_returns_quoted_symbol() {
 
     let expected =  SXRef::quote(SXRef::symbol("x".into()));
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -24,7 +24,7 @@ pub fn quote_nothing_returns_quoted_nil() {
 
     let expected =  SXRef::quote(SXRef::nil());
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -38,7 +38,7 @@ pub fn quote_string_returns_quoted_string() {
 
     let expected =  SXRef::quote(SXRef::string("x".into()));
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -52,7 +52,7 @@ pub fn quote_number_returns_quoted_number() {
 
     let expected =  SXRef::quote(SXRef::number(1));
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -76,7 +76,7 @@ pub fn quote_list_returns_quoted_list() {
         ]),
     );
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -91,7 +91,7 @@ pub fn quote_quote_returns_quoted_quote() {
         SXRef::quote(SXRef::number(1)),
     );
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -141,7 +141,7 @@ pub fn quote_list_with_sublists_returns_quoted_list_with_sublists() {
         ]),
     );
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -157,7 +157,7 @@ pub fn quote_function_returns_quoted_function() {
         SXRef::function("()".try_into().unwrap()),
     );
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -173,7 +173,7 @@ pub fn quote_macro_returns_quoted_macro() {
         SXRef::r#macro("()".try_into().unwrap()),
     );
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -185,7 +185,7 @@ pub fn quote_rust_function_returns_quoted_rust_function() {
         RustFunction::new(dummy_fn).into(),
     ]);
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     match &*actual {
         SX::Quote(sx) => match &**sx {
@@ -206,7 +206,7 @@ pub fn quote_rust_macro_returns_quoted_rust_macro() {
         SXRef::r#macro(RustMacro::new(dummy_macro).into()),
     ]);
 
-    let actual = McCarthyScope::quote(subject, &mut Env::new());
+    let actual = McCarthyScope::quote(subject, &mut Env::new()).unwrap();
 
     match &*actual {
         SX::Quote(sx) => match &**sx {
