@@ -32,10 +32,9 @@
     [*] Add . symbol to syntax parsing
         [*] implement
         [*] Add test
-    [ ] Add . symbol to semantic parsing
-        [ ] Parse it into (cons car cdr)
-        [ ] Add test
-            [ ] lone Dot Syntax parses into (cons car cdr)
+    [*] Add . symbol to semantic parsing
+        [*] Parse it into (cons car cdr)
+        [*] Add test
     [ ] Add some sort of e2e tests or lib unit tests
         [ ] Figure out the difference and standard practices while you are at it
 [ ] Garbage collector

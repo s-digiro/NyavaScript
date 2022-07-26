@@ -90,11 +90,10 @@ fn dot_as_only_item_in_list() {
         ),
     ]);
 
-    let expected = SXRef::from(vec![
-        SXRef::symbol("cons".into()),
+    let expected = SXRef::cons_cell(ConsCell::new(
         SXRef::number(1),
         SXRef::number(2),
-    ]);
+    ));
 
     let actual = parse(subject).unwrap();
 
@@ -207,6 +206,4 @@ fn dot_as_not_last_item_in_last() {
     let actual = parse(subject).err().unwrap();
 
     assert_eq!(expected, actual);
-
-    panic!("FAIL")
 }
