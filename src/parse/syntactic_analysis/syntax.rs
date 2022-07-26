@@ -1,6 +1,6 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum Syntax {
-    Dot(Box<Syntax>, Box<Syntax>),
+    Dot(Option<Box<Syntax>>, Option<Box<Syntax>>),
     List(Vec<Syntax>),
     Number(isize),
     String(String),
@@ -16,10 +16,10 @@ impl Syntax {
         Syntax::Symbol(s.to_owned())
     }
 
-    pub fn dot(car: Syntax, cdr: Syntax) -> Syntax {
+    pub fn dot(car: Option<Syntax>, cdr: Option<Syntax>) -> Syntax {
         Syntax::Dot(
-            Box::new(car),
-            Box::new(cdr),
+            car.map(|x| Box::new(x)),
+            cdr.map(|x| Box::new(x)),
         )
     }
 
