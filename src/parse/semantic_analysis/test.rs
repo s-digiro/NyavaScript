@@ -79,3 +79,24 @@ fn parse_symbol() {
         ),
     );
 }
+
+#[test]
+fn dot_as_only_item_in_list() {
+    let subject = Syntax::List(vec![
+        Syntax::List(vec![
+            Syntax::symbol("foo"),
+        ]),
+        Syntax::list(),
+    ]);
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_as_last_item_in_list() {
+    panic!("FAIL")
+}
+
+#[test]
+fn dot_as_not_last_item_in_last() {
+    panic!("FAIL")
+}
