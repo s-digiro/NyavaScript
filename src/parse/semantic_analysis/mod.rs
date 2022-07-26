@@ -10,6 +10,7 @@ pub fn parse(tree: Syntax) -> SXRef {
         Syntax::Number(n) => SXRef::number(n),
         Syntax::String(s) => SXRef::string(s),
         Syntax::Symbol(s) => SXRef::symbol(s),
+        Syntax::Dot(_, _) => todo!(),
     }
 }
 

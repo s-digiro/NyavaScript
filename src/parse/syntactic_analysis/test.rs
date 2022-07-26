@@ -212,3 +212,38 @@ fn parse_works() {
                 Syntax::symbol("bar")]),
             Syntax::symbol("baz")]));
 }
+
+#[test]
+fn dot_with_car_and_cdr() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_with_car_but_no_cdr() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_with_cdr_but_no_car() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_with_no_car_and_no_cdr() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_as_second_last_item_in_list() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_as_last_item_in_list() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_with_more_than_one_item_after_it_in_list() {
+    panic!("FAIL");
+}

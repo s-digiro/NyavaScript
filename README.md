@@ -27,9 +27,8 @@
         [*] implement
         [*] Add tests
             [*] lone . parses into dot operator
-    [ ] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
-        [ ] implement
-        [ ] Test?
+    [*] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
+        [*] implement
     [ ] Add . symbol to syntax parsing
         [ ] implement
         [ ] Add test
