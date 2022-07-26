@@ -2,6 +2,7 @@
 #[derive(Debug)]
 pub enum Token {
     CloseList,
+    Dot,
     Number(isize),
     OpenList,
     Quote,
@@ -29,6 +30,7 @@ impl std::fmt::Display for Token {
             Token::Quote => write!(f, "'"),
             Token::String(s) => write!(f, "\"{}\"", s),
             Token::Symbol(a) => write!(f, "{}", a),
+            Token::Dot => write!(f, "."),
         }
     }
 }
