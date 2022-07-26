@@ -35,6 +35,7 @@ pub fn parse(tokens: Vec<Token>) -> Result<Syntax, SyntaxError> {
 pub fn parse_quote(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token>), SyntaxError> {
     let quoted = match tokens.next() {
         Some(tok) => match tok {
+            Token::Dot => todo!(),
             Token::Symbol(s) => Syntax::Symbol(s),
             Token::String(s) => Syntax::String(s),
             Token::Number(n) => Syntax::Number(n),
@@ -69,6 +70,7 @@ pub fn parse_list(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token
 
     while let Some(tok) = tokens.next() {
         match tok {
+            Token::Dot => todo!(),
             Token::Symbol(s) => ret.push(Syntax::Symbol(s)),
             Token::String(s) => ret.push(Syntax::String(s)),
             Token::Number(n) => ret.push(Syntax::Number(n)),

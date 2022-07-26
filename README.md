@@ -22,9 +22,7 @@
     [*] print cons cells with non-list cdr using dot infix
         [*] implement
         [*] Add tests
-    [ ] Add . token
-        [ ] implement
-        [ ] test?
+    [*] Add . token
     [ ] Add . symbol to lexical parsing
         [ ] implement
         [ ] Add tests
