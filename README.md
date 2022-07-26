@@ -18,7 +18,7 @@
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
-[ ] . infix operator
+[*] . infix operator
     [*] print cons cells with non-list cdr using dot infix
         [*] implement
         [*] Add tests
@@ -35,8 +35,11 @@
     [*] Add . symbol to semantic parsing
         [*] Parse it into (cons car cdr)
         [*] Add test
-    [ ] Add some sort of e2e tests or lib unit tests
-        [ ] Figure out the difference and standard practices while you are at it
+    [*] Add some sort of e2e tests or lib unit tests
+[ ] Figure out the difference and standard practices between e2e tests and lib unit tests
+[ ] Syntax parsing is a wreck, refactor to make it easier to read
+[ ] Semantic parsing is probably redundant and the work being done there is
+    probably better off being done in syntax parsing
 [ ] Garbage collector
 [ ] Evaluate List should be refactored into more functions so its easier to read
 [ ] Allow multiple lists in root, without tacking on a root list as a new
