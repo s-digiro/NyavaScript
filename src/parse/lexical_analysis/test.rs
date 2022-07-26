@@ -307,3 +307,13 @@ fn parse_works() {
         parse("(print '(1 2))").unwrap(),
     );
 }
+
+#[test]
+fn lone_dot_parses_into_dot_token() {
+    panic!("FAIL");
+}
+
+#[test]
+fn dot_as_part_of_atom_does_not_parse_into_dot_token() {
+    panic!("FAIL");
+}
