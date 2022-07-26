@@ -55,3 +55,13 @@ fn display_works() {
         subject.to_string(),
     );
 }
+
+#[test]
+fn display_on_cons_cell_with_non_list_cdr_uses_dot_infix_notation() {
+    panic!("FAIL");
+}
+
+#[test]
+fn display_on_list_with_last_cons_cell_with_non_list_cdr_uses_dot_infix_notation() {
+    panic!("FAIL");
+}
