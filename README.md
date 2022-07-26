@@ -29,11 +29,9 @@
             [*] lone . parses into dot operator
     [*] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
         [*] implement
-    [ ] Add . symbol to syntax parsing
-        [ ] implement
-        [ ] Add test
-             [ ] lone Dot Token parses into Dot Syntax with left and right item
-                 in it
+    [*] Add . symbol to syntax parsing
+        [*] implement
+        [*] Add test
     [ ] Add . symbol to semantic parsing
         [ ] Parse it into (cons car cdr)
         [ ] Add test

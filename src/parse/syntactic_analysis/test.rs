@@ -362,3 +362,60 @@ fn dot_with_more_than_one_item_after_it_in_list() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+fn double_dot() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::Dot,
+        Token::CloseList,
+    ];
+
+    let expected = SyntaxError::BadInfixDotNotation;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_as_last() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+    ];
+
+    let expected = SyntaxError::UnmatchedOpenListError;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_list_after() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            None,
+            Some(Syntax::List(vec![
+                Syntax::Number(1),
+                Syntax::Number(2),
+            ])),
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
