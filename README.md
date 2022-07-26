@@ -29,26 +29,18 @@
         [ ] implement
         [ ] Add tests
             [ ] lone . parses into dot operator
-    [ ] Add . Syntax
+    [ ] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
         [ ] implement
         [ ] Test?
     [ ] Add . symbol to syntax parsing
         [ ] implement
-            [ ] Should parse into JUST Dot, not a tree
         [ ] Add test
-             [ ] lone Dot Token parses into Dot Syntax
-    [ ] Add . SExpr
-        [ ] implement
-        [ ] Test
-            [ ] lots...
+             [ ] lone Dot Token parses into Dot Syntax with left and right item
+                 in it
     [ ] Add . symbol to semantic parsing
-        [ ] Parse it into new infixDot SExpr type
+        [ ] Parse it into (cons car cdr)
         [ ] Add test
-            [ ] lone Dot Syntax parses into Dot Operator
-    [ ] Add rules for how . SExpr is evaluated
-        [ ] implement
-        [ ] Test
-            [ ] lots...
+            [ ] lone Dot Syntax parses into (cons car cdr)
     [ ] Add some sort of e2e tests or lib unit tests
         [ ] Figure out the difference and standard practices while you are at it
 [ ] Garbage collector
