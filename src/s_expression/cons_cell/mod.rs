@@ -1,4 +1,7 @@
-use super::SExpressionRef as SXRef;
+use super::{
+    SExpression as SX,
+    SExpressionRef as SXRef,
+};
 
 mod iter;
 use iter::ConsCellIter;
@@ -27,10 +30,28 @@ impl ConsCell {
 
 impl std::fmt::Display for ConsCell {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "(")?;
-        for e in self.iter() {
-            write!(f, "{} ", e)?;
+        let mut s = "(".to_owned();
+
+        let mut current = self;
+
+        loop {
+            s.push_str(&format!("{}", current.car));
+
+            match &*current.cdr {
+                SX::Nil => break,
+                SX::ConsCell(c) => {
+                    s.push(' ');
+                    current = c;
+                },
+                x => {
+                    s.push_str(&format!(" . {}", x));
+                    break
+                }
+            }
         }
-        write!(f, ")")
+
+        s.push(')');
+
+        write!(f, "{}", s)
     }
 }

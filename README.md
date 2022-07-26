@@ -19,9 +19,9 @@
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
 [ ] . infix operator
-    [ ] print cons cells with non-list cdr using dot infix
-        [ ] implement
-        [ ] Add tests
+    [*] print cons cells with non-list cdr using dot infix
+        [*] implement
+        [*] Add tests
     [ ] Add . token
         [ ] implement
         [ ] test?

@@ -51,7 +51,7 @@ fn display_works() {
     );
 
     assert_eq!(
-        "(1 2 3 )",
+        "(1 2 3)",
         subject.to_string(),
     );
 }
