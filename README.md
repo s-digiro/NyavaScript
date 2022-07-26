@@ -23,10 +23,10 @@
         [*] implement
         [*] Add tests
     [*] Add . token
-    [ ] Add . symbol to lexical parsing
-        [ ] implement
-        [ ] Add tests
-            [ ] lone . parses into dot operator
+    [*] Add . symbol to lexical parsing
+        [*] implement
+        [*] Add tests
+            [*] lone . parses into dot operator
     [ ] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
         [ ] implement
         [ ] Test?
