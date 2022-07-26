@@ -18,24 +18,6 @@
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
-[*] . infix operator
-    [*] print cons cells with non-list cdr using dot infix
-        [*] implement
-        [*] Add tests
-    [*] Add . token
-    [*] Add . symbol to lexical parsing
-        [*] implement
-        [*] Add tests
-            [*] lone . parses into dot operator
-    [*] Add . Syntax in form Dot(car, cdr) (as operator would cause macro problems)
-        [*] implement
-    [*] Add . symbol to syntax parsing
-        [*] implement
-        [*] Add test
-    [*] Add . symbol to semantic parsing
-        [*] Parse it into (cons car cdr)
-        [*] Add test
-    [*] Add some sort of e2e tests or lib unit tests
 [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
 [ ] Syntax parsing is a wreck, refactor to make it easier to read
 [ ] Semantic parsing is probably redundant and the work being done there is
@@ -52,8 +34,6 @@
 [ ] arbitrary cdaddr function
 [ ] Maybe mccarthy functions should be "specials", separate from macros?
     decide.
-[*] Invalid function calls should fail spectacularly rather than returning nil
-[*] NIL keyword
 [ ] From SX for SXRef
 [ ] From inner for SXRef
 [ ] From inner for SX
