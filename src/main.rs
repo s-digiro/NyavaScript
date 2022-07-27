@@ -1,4 +1,4 @@
-use toylisp::*;
+use nyavascript::*;
 use std::env;
 
 pub fn main() -> Result<(), String> {
