@@ -35,6 +35,7 @@ pub fn parse(tokens: Vec<Token>) -> Result<Syntax, SyntaxError> {
 pub fn parse_quote(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token>), SyntaxError> {
     let quoted = match tokens.next() {
         Some(tok) => match tok {
+            Token::Dot => todo!(),
             Token::Symbol(s) => Syntax::Symbol(s),
             Token::String(s) => Syntax::String(s),
             Token::Number(n) => Syntax::Number(n),
@@ -69,6 +70,7 @@ pub fn parse_list(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token
 
     while let Some(tok) = tokens.next() {
         match tok {
+            Token::Dot => return parse_list_remainder_as_dot(ret, tokens),
             Token::Symbol(s) => ret.push(Syntax::Symbol(s)),
             Token::String(s) => ret.push(Syntax::String(s)),
             Token::Number(n) => ret.push(Syntax::Number(n)),
@@ -109,4 +111,94 @@ pub fn parse_list(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token
 
 
     Err(SyntaxError::UnmatchedOpenListError)
+}
+
+pub fn parse_list_remainder_as_dot(
+    mut list: Vec<Syntax>,
+    mut tokens: IntoIter<Token>
+) -> Result<(Syntax, IntoIter<Token>), SyntaxError> {
+    let car = match list.pop() {
+        Some(x) => Some(x),
+        None => None,
+    };
+
+    match tokens.next() {
+        Some(x) => match x {
+            Token::Dot => return Err(SyntaxError::BadInfixDotNotation),
+            Token::OpenList => {
+                let (syn, it) = parse_list(tokens)?;
+
+                tokens = it;
+
+                let ret = Syntax::dot(
+                    car,
+                    Some(syn),
+                );
+
+                list.push(ret);
+                let ret = Syntax::List(list);
+
+                match tokens.next() {
+                    Some(Token::CloseList) => return Ok((ret, tokens)),
+                    None => return Err(SyntaxError::UnmatchedOpenListError),
+                    _ => return Err(SyntaxError::BadInfixDotNotation),
+                }
+            },
+            Token::Quote => {
+                let (syn, it) = parse_quote(tokens)?;
+
+                tokens = it;
+
+                let ret = Syntax::dot(
+                    car,
+                    Some(syn),
+                );
+
+                list.push(ret);
+                let ret = Syntax::List(list);
+
+                match tokens.next() {
+                    Some(Token::CloseList) => return Ok((ret, tokens)),
+                    None => return Err(SyntaxError::UnmatchedOpenListError),
+                    _ => return Err(SyntaxError::BadInfixDotNotation),
+                }
+            },
+            Token::CloseList =>  {
+                let ret = Syntax::dot(
+                    car,
+                    None,
+                );
+
+                list.push(ret);
+                let ret = Syntax::List(list);
+
+                return Ok((ret, tokens))
+            }
+            Token::Symbol(_)
+            | Token::String(_)
+            | Token::Number(_) => {
+                let syn = match x {
+                    Token::Symbol(s) => Syntax::Symbol(s),
+                    Token::String(s) => Syntax::String(s),
+                    Token::Number(n) => Syntax::Number(n),
+                    _ => panic!("This should never happen"),
+                };
+
+                let ret = Syntax::dot(
+                    car,
+                    Some(syn),
+                );
+
+                list.push(ret);
+                let ret = Syntax::List(list);
+
+                match tokens.next() {
+                    Some(Token::CloseList) => return Ok((ret, tokens)),
+                    None => return Err(SyntaxError::UnmatchedOpenListError),
+                    _ => return Err(SyntaxError::BadInfixDotNotation),
+                }
+            },
+        },
+        None => return Err(SyntaxError::UnmatchedOpenListError)
+    };
 }

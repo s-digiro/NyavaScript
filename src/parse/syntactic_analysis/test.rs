@@ -212,3 +212,210 @@ fn parse_works() {
                 Syntax::symbol("bar")]),
             Syntax::symbol("baz")]));
 }
+
+#[test]
+fn dot_with_car_and_cdr() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Dot,
+        Token::Number(2),
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            Some(Syntax::Number(1)),
+            Some(Syntax::Number(2)),
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_car_but_no_cdr() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Dot,
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            Some(Syntax::Number(1)),
+            None,
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_cdr_but_no_car() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::Number(2),
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            None,
+            Some(Syntax::Number(2)),
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_no_car_and_no_cdr() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            None,
+            None,
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_as_second_last_item_in_list() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::Dot,
+        Token::Number(3),
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::Number(1),
+        Syntax::dot(
+            Some(Syntax::Number(2)),
+            Some(Syntax::Number(3)),
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_as_last_item_in_list() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::Dot,
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::Number(1),
+        Syntax::dot(
+            Some(Syntax::Number(2)),
+            None,
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_more_than_one_item_after_it_in_list() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::Dot,
+        Token::Number(3),
+        Token::Number(4),
+        Token::CloseList,
+    ];
+
+    let expected = SyntaxError::BadInfixDotNotation;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn double_dot() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::Dot,
+        Token::CloseList,
+    ];
+
+    let expected = SyntaxError::BadInfixDotNotation;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_as_last() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+    ];
+
+    let expected = SyntaxError::UnmatchedOpenListError;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_with_list_after() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Dot,
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::CloseList,
+    ];
+
+    let expected = Syntax::List(vec![
+        Syntax::dot(
+            None,
+            Some(Syntax::List(vec![
+                Syntax::Number(1),
+                Syntax::Number(2),
+            ])),
+        ),
+    ]);
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}

@@ -22,7 +22,10 @@ pub fn run(text: &str) -> Result<SExpressionRef, Box<dyn Error>> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::s_expression::SExpressionRef as SXRef;
+    use crate::s_expression::{
+        SExpressionRef as SXRef,
+        ConsCell,
+    };
 
     #[test]
     fn pipe() {
@@ -46,6 +49,20 @@ mod test {
             SXRef::number(1),
             SXRef::number(4),
         ]);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn dot_notation() {
+        let code = "(cons (car '(1 . 2)) (cdr '(3 . 4)))";
+
+        let expected = SXRef::cons_cell(ConsCell::new(
+            SXRef::number(1),
+            SXRef::number(4),
+        ));
 
         let actual = run(code).unwrap();
 

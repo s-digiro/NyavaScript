@@ -11,10 +11,11 @@ use std::mem;
 
 pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
     enum State {
-        InList,
+        Dot,
         InAtom,
-        InString,
+        InList,
         InNumber,
+        InString,
         SlashQuote,
     }
 
@@ -36,6 +37,8 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
             (State::InList, ')') => ret.push(Token::CloseList),
 
             (State::InList, '"') => state = State::InString,
+
+            (State::InList, '.') => state = State::Dot,
 
             (State::InList, n) if could_be_number(n) => {
                 state = State::InNumber;
@@ -112,6 +115,32 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
             (State::InNumber, n) if n.is_numeric() => buf.push(c),
 
             (State::InNumber, c) => {
+                buf.push(c);
+                state = State::InAtom;
+            }
+
+            (State::Dot, ' ')
+            | (State::Dot, '\t')
+            | (State::Dot, '\n')
+            | (State::Dot, '\r') => {
+                ret.push(Token::Dot);
+                state = State::InList;
+            },
+
+            (State::Dot, '(') => {
+                ret.push(Token::Dot);
+                ret.push(Token::OpenList);
+                state = State::InList;
+            }
+
+            (State::Dot, ')') => {
+                ret.push(Token::Dot);
+                ret.push(Token::CloseList);
+                state = State::InList;
+            }
+
+            (State::Dot, c) => {
+                buf.push('.');
                 buf.push(c);
                 state = State::InAtom;
             }

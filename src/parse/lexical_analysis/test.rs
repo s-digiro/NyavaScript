@@ -307,3 +307,38 @@ fn parse_works() {
         parse("(print '(1 2))").unwrap(),
     );
 }
+
+#[test]
+fn lone_dot_parses_into_dot_token() {
+    let subject = "(1 . 2)";
+
+    let expected = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Dot,
+        Token::Number(2),
+        Token::CloseList,
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn dot_as_part_of_atom_does_not_parse_into_dot_token() {
+    let subject = "(1. .. .foo \"f.oo\")";
+
+    let expected = vec![
+        Token::OpenList,
+        Token::symbol("1."),
+        Token::symbol(".."),
+        Token::symbol(".foo"),
+        Token::string("f.oo"),
+        Token::CloseList,
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}

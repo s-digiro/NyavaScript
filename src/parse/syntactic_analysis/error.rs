@@ -10,6 +10,7 @@ pub enum SyntaxError {
     UnexpectedTrailingTokensError,
     UnmatchedCloseListError,
     UnmatchedOpenListError,
+    BadInfixDotNotation,
 }
 
 impl fmt::Display for SyntaxError {
@@ -24,6 +25,7 @@ impl fmt::Display for SyntaxError {
             SyntaxError::UnmatchedCloseListError => write!(f, "Unmatched Close List: Close parenthesis is missing open parenthesis"),
             SyntaxError::QuoteMissingItemError => write!(f, "Quote is missing an item after it"),
             SyntaxError::UnexpectedTrailingTokensError => write!(f, "Unexpected Trailing tokens"),
+            SyntaxError::BadInfixDotNotation => write!(f, "Bad infix dot notation. Dot must be last or second to last item if it is in list"),
         }
     }
 }

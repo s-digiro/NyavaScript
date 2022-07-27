@@ -51,7 +51,38 @@ fn display_works() {
     );
 
     assert_eq!(
-        "(1 2 3 )",
+        "(1 2 3)",
         subject.to_string(),
     );
+}
+
+#[test]
+fn display_on_cons_cell_with_non_list_cdr_uses_dot_infix_notation() {
+    let subject = ConsCell::new(
+        SXRef::number(1),
+        SXRef::number(2),
+    );
+
+    let expected = "(1 . 2)";
+
+    let actual = subject.to_string();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn display_on_list_with_last_cons_cell_with_non_list_cdr_uses_dot_infix_notation() {
+    let subject = ConsCell::new(
+        SXRef::number(1),
+        ConsCell::new(
+            SXRef::number(2),
+            SXRef::number(3),
+        ).into(),
+    );
+
+    let expected = "(1 2 . 3)";
+
+    let actual = subject.to_string();
+
+    assert_eq!(expected, actual);
 }

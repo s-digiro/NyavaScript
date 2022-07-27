@@ -18,7 +18,10 @@
     [ ] Like print
     [ ] Add/Subtract
     [ ] Stuff that isn't pure McCarthy
-[ ] . infix operator
+[ ] Figure out the difference and standard practices between e2e tests and lib unit tests
+[ ] Syntax parsing is a wreck, refactor to make it easier to read
+[ ] Semantic parsing is probably redundant and the work being done there is
+    probably better off being done in syntax parsing
 [ ] Garbage collector
 [ ] Evaluate List should be refactored into more functions so its easier to read
 [ ] Allow multiple lists in root, without tacking on a root list as a new
@@ -31,8 +34,6 @@
 [ ] arbitrary cdaddr function
 [ ] Maybe mccarthy functions should be "specials", separate from macros?
     decide.
-[*] Invalid function calls should fail spectacularly rather than returning nil
-[*] NIL keyword
 [ ] From SX for SXRef
 [ ] From inner for SXRef
 [ ] From inner for SX
