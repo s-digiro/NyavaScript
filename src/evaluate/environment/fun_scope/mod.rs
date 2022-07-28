@@ -3,7 +3,7 @@ mod test;
 
 use super::Scope;
 use crate::evaluate::{
-    evaluate,
+    eval,
     Environment as Env,
     Result as EvalResult,
 };
@@ -61,13 +61,13 @@ impl FunScope {
         let mut it = sx.iter().skip(1);
 
         if let Some(first) = it.next() {
-            let first = evaluate(first, env)?;
+            let first = eval(first, env)?;
 
             let mut last = first;
 
             for arg in it {
                 let arg = util::push(&arg, &SXRef::quote(last));
-                last = evaluate(arg, env)?;
+                last = eval(arg, env)?;
             }
 
             Ok(last)
@@ -80,7 +80,7 @@ impl FunScope {
         let mut last = SXRef::nil();
 
         for sx in sx.iter().skip(1) {
-            last = evaluate(sx, env)?;
+            last = eval(sx, env)?;
         }
 
         Ok(last)

@@ -12,7 +12,13 @@ use crate::s_expression::{
 
 use super::syntactic_analysis::Syntax;
 
-pub fn parse(tree: Syntax) -> Result<SXRef, SemanticError> {
+pub fn parse(trees: Vec<Syntax>) -> Result<Vec<SXRef>, SemanticError> {
+    trees.into_iter()
+        .map(|tree| parse_syn(tree))
+        .collect::<Result<Vec<SXRef>, SemanticError>>()
+}
+
+fn parse_syn(tree: Syntax) -> Result<SXRef, SemanticError> {
     match tree {
         Syntax::List(l) => parse_list(l),
         Syntax::Number(n) => Ok(SXRef::number(n)),
@@ -32,7 +38,7 @@ fn parse_list(list: Vec<Syntax>) -> Result<SXRef, SemanticError> {
             DotStatus::Malformed => Err(SemanticError::DotSyntaxNotAtListEnd),
             DotStatus::NoDot => {
                 let children = list.into_iter()
-                    .map(|syn| parse(syn))
+                    .map(|syn| parse_syn(syn))
                     .collect::<Result<Vec<SXRef>, SemanticError>>()?;
 
                 Ok(SXRef::from(children))
@@ -47,12 +53,12 @@ fn parse_list(list: Vec<Syntax>) -> Result<SXRef, SemanticError> {
                 };
 
                 let car = match car {
-                    Some(car) => parse(*car)?,
+                    Some(car) => parse_syn(*car)?,
                     None => SXRef::nil(),
                 };
 
                 let cdr = match cdr {
-                    Some(cdr) => parse(*cdr)?,
+                    Some(cdr) => parse_syn(*cdr)?,
                     None => SXRef::nil(),
                 };
 
@@ -62,7 +68,7 @@ fn parse_list(list: Vec<Syntax>) -> Result<SXRef, SemanticError> {
                 ));
 
                 for syn in it {
-                    let sx = parse(syn)?;
+                    let sx = parse_syn(syn)?;
 
                     current = util::cons(&sx, &current);
                 }

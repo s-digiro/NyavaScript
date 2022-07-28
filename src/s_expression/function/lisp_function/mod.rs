@@ -4,7 +4,7 @@ mod test;
 use crate::evaluate::{
     Environment as Env,
     Scope,
-    evaluate as eval,
+    eval,
     Result as EvalResult,
 };
 use crate::parse::{ parse, ParseError };
@@ -52,9 +52,9 @@ impl TryFrom<&str> for LispFunction {
     type Error = ParseError;
 
     fn try_from(text: &str) -> Result<Self, Self::Error> {
-        let ast = parse(text)?;
+        let mut ast = parse(text)?;
 
-        Ok(ast.into())
+        Ok(ast.remove(0).into())
     }
 }
 

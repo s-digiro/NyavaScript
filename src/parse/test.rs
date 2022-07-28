@@ -1,12 +1,12 @@
 use super::*;
 
-use crate::s_expression::{ ConsCell };
+use crate::s_expression::ConsCell;
 
 #[test]
 pub fn full_parse() {
     let subject = "((lambda (x) (cons x (\"foo\" 2))) (car (3 \"bar\")))";
 
-    let expected =
+    let expected = vec![
         SExpressionRef::cons_cell(ConsCell::new( // First actual parenthesis
             SExpressionRef::cons_cell(ConsCell::new(
                 SExpressionRef::symbol("lambda".to_owned()),
@@ -52,7 +52,8 @@ pub fn full_parse() {
                 )),
                 SExpressionRef::nil(),
             )),
-        ));
+        ))
+    ];
 
     assert_eq!(expected, parse(subject).unwrap());
 }

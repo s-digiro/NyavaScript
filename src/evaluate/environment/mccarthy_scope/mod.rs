@@ -2,7 +2,7 @@
 mod test;
 
 use crate::evaluate::{
-    evaluate as eval,
+    eval,
     Environment as Env,
     Scope,
     Result as EvalResult,

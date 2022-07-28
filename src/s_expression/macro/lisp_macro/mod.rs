@@ -6,7 +6,7 @@ use crate::s_expression::{ SExpressionRef as SXRef, util };
 use crate::evaluate::{
     Environment as Env,
     Scope,
-    evaluate as eval,
+    eval,
     Result as EvalResult,
 };
 
@@ -51,9 +51,9 @@ impl TryFrom<&str> for LispMacro {
     type Error = ParseError;
 
     fn try_from(text: &str) -> Result<Self, Self::Error> {
-        let ast = parse(text)?;
+        let mut ast = parse(text)?;
 
-        Ok(ast.into())
+        Ok(ast.remove(0).into())
     }
 }
 

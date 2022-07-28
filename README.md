@@ -1,23 +1,4 @@
 # To Do
-[ ] Allow multiple lists in root, without tacking on a root list as a new
-    function. Maybe as a vector of refvals
-    [ ] Lexical
-        [ ] Should be fine, but make sure we aren't checking for root list
-        [ ] Make sure tests pass if any changes were made
-        [ ] New Tests
-            [ ] Lexical works with multiple root lists
-    [ ] Syntax
-        [ ] Return Vec of SXRefs, rather than a single SXRef,
-        [ ] Main parse function will run in loop
-        [ ] New Tests
-            [ ] Syntax parse parses multiple sxrefs
-    [ ] Semantic
-        [ ] Parse vec rather than single
-        [ ] Return vec rather than single
-        [ ] Test for multiple syntaxes
-    [ ] Evaluate
-        [ ] Just do it in a loop, keep same context whole time so defuns remain
-        [ ] Add tests
 [ ] Consider returning data type errors rather than evaluating errors to nil
 [ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
@@ -58,4 +39,7 @@
 [ ] Better toString for Macro
 [ ] Find a way to implement PartialEq on RustFunction
 [ ] Find a way to implement PartialEq on RustMacro
+[ ] Comments
 [*] Move closures in McCarthyScope to their own functions?
+[*] Allow multiple lists in root, without tacking on a root list as a new
+    function. Maybe as a vector of refvals
