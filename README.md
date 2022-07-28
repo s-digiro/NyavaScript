@@ -39,3 +39,4 @@
 - [ ] Comments
 - [x] Move closures in McCarthyScope to their own functions?
 - [x] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
+- [ ] Global scope shadows lib scope

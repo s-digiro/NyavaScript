@@ -120,15 +120,15 @@ fn local_shadows_global() {
 }
 
 #[test]
-fn lib_shadows_global() {
+fn global_shadows_lib() {
     let mut lib1 = HashMap::new();
     lib1.insert("foo".into(), SXRef::number(1));
 
     let mut env = Env::new();
+    env.push_lib(lib1);
     env.defun("foo".into(), SXRef::number(2));
-    env.push(lib1);
 
-    let expected = SXRef::number(1);
+    let expected = SXRef::number(2);
 
     let actual = env.get("foo");
 
