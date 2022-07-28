@@ -4,7 +4,6 @@ use std::error::Error;
 #[derive(Debug, PartialEq)]
 pub enum LexError {
     UnterminatedStringError(UnterminatedStringError),
-    NoRootListError(NoRootListError),
 }
 
 impl LexError {
@@ -17,10 +16,6 @@ impl LexError {
             UnterminatedStringError::new(string, line, column)
         )
     }
-
-    pub fn no_root_list_error() -> LexError {
-        LexError::NoRootListError(NoRootListError)
-    }
 }
 
 impl Error for LexError { }
@@ -29,7 +24,6 @@ impl fmt::Display for LexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             LexError::UnterminatedStringError(e) => write!(f, "{}", e),
-            LexError::NoRootListError(e) => write!(f, "{}", e),
         }
     }
 }
@@ -62,16 +56,5 @@ impl fmt::Display for UnterminatedStringError {
             self.line,
             self.column,
         )
-    }
-}
-
-#[derive(Debug, PartialEq)]
-pub struct NoRootListError;
-
-impl Error for NoRootListError { }
-
-impl fmt::Display for NoRootListError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "No Root List. Try wrapping your code in parenthesis")
     }
 }
