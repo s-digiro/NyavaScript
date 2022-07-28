@@ -166,10 +166,6 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
         _ => (),
     }
 
-    if ret.first() != Some(&Token::OpenList) {
-        return Err(LexError::no_root_list_error())
-    }
-
     Ok(ret)
 }
 

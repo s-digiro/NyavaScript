@@ -10,34 +10,85 @@ fn unmatched_open_parenthesis_fails() {
 
 #[test]
 fn unmatched_close_parenthesis_fails() {
-    assert_eq!(
-        parse(vec![Token::OpenList, Token::CloseList, Token::CloseList]),
-        Err(SyntaxError::UnexpectedTrailingTokensError),
-    );
+    let subject = vec![
+        Token::OpenList,
+        Token::CloseList,
+        Token::CloseList
+    ];
+
+    let expected = Err(SyntaxError::UnmatchedCloseListError);
+
+    let actual = parse(subject);
+
+    assert_eq!(expected, actual);
 }
 
 #[test]
-fn unlisted_extra_tokens_fails() {
-    assert_eq!(
-        parse(vec![Token::OpenList, Token::CloseList, Token::symbol("foo")]),
-        Err(SyntaxError::UnexpectedTrailingTokensError),
-    );
+fn parse_empty_symbols_list_succeeds() {
+    let expected: Vec<Syntax> = Vec::new();
+
+    let actual = parse(vec![]).unwrap();
+
+    assert_eq!(expected, actual);
 }
 
 #[test]
-fn parse_empty_symbols_list_fails() {
-    assert_eq!(
-        parse(vec![]),
-        Err(SyntaxError::NoSymbolsError),
-    );
+fn single_free_atom() {
+    let subject = vec![
+        Token::symbol("test"),
+    ];
+
+    let expected = SyntaxError::FreeAtom;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
 }
 
 #[test]
-fn parse_missing_open_root_list_fails() {
-    assert_eq!(
-        parse(vec![Token::symbol("test")]),
-        Err(SyntaxError::NoRootListError),
-    );
+fn free_atom_after_list() {
+    let subject = vec![
+        Token::OpenList,
+        Token::symbol("foo"),
+        Token::CloseList,
+        Token::symbol("test"),
+    ];
+
+    let expected = SyntaxError::FreeAtom;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn free_atom_before_list() {
+    let subject = vec![
+        Token::symbol("test"),
+        Token::OpenList,
+        Token::symbol("foo"),
+        Token::CloseList,
+    ];
+
+    let expected = SyntaxError::FreeAtom;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn missing_open_list() {
+    let subject = vec![
+        Token::symbol("foo"),
+        Token::CloseList,
+    ];
+
+    let expected = SyntaxError::FreeAtom;
+
+    let actual = parse(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
 }
 
 #[test]
@@ -56,7 +107,7 @@ fn parse_missing_close_root_list_fails() {
 #[test]
 fn parse_nil_list_works() {
     assert_eq!(
-        parse(vec![Token::OpenList, Token::CloseList]).unwrap(),
+        parse(vec![Token::OpenList, Token::CloseList]).unwrap().remove(0),
         Syntax::list(),
     );
 }
@@ -68,7 +119,7 @@ fn parse_string_works() {
               Token::OpenList,
               Token::String("foo".to_owned()),
               Token::CloseList
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![Syntax::String("foo".to_owned())])
     );
 }
@@ -80,7 +131,7 @@ fn parse_number_works() {
               Token::OpenList,
               Token::Number(105),
               Token::CloseList
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![Syntax::Number(105)])
     );
 }
@@ -94,7 +145,7 @@ fn parse_list_works() {
               Token::string("bar"),
               Token::Number(105),
               Token::CloseList,
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![
             Syntax::symbol("foo"),
             Syntax::string("bar"),
@@ -111,7 +162,7 @@ fn parse_quote_works() {
               Token::Quote,
               Token::symbol("foo"),
               Token::CloseList,
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![
             Syntax::symbol("quote"),
             Syntax::symbol("foo"),
@@ -154,7 +205,7 @@ fn parse_quote_as_not_first_value_in_list() {
               Token::symbol("bar"),
               Token::CloseList,
               Token::CloseList,
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![
             Syntax::symbol("car"),
             Syntax::List(vec![
@@ -176,7 +227,7 @@ fn parse_works() {
             Token::symbol("foo"),
             Token::symbol("bar"),
             Token::CloseList,
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![Syntax::symbol("foo"), Syntax::symbol("bar")]),
     );
 
@@ -189,7 +240,7 @@ fn parse_works() {
             Token::symbol("baz"),
             Token::CloseList,
             Token::CloseList
-        ]).unwrap(),
+        ]).unwrap().remove(0),
         Syntax::List(vec![
             Syntax::symbol("foo"),
             Syntax::List(vec![
@@ -205,7 +256,7 @@ fn parse_works() {
               Token::symbol("bar"),
               Token::CloseList,
               Token::symbol("baz"),
-              Token::CloseList]).unwrap(),
+              Token::CloseList]).unwrap().remove(0),
         Syntax::List(vec![
             Syntax::List(vec![
                 Syntax::symbol("foo"),
@@ -230,7 +281,7 @@ fn dot_with_car_and_cdr() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -251,7 +302,7 @@ fn dot_with_car_but_no_cdr() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -272,7 +323,7 @@ fn dot_with_cdr_but_no_car() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -292,7 +343,7 @@ fn dot_with_no_car_and_no_cdr() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -316,7 +367,7 @@ fn dot_as_second_last_item_in_list() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -339,7 +390,7 @@ fn dot_as_last_item_in_list() {
         ),
     ]);
 
-    let actual = parse(subject).unwrap();
+    let actual = parse(subject).unwrap().remove(0);
 
     assert_eq!(expected, actual);
 }
@@ -414,6 +465,35 @@ fn dot_with_list_after() {
             ])),
         ),
     ]);
+
+    let actual = parse(subject).unwrap().remove(0);
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn multiple_root_lists() {
+    let subject = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(3),
+        Token::Number(4),
+        Token::CloseList,
+    ];
+
+    let expected = vec![
+        Syntax::List(vec![
+            Syntax::Number(1),
+            Syntax::Number(2),
+        ]),
+        Syntax::List(vec![
+            Syntax::Number(3),
+            Syntax::Number(4),
+        ]),
+    ];
 
     let actual = parse(subject).unwrap();
 

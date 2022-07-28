@@ -2,23 +2,23 @@ use super::*;
 use crate::s_expression::ConsCell;
 
 #[test]
-fn parse_blank() {
+fn parse_syn_blank() {
     assert_eq!(
         SXRef::nil(),
-        parse(Syntax::list()).unwrap(),
+        parse_syn(Syntax::list()).unwrap(),
     );
 }
 
 #[test]
-fn parse_empty_list() {
+fn parse_syn_empty_list() {
     assert_eq!(
         SXRef::nil(),
-        parse(Syntax::list()).unwrap(),
+        parse_syn(Syntax::list()).unwrap(),
     );
 }
 
 #[test]
-fn parse_string() {
+fn parse_syn_string() {
     assert_eq!(
         SXRef::from(vec![
             SXRef::from(vec![
@@ -27,7 +27,7 @@ fn parse_string() {
             ]),
             SXRef::nil(),
         ]),
-        parse(
+        parse_syn(
             Syntax::List(vec![
                 Syntax::List(vec![
                     Syntax::String("foo".into()),
@@ -40,7 +40,7 @@ fn parse_string() {
 }
 
 #[test]
-fn parse_number() {
+fn parse_syn_number() {
     assert_eq!(
         SXRef::from(vec![
             SXRef::from(vec![
@@ -49,7 +49,7 @@ fn parse_number() {
             ]),
             SXRef::nil(),
         ]),
-        parse(
+        parse_syn(
             Syntax::List(vec![
                 Syntax::List(vec![
                     Syntax::Number(105),
@@ -62,7 +62,7 @@ fn parse_number() {
 }
 
 #[test]
-fn parse_symbol() {
+fn parse_syn_symbol() {
     assert_eq!(
         SXRef::from(vec![
             SXRef::from(vec![
@@ -70,7 +70,7 @@ fn parse_symbol() {
             ]),
             SXRef::nil(),
         ]),
-        parse(
+        parse_syn(
             Syntax::List(vec![
                 Syntax::List(vec![
                     Syntax::symbol("foo"),
@@ -95,7 +95,7 @@ fn dot_as_only_item_in_list() {
         SXRef::number(2),
     ));
 
-    let actual = parse(subject).unwrap();
+    let actual = parse_syn(subject).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -116,7 +116,7 @@ fn dot_with_no_cdr() {
         )
     );
 
-    let actual = parse(subject).unwrap();
+    let actual = parse_syn(subject).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -137,7 +137,7 @@ fn dot_with_no_car() {
         )
     );
 
-    let actual = parse(subject).unwrap();
+    let actual = parse_syn(subject).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -158,7 +158,7 @@ fn dot_with_no_cdr_or_car() {
         )
     );
 
-    let actual = parse(subject).unwrap();
+    let actual = parse_syn(subject).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -185,7 +185,7 @@ fn dot_as_last_item_in_list() {
         )),
     ));
 
-    let actual = parse(subject).unwrap();
+    let actual = parse_syn(subject).unwrap();
 
     assert_eq!(expected, actual);
 }
@@ -203,7 +203,68 @@ fn dot_as_not_last_item_in_last() {
 
     let expected = SemanticError::DotSyntaxNotAtListEnd;
 
-    let actual = parse(subject).err().unwrap();
+    let actual = parse_syn(subject).err().unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn multiple_syntaxes() {
+    let subject = vec![
+        Syntax::List(vec![
+            Syntax::Number(1),
+            Syntax::Number(2),
+        ]),
+        Syntax::List(vec![
+            Syntax::Number(3),
+            Syntax::Number(4),
+        ]),
+    ];
+
+    let expected = vec![
+        SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(2),
+        ]),
+        SXRef::from(vec![
+            SXRef::number(3),
+            SXRef::number(4),
+        ]),
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn one_syntax() {
+    let subject = vec![
+        Syntax::List(vec![
+            Syntax::Number(3),
+            Syntax::Number(4),
+        ]),
+    ];
+
+    let expected = vec![
+        SXRef::from(vec![
+            SXRef::number(3),
+            SXRef::number(4),
+        ]),
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn no_syntaxes() {
+    let subject: Vec<Syntax> = vec![];
+
+    let expected: Vec<SXRef> = vec![];
+
+    let actual = parse(subject).unwrap();
 
     assert_eq!(expected, actual);
 }

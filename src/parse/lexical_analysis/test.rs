@@ -1,18 +1,12 @@
 use super::*;
 
 #[test]
-fn blank_text_is_no_root_error() {
-    assert_eq!(
-        Err(LexError::no_root_list_error()),
-        parse(""),
-    );
-}
+fn blank_text_is_okay() {
+    let empty: Vec<Token> = Vec::new();
 
-#[test]
-fn no_first_parenthesis_makes_no_root_error() {
     assert_eq!(
-        Err(LexError::no_root_list_error()),
-        parse("foo bar baz)"),
+        empty,
+        parse("").unwrap(),
     );
 }
 
@@ -335,6 +329,26 @@ fn dot_as_part_of_atom_does_not_parse_into_dot_token() {
         Token::symbol(".."),
         Token::symbol(".foo"),
         Token::string("f.oo"),
+        Token::CloseList,
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn parses_multiple_root_lists() {
+    let subject = "(1 2) (3 4)";
+
+    let expected = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(3),
+        Token::Number(4),
         Token::CloseList,
     ];
 

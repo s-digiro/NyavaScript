@@ -24,8 +24,6 @@
     probably better off being done in syntax parsing
 [ ] Garbage collector
 [ ] Evaluate List should be refactored into more functions so its easier to read
-[ ] Allow multiple lists in root, without tacking on a root list as a new
-    function. Maybe as a vector of refvals
 [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols?
     Pick one
 [ ] List macro
@@ -41,4 +39,7 @@
 [ ] Better toString for Macro
 [ ] Find a way to implement PartialEq on RustFunction
 [ ] Find a way to implement PartialEq on RustMacro
+[ ] Comments
 [*] Move closures in McCarthyScope to their own functions?
+[*] Allow multiple lists in root, without tacking on a root list as a new
+    function. Maybe as a vector of refvals

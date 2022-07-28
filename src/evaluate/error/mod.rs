@@ -7,6 +7,7 @@ use std::convert::From;
 #[derive(Debug, PartialEq)]
 pub enum Error {
     UnboundFnCall(UnboundFnCallError),
+    NoOp,
 }
 
 impl Error {
@@ -21,6 +22,7 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::UnboundFnCall(x) => write!(f, "{}", x),
+            Self::NoOp => write!(f, "Error::NoOp"),
         }
     }
 }

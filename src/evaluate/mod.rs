@@ -23,8 +23,18 @@ fn get_id() -> usize {
     COUNTER.fetch_add(1, Ordering::Relaxed)
 }
 
+pub fn eval_all(sxs: Vec<SXRef>, env: &mut Env) -> Result {
+    let mut ret = Err(Error::NoOp);
 
-pub fn evaluate(sx: SXRef, env: &mut Env) -> Result {
+    for sx in sxs.into_iter() {
+        ret = eval(sx, env);
+    }
+
+    ret
+}
+
+
+pub fn eval(sx: SXRef, env: &mut Env) -> Result {
     let id = get_id();
 
     eprintln!("{} Evaluating: {}", id, sx);
@@ -44,7 +54,7 @@ pub fn evaluate(sx: SXRef, env: &mut Env) -> Result {
 fn eval_list(list: SXRef, env: &mut Env) -> Result {
     let first = util::car(&list);
 
-    let proc = evaluate(SXRef::clone(&first), env)?;
+    let proc = eval(SXRef::clone(&first), env)?;
 
     let rest = util::cdr(&list);
 
@@ -53,12 +63,12 @@ fn eval_list(list: SXRef, env: &mut Env) -> Result {
     match &*proc {
         SX::Macro(m) => {
             let new_list = m.execute(list, env)?;
-            let ret = evaluate(new_list, env)?;
+            let ret = eval(new_list, env)?;
             Ok(ret)
         },
         SX::Function(f) => {
             let args = rest.iter()
-                .map(|sx| evaluate(sx, env))
+                .map(|sx| eval(sx, env))
                 .collect::<std::result::Result<Vec<SXRef>, Error>>()?;
             let ret = f.execute(args, env)?;
             Ok(ret)

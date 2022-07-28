@@ -10,26 +10,26 @@ mod test;
 use std::vec::IntoIter;
 use super::lexical_analysis::Token;
 
-pub fn parse(tokens: Vec<Token>) -> Result<Syntax, SyntaxError> {
+pub fn parse(tokens: Vec<Token>) -> Result<Vec<Syntax>, SyntaxError> {
     let mut tokens = tokens.into_iter();
 
-    let ret = match tokens.next() {
-        Some(tok) => match tok {
+    let mut ret = Vec::new();
+
+    while let Some(token) = tokens.next() {
+        match token {
             Token::OpenList => {
                 let (syn, it) = parse_list(tokens)?;
 
-                if it.count() > 0 {
-                    Err(SyntaxError::UnexpectedTrailingTokensError)
-                } else {
-                    Ok(syn)
-                }
-            }
-            _ => Err(SyntaxError::NoRootListError),
-        },
-        None => Err(SyntaxError::NoSymbolsError),
-    };
+                tokens = it;
 
-    ret
+                ret.push(syn);
+            },
+            Token::CloseList => return Err(SyntaxError::UnmatchedCloseListError),
+            _ => return Err(SyntaxError::FreeAtom),
+        }
+    }
+
+    Ok(ret)
 }
 
 pub fn parse_quote(mut tokens: IntoIter<Token>) -> Result<(Syntax, IntoIter<Token>), SyntaxError> {
