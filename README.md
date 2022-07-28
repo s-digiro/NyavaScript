@@ -5,13 +5,13 @@
 - [ ] Add line and column to errors where applicable
 - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
 - [ ] McCarthy things need to be implemented
-    - [*] Car
-    - [*] Cons
-    - [*] Cdr
-    - [*] Equal
-    - [*] quote
+    - [x] Car
+    - [x] Cons
+    - [x] Cdr
+    - [x] Equal
+    - [x] quote
     - [ ] Maybe more
-    - [*] McCarthy context??? as a type of Rust context?
+    - [x] McCarthy context??? as a type of Rust context?
     - [ ] Make sure all McCarthy things are added
 - [ ] Lib user defined Rust Contexts
 - [ ] Rust context of lib that I find useful
@@ -37,5 +37,5 @@
 - [ ] Find a way to implement PartialEq on RustFunction
 - [ ] Find a way to implement PartialEq on RustMacro
 - [ ] Comments
-- [*] Move closures in McCarthyScope to their own functions?
-- [*] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
+- [x] Move closures in McCarthyScope to their own functions?
+- [x] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
