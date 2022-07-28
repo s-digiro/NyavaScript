@@ -1,4 +1,23 @@
 # To Do
+[ ] Allow multiple lists in root, without tacking on a root list as a new
+    function. Maybe as a vector of refvals
+    [ ] Lexical
+        [ ] Should be fine, but make sure we aren't checking for root list
+        [ ] Make sure tests pass if any changes were made
+        [ ] New Tests
+            [ ] Lexical works with multiple root lists
+    [ ] Syntax
+        [ ] Return Vec of SXRefs, rather than a single SXRef,
+        [ ] Main parse function will run in loop
+        [ ] New Tests
+            [ ] Syntax parse parses multiple sxrefs
+    [ ] Semantic
+        [ ] Parse vec rather than single
+        [ ] Return vec rather than single
+        [ ] Test for multiple syntaxes
+    [ ] Evaluate
+        [ ] Just do it in a loop, keep same context whole time so defuns remain
+        [ ] Add tests
 [ ] Consider returning data type errors rather than evaluating errors to nil
 [ ] Add tests to make sure McCarthy scope contains what we expect it to
 [ ] Pass env to macro
@@ -24,8 +43,6 @@
     probably better off being done in syntax parsing
 [ ] Garbage collector
 [ ] Evaluate List should be refactored into more functions so its easier to read
-[ ] Allow multiple lists in root, without tacking on a root list as a new
-    function. Maybe as a vector of refvals
 [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols?
     Pick one
 [ ] List macro
