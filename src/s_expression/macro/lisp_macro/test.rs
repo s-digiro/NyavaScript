@@ -62,13 +62,12 @@ pub fn from_string_works() {
         SXRef::from(vec![
             SXRef::symbol("cons".into()),
             SXRef::symbol("x".into()),
-            SXRef::from(vec![
-                SXRef::symbol("quote".into()),
+            SXRef::quote(
                 SXRef::from(vec![
                     SXRef::symbol("x".into()),
                     SXRef::nil(),
                 ]),
-            ]),
+            ),
         ]),
         actual.definition()
     )

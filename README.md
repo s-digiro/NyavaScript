@@ -19,8 +19,6 @@
     - [ ] Add/Subtract
     - [ ] Stuff that isn't pure McCarthy
 - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
-- [ ] Syntax parsing is a wreck, refactor to make it easier to read
-- [ ] Semantic parsing is probably redundant and the work being done there is probably better off being done in syntax parsing
 - [ ] Garbage collector
 - [ ] Evaluate List should be refactored into more functions so its easier to read
 - [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols? Pick one
@@ -39,4 +37,6 @@
 - [ ] Comments
 - [x] Move closures in McCarthyScope to their own functions?
 - [x] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
-- [ ] Global scope shadows lib scope
+- [x] Global scope shadows lib scope
+- [x] Syntax parsing is a wreck, refactor to make it easier to read
+- [x] Semantic parsing is probably redundant and the work being done there is probably better off being done in syntax parsing

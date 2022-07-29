@@ -58,19 +58,20 @@ pub fn from_string_works() {
 
     assert_eq!(&vec!["x".to_owned()], actual.args());
 
-    assert_eq!(
-        SXRef::from(vec![
-            SXRef::symbol("cons".into()),
-            SXRef::symbol("x".into()),
+    let expected = SXRef::from(vec![
+        SXRef::symbol("cons".into()),
+        SXRef::symbol("x".into()),
+        SXRef::quote(
             SXRef::from(vec![
-                SXRef::symbol("quote".into()),
-                SXRef::from(vec![
-                    SXRef::symbol("x".into()),
-                    SXRef::nil(),
-                ]),
+                SXRef::symbol("x".into()),
+                SXRef::nil(),
             ]),
-        ]),
-        actual.definition()
+        ),
+    ]);
+
+    assert_eq!(
+        actual.definition(),
+        expected,
     )
 }
 
