@@ -400,3 +400,45 @@ fn ignores_comments() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+fn multiline_comment() {
+    let subject = "
+        /* test
+         * comment */
+        (1 2)
+        /* Another comment */
+        (3 4)
+        (5 ./* not a comment)
+        (6 '/* a comment
+        */ 7)
+        /* Once more
+    ";
+
+    let expected = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(3),
+        Token::Number(4),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(5),
+        Token::symbol("./*"),
+        Token::symbol("not"),
+        Token::symbol("a"),
+        Token::symbol("comment"),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(6),
+        Token::Quote,
+        Token::Number(7),
+        Token::CloseList,
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
