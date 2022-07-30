@@ -1,4 +1,9 @@
 # To Do
+- [ ] Comments
+    - [ ] lexical parse
+        - [ ] implement
+        - [ ] add tests
+            - [ ] lexical parse skips comments
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Add tests to make sure McCarthy scope contains what we expect it to
 - [ ] Pass env to macro
@@ -34,7 +39,6 @@
 - [ ] Better toString for Macro
 - [ ] Find a way to implement PartialEq on RustFunction
 - [ ] Find a way to implement PartialEq on RustMacro
-- [ ] Comments
 - [x] Move closures in McCarthyScope to their own functions?
 - [x] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
 - [x] Global scope shadows lib scope
