@@ -25,7 +25,7 @@ fn unmatched_close_parenthesis_fails() {
 
 #[test]
 fn parse_empty_symbols_list_succeeds() {
-    let expected: Vec<Syntax> = Vec::new();
+    let expected: Vec<SXRef> = Vec::new();
 
     let actual = parse(vec![]).unwrap();
 
@@ -94,7 +94,7 @@ fn missing_open_list() {
 #[test]
 fn parse_missing_close_root_list_fails() {
     assert_eq!(
-        parse(vec![Token::OpenList, Token::symbol("test")]),
+        parse(vec![Token::OpenList, Token::symbol("test".into())]),
         Err(SyntaxError::UnmatchedOpenListError),
     );
 
@@ -108,7 +108,7 @@ fn parse_missing_close_root_list_fails() {
 fn parse_nil_list_works() {
     assert_eq!(
         parse(vec![Token::OpenList, Token::CloseList]).unwrap().remove(0),
-        Syntax::list(),
+        SXRef::nil(),
     );
 }
 
@@ -120,7 +120,7 @@ fn parse_string_works() {
               Token::String("foo".to_owned()),
               Token::CloseList
         ]).unwrap().remove(0),
-        Syntax::List(vec![Syntax::String("foo".to_owned())])
+        SXRef::from(vec![SXRef::string("foo".to_owned())])
     );
 }
 
@@ -132,7 +132,7 @@ fn parse_number_works() {
               Token::Number(105),
               Token::CloseList
         ]).unwrap().remove(0),
-        Syntax::List(vec![Syntax::Number(105)])
+        SXRef::from(vec![SXRef::number(105)])
     );
 }
 
@@ -146,10 +146,10 @@ fn parse_list_works() {
               Token::Number(105),
               Token::CloseList,
         ]).unwrap().remove(0),
-        Syntax::List(vec![
-            Syntax::symbol("foo"),
-            Syntax::string("bar"),
-            Syntax::Number(105),
+        SXRef::from(vec![
+            SXRef::symbol("foo".into()),
+            SXRef::string("bar".into()),
+            SXRef::number(105),
         ]),
     );
 }
@@ -163,9 +163,8 @@ fn parse_quote_works() {
               Token::symbol("foo"),
               Token::CloseList,
         ]).unwrap().remove(0),
-        Syntax::List(vec![
-            Syntax::symbol("quote"),
-            Syntax::symbol("foo"),
+        SXRef::from(vec![
+            SXRef::quote(SXRef::symbol("foo".into())),
         ]),
     );
 }
@@ -206,15 +205,14 @@ fn parse_quote_as_not_first_value_in_list() {
               Token::CloseList,
               Token::CloseList,
         ]).unwrap().remove(0),
-        Syntax::List(vec![
-            Syntax::symbol("car"),
-            Syntax::List(vec![
-                Syntax::symbol("quote"),
-                Syntax::List(vec![
-                    Syntax::symbol("foo"),
-                    Syntax::symbol("bar"),
+        SXRef::from(vec![
+            SXRef::symbol("car".into()),
+            SXRef::quote(
+                SXRef::from(vec![
+                    SXRef::symbol("foo".into()),
+                    SXRef::symbol("bar".into()),
                 ]),
-            ]),
+            ),
         ]),
     );
 }
@@ -228,7 +226,10 @@ fn parse_works() {
             Token::symbol("bar"),
             Token::CloseList,
         ]).unwrap().remove(0),
-        Syntax::List(vec![Syntax::symbol("foo"), Syntax::symbol("bar")]),
+        SXRef::from(vec![
+            SXRef::symbol("foo".into()),
+            SXRef::symbol("bar".into())
+        ]),
     );
 
     assert_eq!(
@@ -241,11 +242,11 @@ fn parse_works() {
             Token::CloseList,
             Token::CloseList
         ]).unwrap().remove(0),
-        Syntax::List(vec![
-            Syntax::symbol("foo"),
-            Syntax::List(vec![
-                Syntax::symbol("bar"),
-                Syntax::symbol("baz")])])
+        SXRef::from(vec![
+            SXRef::symbol("foo".into()),
+            SXRef::from(vec![
+                SXRef::symbol("bar".into()),
+                SXRef::symbol("baz".into())])])
     );
 
     assert_eq!(
@@ -257,11 +258,11 @@ fn parse_works() {
               Token::CloseList,
               Token::symbol("baz"),
               Token::CloseList]).unwrap().remove(0),
-        Syntax::List(vec![
-            Syntax::List(vec![
-                Syntax::symbol("foo"),
-                Syntax::symbol("bar")]),
-            Syntax::symbol("baz")]));
+        SXRef::from(vec![
+            SXRef::from(vec![
+                SXRef::symbol("foo".into()),
+                SXRef::symbol("bar".into())]),
+            SXRef::symbol("baz".into())]).into());
 }
 
 #[test]
@@ -274,12 +275,10 @@ fn dot_with_car_and_cdr() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::dot(
-            Some(Syntax::Number(1)),
-            Some(Syntax::Number(2)),
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        SXRef::number(2),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -295,12 +294,10 @@ fn dot_with_car_but_no_cdr() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::dot(
-            Some(Syntax::Number(1)),
-            None,
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        SXRef::nil(),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -316,12 +313,10 @@ fn dot_with_cdr_but_no_car() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::dot(
-            None,
-            Some(Syntax::Number(2)),
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::nil(),
+        SXRef::number(2),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -336,12 +331,10 @@ fn dot_with_no_car_and_no_cdr() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::dot(
-            None,
-            None,
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::nil(),
+        SXRef::nil(),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -359,13 +352,13 @@ fn dot_as_second_last_item_in_list() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::Number(1),
-        Syntax::dot(
-            Some(Syntax::Number(2)),
-            Some(Syntax::Number(3)),
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        ConsCell::new(
+            SXRef::number(2),
+            SXRef::number(3),
+        ).into(),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -382,13 +375,13 @@ fn dot_as_last_item_in_list() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::Number(1),
-        Syntax::dot(
-            Some(Syntax::Number(2)),
-            None,
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::number(1),
+        ConsCell::new(
+            SXRef::number(2),
+            SXRef::nil(),
+        ).into(),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -456,15 +449,16 @@ fn dot_with_list_after() {
         Token::CloseList,
     ];
 
-    let expected = Syntax::List(vec![
-        Syntax::dot(
-            None,
-            Some(Syntax::List(vec![
-                Syntax::Number(1),
-                Syntax::Number(2),
-            ])),
-        ),
-    ]);
+    let expected = SXRef::cons_cell(ConsCell::new(
+        SXRef::nil(),
+        ConsCell::new(
+            SXRef::number(1),
+            ConsCell::new(
+                SXRef::number(2),
+                SXRef::nil(),
+            ).into(),
+        ).into(),
+    ));
 
     let actual = parse(subject).unwrap().remove(0);
 
@@ -485,13 +479,13 @@ fn multiple_root_lists() {
     ];
 
     let expected = vec![
-        Syntax::List(vec![
-            Syntax::Number(1),
-            Syntax::Number(2),
+        SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(2),
         ]),
-        Syntax::List(vec![
-            Syntax::Number(3),
-            Syntax::Number(4),
+        SXRef::from(vec![
+            SXRef::number(3),
+            SXRef::number(4),
         ]),
     ];
 

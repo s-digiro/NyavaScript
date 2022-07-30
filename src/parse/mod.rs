@@ -19,8 +19,7 @@ use std::convert::From;
 
 pub fn parse(text: &str) -> Result<Vec<SExpressionRef>, ParseError> {
     let tokens = lexical_analysis::parse(text)?;
-    let syntax = syntactic_analysis::parse(tokens)?;
-    let ret = semantic_analysis::parse(syntax)?;
+    let ret = syntactic_analysis::parse(tokens)?;
 
     Ok(ret)
 }

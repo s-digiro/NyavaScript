@@ -48,15 +48,15 @@ impl Environment {
             return local
         }
 
+        if let Some(global) = self.global.get(key) {
+            return SXRef::clone(global)
+        }
+
         let lib = self.lib.iter().rev()
             .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
 
         if let Some(lib) = lib {
             return lib
-        }
-
-        if let Some(global) = self.global.get(key) {
-            return SXRef::clone(global)
         }
 
         SXRef::nil()
