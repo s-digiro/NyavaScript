@@ -1,4 +1,28 @@
 # To Do
+- [ ] Rename s\_expression to form?
+- [ ] Control flow scope
+    - [ ] while loop
+    - [ ] let macro
+    - [ ] define global var
+- [ ] Basic scope
+    - [ ] print
+    - [ ] println
+    - [ ] string concatenation
+    - [ ] string indexing
+    - [ ] string length
+    - [ ] string to list of chars
+    - [ ] Math operations
+        - [ ] Addition
+        - [ ] Subtraction
+        - [ ] Multiplication
+        - [ ] Division
+        - [ ] Modulo
+    - [ ] bitwise operations
+        - [ ] and
+        - [ ] or
+        - [ ] left shirt
+        - [ ] right shirt
+        - [ ] not
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Add tests to make sure McCarthy scope contains what we expect it to
 - [ ] Pass env to macro
@@ -14,10 +38,6 @@
     - [x] McCarthy context??? as a type of Rust context?
     - [ ] Make sure all McCarthy things are added
 - [ ] Lib user defined Rust Contexts
-- [ ] Rust context of lib that I find useful
-    - [ ] Like print
-    - [ ] Add/Subtract
-    - [ ] Stuff that isn't pure McCarthy
 - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
 - [ ] Garbage collector
 - [ ] Evaluate List should be refactored into more functions so its easier to read
@@ -34,10 +54,3 @@
 - [ ] Better toString for Macro
 - [ ] Find a way to implement PartialEq on RustFunction
 - [ ] Find a way to implement PartialEq on RustMacro
-- [x] Move closures in McCarthyScope to their own functions?
-- [x] Allow multiple lists in root, without tacking on a root list as a new function. Maybe as a vector of refvals
-- [x] Global scope shadows lib scope
-- [x] Syntax parsing is a wreck, refactor to make it easier to read
-- [x] Semantic parsing is probably redundant and the work being done there is probably better off being done in syntax parsing
-- [x] Line Comments
-- [x] Multiline comments
