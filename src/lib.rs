@@ -87,4 +87,32 @@ mod test {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn comments() {
+        let code = "
+// This code has some comments in it!
+
+/* This function returns a new list from
+ * the first item of one list and the second
+ * item of another */
+(defun foo (x y) // Takes two arguments
+    (cons /* Combine both args */
+         (car x) // Get first from x
+         (cdr y))) // Get second from y
+
+// Test it out on (1 2) and (3 4)
+(foo '(1 2) '(3 4))
+/* I hope it works!
+            ";
+
+        let expected = SXRef::from(vec![
+            SXRef::number(1),
+            SXRef::number(4),
+        ]);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+    }
 }
