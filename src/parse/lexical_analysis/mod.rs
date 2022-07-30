@@ -17,8 +17,10 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
         InNumber,
         InString,
         SlashQuote,
-        MaybeLineComment,
+        MaybeComment,
         LineComment,
+        Comment,
+        MaybeEndComment,
     }
 
     let mut state = State::InList;
@@ -27,11 +29,18 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
 
     for c in text.chars() {
         match (&state, c) {
+            (State::MaybeEndComment, '/') => state = State::InList,
+            (State::MaybeEndComment, _) => state = State::Comment,
+
+            (State::Comment, '*') => state = State::MaybeEndComment,
+            (State::Comment, _) => (),
+
             (State::LineComment, '\n') => state = State::InList,
             (State::LineComment, _) => (),
 
-            (State::MaybeLineComment, '/') => state = State::LineComment,
-            (State::MaybeLineComment, c) => {
+            (State::MaybeComment, '/') => state = State::LineComment,
+            (State::MaybeComment, '*') => state = State::Comment,
+            (State::MaybeComment, c) => {
                 buf.push('/');
                 buf.push(c);
                 state = State::InAtom;
@@ -46,7 +55,7 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
             (State::InList, ')') => ret.push(Token::CloseList),
             (State::InList, '"') => state = State::InString,
             (State::InList, '.') => state = State::Dot,
-            (State::InList, '/') => state = State::MaybeLineComment,
+            (State::InList, '/') => state = State::MaybeComment,
             (State::InList, n) if could_be_number(n) => {
                 state = State::InNumber;
                 buf.push(n);
