@@ -17,6 +17,8 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
         InNumber,
         InString,
         SlashQuote,
+        MaybeLineComment,
+        LineComment,
     }
 
     let mut state = State::InList;
@@ -25,26 +27,30 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
 
     for c in text.chars() {
         match (&state, c) {
-            (_, '\'') => ret.push(Token::Quote),
+            (State::LineComment, '\n') => state = State::InList,
+            (State::LineComment, _) => (),
 
+            (State::MaybeLineComment, '/') => state = State::LineComment,
+            (State::MaybeLineComment, c) => {
+                buf.push('/');
+                buf.push(c);
+                state = State::InAtom;
+            },
+
+            (State::InList, '\'') => ret.push(Token::Quote),
             (State::InList, ' ')
             | (State::InList, '\t')
             | (State::InList, '\n')
             | (State::InList, '\r') => (),
-
             (State::InList, '(') => ret.push(Token::OpenList),
-
             (State::InList, ')') => ret.push(Token::CloseList),
-
             (State::InList, '"') => state = State::InString,
-
             (State::InList, '.') => state = State::Dot,
-
+            (State::InList, '/') => state = State::MaybeLineComment,
             (State::InList, n) if could_be_number(n) => {
                 state = State::InNumber;
                 buf.push(n);
             },
-
             (State::InList, c) => {
                 state = State::InAtom;
                 buf.push(c);
@@ -57,19 +63,16 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 state = State::InList;
             },
-
             (State::InAtom, '(') => {
                 ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 ret.push(Token::OpenList);
                 state = State::InList;
             }
-
             (State::InAtom, ')') => {
                 ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 ret.push(Token::CloseList);
                 state = State::InList;
             }
-
             (State::InAtom, c) => buf.push(c),
 
             (State::SlashQuote, c) => {
@@ -81,9 +84,7 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::String(mem::replace(&mut buf, String::new())));
                 state = State::InList;
             },
-
             (State::InString, '\\') => state = State::SlashQuote,
-
             (State::InString, c) => buf.push(c),
 
             (State::InNumber, ' ')
@@ -95,7 +96,6 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::Number(num));
                 state = State::InList;
             },
-
             (State::InNumber, '(') => {
                 let num = mem::replace(&mut buf, String::new())
                     .parse::<isize>().unwrap();
@@ -103,7 +103,6 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::OpenList);
                 state = State::InList;
             }
-
             (State::InNumber, ')') => {
                 let num = mem::replace(&mut buf, String::new())
                     .parse::<isize>().unwrap();
@@ -111,9 +110,7 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::CloseList);
                 state = State::InList;
             }
-
             (State::InNumber, n) if n.is_numeric() => buf.push(c),
-
             (State::InNumber, c) => {
                 buf.push(c);
                 state = State::InAtom;
@@ -126,19 +123,16 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::Dot);
                 state = State::InList;
             },
-
             (State::Dot, '(') => {
                 ret.push(Token::Dot);
                 ret.push(Token::OpenList);
                 state = State::InList;
             }
-
             (State::Dot, ')') => {
                 ret.push(Token::Dot);
                 ret.push(Token::CloseList);
                 state = State::InList;
             }
-
             (State::Dot, c) => {
                 buf.push('.');
                 buf.push(c);

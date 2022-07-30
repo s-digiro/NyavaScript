@@ -362,6 +362,9 @@ fn ignores_comments() {
     let subject = "
         // Comment
         (1 2)
+        (g//not a comment)
+        (t .//also not a comment)
+        (h '//comment)
         // Another comment
         (3 4)
         // And another
@@ -372,6 +375,21 @@ fn ignores_comments() {
         Token::Number(1),
         Token::Number(2),
         Token::CloseList,
+        Token::OpenList,
+        Token::symbol("g//not"),
+        Token::symbol("a"),
+        Token::symbol("comment"),
+        Token::CloseList,
+        Token::OpenList,
+        Token::symbol("t"),
+        Token::symbol(".//also"),
+        Token::symbol("not"),
+        Token::symbol("a"),
+        Token::symbol("comment"),
+        Token::CloseList,
+        Token::OpenList,
+        Token::symbol("h"),
+        Token::Quote,
         Token::OpenList,
         Token::Number(3),
         Token::Number(4),

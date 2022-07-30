@@ -1,9 +1,5 @@
 # To Do
-- [ ] Comments
-    - [ ] lexical parse
-        - [ ] implement
-        - [ ] add tests
-            - [ ] lexical parse skips comments
+- [ ] Multiline comments
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Add tests to make sure McCarthy scope contains what we expect it to
 - [ ] Pass env to macro
@@ -44,3 +40,4 @@
 - [x] Global scope shadows lib scope
 - [x] Syntax parsing is a wreck, refactor to make it easier to read
 - [x] Semantic parsing is probably redundant and the work being done there is probably better off being done in syntax parsing
+- [x] Line Comments
