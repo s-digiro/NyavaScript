@@ -1,4 +1,6 @@
 # To Do
+- [ ] Sys calls somehow
+- [ ] inline assembly????
 - [ ] Rename s\_expression to form?
 - [ ] Control flow scope
     - [ ] while loop
