@@ -1,5 +1,9 @@
 # To Do
 - [ ] Multiline comments
+    - [ ] lexical parsing
+        - [ ] Implement
+        - [ ] Test
+    - [ ] add and e2e test for both line and regular comments
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Add tests to make sure McCarthy scope contains what we expect it to
 - [ ] Pass env to macro
