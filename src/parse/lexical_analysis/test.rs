@@ -356,3 +356,29 @@ fn parses_multiple_root_lists() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+fn ignores_comments() {
+    let subject = "
+        // Comment
+        (1 2)
+        // Another comment
+        (3 4)
+        // And another
+    ";
+
+    let expected = vec![
+        Token::OpenList,
+        Token::Number(1),
+        Token::Number(2),
+        Token::CloseList,
+        Token::OpenList,
+        Token::Number(3),
+        Token::Number(4),
+        Token::CloseList,
+    ];
+
+    let actual = parse(subject).unwrap();
+
+    assert_eq!(expected, actual);
+}
