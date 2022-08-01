@@ -1,4 +1,11 @@
 # To Do
+- [ ] McCarthy things need to be implemented
+    - [ ] NIL
+    - [ ] T
+    - [ ] arbitrary cdadr
+    - [ ] eval
+    - [ ] label
+    - [ ] list
 - [ ] Sys calls somehow
 - [ ] inline assembly????
 - [ ] Rename s\_expression to form
@@ -51,15 +58,6 @@
 - [ ] Pass env to macro
 - [ ] Add line and column to errors where applicable
 - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
-- [ ] McCarthy things need to be implemented
-    - [x] Car
-    - [x] Cons
-    - [x] Cdr
-    - [x] Equal
-    - [x] quote
-    - [ ] Maybe more
-    - [x] McCarthy context??? as a type of Rust context?
-    - [ ] Make sure all McCarthy things are added
 - [ ] Lib user defined Rust Contexts
 - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
 - [ ] Garbage collector
