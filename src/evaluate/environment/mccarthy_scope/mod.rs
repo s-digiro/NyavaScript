@@ -166,6 +166,11 @@ impl McCarthyScope {
         );
 
         ret.insert(
+            "T".into(),
+            SXRef::number(1),
+        );
+
+        ret.insert(
             "equal".to_string(),
             RustFunction::new(Self::equal).into(),
         );

@@ -19,6 +19,7 @@ mod not;
 mod null;
 mod or;
 mod quote;
+mod t;
 
 fn dummy_fn(_: Vec<SXRef>, _: &mut Env) -> EvalResult {
     Ok(SXRef::nil())
