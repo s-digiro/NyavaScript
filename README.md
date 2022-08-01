@@ -8,13 +8,14 @@
     - [ ] while loop
     - [ ] let macro
     - [ ] define global var
-- [ ] Basic scope
+- [ ] String scope
     - [ ] print
     - [ ] println
     - [ ] string concatenation
     - [ ] string indexing
     - [ ] string length
     - [ ] string to list of chars
+- [ ] Math scope
     - [ ] Math operations
         - [ ] Addition
         - [ ] Subtraction
@@ -24,11 +25,29 @@
     - [ ] bitwise operations
         - [ ] and
         - [ ] or
-        - [ ] left shirt
-        - [ ] right shirt
+        - [ ] left shift
+        - [ ] right shift
         - [ ] not
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Add tests to make sure McCarthy scope contains what we expect it to
+    - [ ] NIL
+    - [ ] T
+    - [ ] and
+    - [ ] cadr
+    - [ ] car
+    - [ ] cdr
+    - [ ] cond
+    - [ ] cons
+    - [ ] defun
+    - [ ] equal
+    - [ ] label
+    - [ ] lambda
+    - [ ] list
+    - [ ] not
+    - [ ] null
+    - [ ] or
+    - [ ] quote
+    - [ ] eval
 - [ ] Pass env to macro
 - [ ] Add line and column to errors where applicable
 - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
