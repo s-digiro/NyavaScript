@@ -1,7 +1,9 @@
 # To Do
 - [ ] Sys calls somehow
 - [ ] inline assembly????
-- [ ] Rename s\_expression to form?
+- [ ] Rename s\_expression to form
+- [ ] Rename function to procedure
+    - [ ] Make sure this reflects in toString as well
 - [ ] Control flow scope
     - [ ] while loop
     - [ ] let macro
