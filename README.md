@@ -1,6 +1,6 @@
 # To Do
 - [ ] McCarthy things need to be implemented
-    - [ ] NIL
+    - [x] NIL
     - [ ] T
     - [ ] arbitrary cdadr
     - [ ] eval

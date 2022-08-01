@@ -161,6 +161,11 @@ impl McCarthyScope {
         );
 
         ret.insert(
+            "NIL".to_string(),
+            SXRef::nil(),
+        );
+
+        ret.insert(
             "equal".to_string(),
             RustFunction::new(Self::equal).into(),
         );
