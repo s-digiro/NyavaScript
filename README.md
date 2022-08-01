@@ -29,25 +29,25 @@
         - [ ] right shift
         - [ ] not
 - [ ] Consider returning data type errors rather than evaluating errors to nil
-- [ ] Add tests to make sure McCarthy scope contains what we expect it to
-    - [ ] NIL
-    - [ ] T
-    - [ ] and
-    - [ ] cadr
-    - [ ] car
-    - [ ] cdr
-    - [ ] cond
-    - [ ] cons
-    - [ ] defun
-    - [ ] equal
-    - [ ] label
-    - [ ] lambda
-    - [ ] list
-    - [ ] not
-    - [ ] null
-    - [ ] or
-    - [ ] quote
-    - [ ] eval
+- [x] Add tests to make sure McCarthy scope contains what we expect it to
+    - [x] NIL
+    - [x] T
+    - [x] and
+    - [x] cadr
+    - [x] car
+    - [x] cdr
+    - [x] cond
+    - [x] cons
+    - [x] defun
+    - [x] equal
+    - [x] eval
+    - [x] label
+    - [x] lambda
+    - [x] list
+    - [x] not
+    - [x] null
+    - [x] or
+    - [x] quote
 - [ ] Pass env to macro
 - [ ] Add line and column to errors where applicable
 - [ ] Passing lambdas to other lambdas is a lil weird... figure it out

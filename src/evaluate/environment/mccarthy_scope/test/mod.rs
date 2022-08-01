@@ -34,3 +34,37 @@ fn mc_env() -> Env {
 
     ret
 }
+
+#[test]
+fn all_mccarthy_functions_are_defined() {
+    let subject = McCarthyScope::new();
+
+    let fns = [
+        "NIL",
+        "T",
+        "and",
+        "cadr",
+        "car",
+        "cdr",
+        "cond",
+        "cons",
+        "defun",
+        "equal",
+        "eval",
+        "label",
+        "lambda",
+        "list",
+        "not",
+        "null",
+        "or",
+        "quote",
+    ];
+
+    let missing: Vec<&str> = fns.into_iter()
+        .filter(|f| !subject.contains_key(*f))
+        .collect();
+
+    if !missing.is_empty() {
+        panic!("Expected McCarthyScope to contain a definition for the following keys {:?}", missing);
+    }
+}
