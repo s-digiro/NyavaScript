@@ -47,6 +47,13 @@ impl SExpression {
         }
     }
 
+    pub fn as_function(&self) -> Option<&Function> {
+        match self {
+            Self::Function(f) => Some(f),
+            _ => None,
+        }
+    }
+
     pub fn as_symbol(&self) -> Option<&str> {
         match self {
             Self::Symbol(s) => Some(s),

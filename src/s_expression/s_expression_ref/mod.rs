@@ -113,9 +113,21 @@ impl From<LispMacro> for SExpressionRef {
     }
 }
 
+impl From<SExpression> for SExpressionRef {
+    fn from(sx: SExpression) -> Self {
+        Self::new(sx)
+    }
+}
+
 impl From<RustMacro> for SExpressionRef {
     fn from(f: RustMacro) -> Self {
         Self::r#macro(f.into())
+    }
+}
+
+impl From<LabelFunction> for SExpressionRef {
+    fn from(f: LabelFunction) -> Self {
+        Self::function(f.into())
     }
 }
 

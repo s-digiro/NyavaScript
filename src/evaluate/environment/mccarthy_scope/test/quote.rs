@@ -191,7 +191,8 @@ pub fn quote_rust_function_returns_quoted_rust_function() {
         SX::Quote(sx) => match &**sx {
             SX::Function(f) => match f {
                 Function::Rust(_) => (),
-                Function::Lisp(_) => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
+                Function::Label(_)
+                | Function::Lisp(_) => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
             },
             sx => panic!("Expected SX::Quote(SX::RustFunction). Recieved: {:?}", sx),
         }

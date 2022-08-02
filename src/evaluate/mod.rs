@@ -70,6 +70,11 @@ fn eval_list(list: SXRef, env: &mut Env) -> Result {
             let args = rest.iter()
                 .map(|sx| eval(sx, env))
                 .collect::<std::result::Result<Vec<SXRef>, Error>>()?;
+            eprint!("Calling Function on (");
+            for arg in args.iter() {
+                eprintln!("{}, ", arg);
+            }
+            eprintln!(")");
             let ret = f.execute(args, env)?;
             Ok(ret)
         },

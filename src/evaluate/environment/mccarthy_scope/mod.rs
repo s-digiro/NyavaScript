@@ -11,6 +11,7 @@ use crate::s_expression::{
     Function,
     RustFunction,
     RustMacro,
+    LabelFunction,
     SExpression as SX,
     SExpressionRef as SXRef,
     util,
@@ -133,6 +134,10 @@ impl McCarthyScope {
         Ok(ret)
     }
 
+    pub fn label(sx: SXRef, _env: &mut Env) -> EvalResult {
+        Ok(SXRef::function(LabelFunction::from(sx).into()))
+    }
+
     pub fn lambda(sx: SXRef, _env: &mut Env) -> EvalResult {
         Ok(SXRef::function(sx.into()))
     }
@@ -161,8 +166,23 @@ impl McCarthyScope {
         );
 
         ret.insert(
+            "NIL".to_string(),
+            SXRef::nil(),
+        );
+
+        ret.insert(
+            "T".into(),
+            SXRef::number(1),
+        );
+
+        ret.insert(
             "equal".to_string(),
             RustFunction::new(Self::equal).into(),
+        );
+
+        ret.insert(
+            "label".to_string(),
+            RustMacro::new(Self::label).into()
         );
 
         ret.insert(

@@ -1,16 +1,28 @@
 # To Do
-- [ ] Rename s\_expression to form?
+- [ ] McCarthy things need to be implemented
+    - [x] NIL
+    - [x] T
+    - [x] label
+    - [ ] arbitrary cdadr
+    - [ ] eval
+    - [ ] list
+- [ ] Sys calls somehow
+- [ ] inline assembly????
+- [ ] Rename s\_expression to form
+- [ ] Rename function to procedure
+    - [ ] Make sure this reflects in toString as well
 - [ ] Control flow scope
     - [ ] while loop
     - [ ] let macro
     - [ ] define global var
-- [ ] Basic scope
+- [ ] String scope
     - [ ] print
     - [ ] println
     - [ ] string concatenation
     - [ ] string indexing
     - [ ] string length
     - [ ] string to list of chars
+- [ ] Math scope
     - [ ] Math operations
         - [ ] Addition
         - [ ] Subtraction
@@ -20,23 +32,32 @@
     - [ ] bitwise operations
         - [ ] and
         - [ ] or
-        - [ ] left shirt
-        - [ ] right shirt
+        - [ ] left shift
+        - [ ] right shift
         - [ ] not
 - [ ] Consider returning data type errors rather than evaluating errors to nil
-- [ ] Add tests to make sure McCarthy scope contains what we expect it to
+- [x] Add tests to make sure McCarthy scope contains what we expect it to
+    - [x] NIL
+    - [x] T
+    - [x] and
+    - [x] cadr
+    - [x] car
+    - [x] cdr
+    - [x] cond
+    - [x] cons
+    - [x] defun
+    - [x] equal
+    - [x] eval
+    - [x] label
+    - [x] lambda
+    - [x] list
+    - [x] not
+    - [x] null
+    - [x] or
+    - [x] quote
 - [ ] Pass env to macro
 - [ ] Add line and column to errors where applicable
 - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
-- [ ] McCarthy things need to be implemented
-    - [x] Car
-    - [x] Cons
-    - [x] Cdr
-    - [x] Equal
-    - [x] quote
-    - [ ] Maybe more
-    - [x] McCarthy context??? as a type of Rust context?
-    - [ ] Make sure all McCarthy things are added
 - [ ] Lib user defined Rust Contexts
 - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
 - [ ] Garbage collector
