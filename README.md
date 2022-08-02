@@ -2,9 +2,9 @@
 - [ ] McCarthy things need to be implemented
     - [x] NIL
     - [x] T
+    - [x] label
     - [ ] arbitrary cdadr
     - [ ] eval
-    - [ ] label
     - [ ] list
 - [ ] Sys calls somehow
 - [ ] inline assembly????

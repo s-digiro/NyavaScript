@@ -5,6 +5,9 @@ mod rust_function;
 pub use rust_function::ScopeableRustFn;
 pub use rust_function::RustFunction;
 
+mod label_function;
+pub use label_function::LabelFunction;
+
 use crate::s_expression::SExpressionRef as SXRef;
 use crate::evaluate::{
     Environment as Env,
@@ -16,6 +19,7 @@ use crate::parse::ParseError;
 pub enum Function {
     Lisp(LispFunction),
     Rust(RustFunction),
+    Label(LabelFunction),
 }
 
 impl Function {
@@ -25,6 +29,7 @@ impl Function {
         let ret = match self {
             Self::Lisp(f) => f.execute(args, env)?,
             Self::Rust(f) => f.execute(args, env)?,
+            Self::Label(f) => f.execute(args, env)?,
         };
 
         eprintln!("Function returning: {}", ret);
@@ -46,6 +51,7 @@ impl PartialEq for Function {
         match (self, other) {
             (Self::Lisp(l), Self::Lisp(o)) => l.eq(o),
             (Self::Rust(r), Self::Rust(o)) => r.eq(o),
+            (Self::Label(l), Self::Label(o)) => l.eq(o),
             _ => false,
         }
     }
@@ -54,8 +60,9 @@ impl PartialEq for Function {
 impl std::fmt::Debug  for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Self::Lisp(l) => write!(f, "{:?}", l),
-            Self::Rust(r) => write!(f, "{:?}", r),
+            Self::Lisp(x) => write!(f, "{:?}", x),
+            Self::Rust(x) => write!(f, "{:?}", x),
+            Self::Label(x) => write!(f, "{:?}", x),
         }
     }
 }
@@ -63,8 +70,9 @@ impl std::fmt::Debug  for Function {
 impl std::fmt::Display for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Self::Lisp(l) => write!(f, "{}", l),
-            Self::Rust(r) => write!(f, "{}", r),
+            Self::Lisp(x) => write!(f, "{}", x),
+            Self::Rust(x) => write!(f, "{}", x),
+            Self::Label(x) => write!(f, "{}", x),
         }
     }
 }
@@ -94,5 +102,11 @@ impl From<RustFunction> for Function {
 impl From<LispFunction> for Function {
     fn from(l: LispFunction) -> Self {
         Self::Lisp(l)
+    }
+}
+
+impl From<LabelFunction> for Function {
+    fn from(l: LabelFunction) -> Self {
+        Self::Label(l)
     }
 }

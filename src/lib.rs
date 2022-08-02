@@ -115,4 +115,53 @@ mod test {
 
         assert_eq!(expected, actual);
     }
+
+
+    #[test]
+    fn recursion() {
+        let code = "
+((label first-atom
+    (lambda (x)
+        (cond
+            ((atom x) x)
+            (1 (first-atom (car x))))))
+    4)
+        ";
+
+        let expected = SXRef::number(4);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+
+        let code = "
+((label first-atom
+    (lambda (x)
+        (cond
+            ((atom x) x)
+            (1 (first-atom (car x))))))
+    '(4 1))
+        ";
+
+        let expected = SXRef::number(4);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+
+        let code = "
+((label first-atom
+    (lambda (x)
+        (cond
+            ((atom x) x)
+            (1 (first-atom (car x))))))
+    '((4 1) 2))
+        ";
+
+        let expected = SXRef::number(4);
+
+        let actual = run(code).unwrap();
+
+        assert_eq!(expected, actual);
+    }
 }

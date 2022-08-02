@@ -13,6 +13,7 @@ mod cond;
 mod cons;
 mod defun;
 mod equal;
+mod label;
 mod lambda;
 mod nil;
 mod not;
