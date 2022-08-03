@@ -6,11 +6,27 @@
     - [ ] arbitrary cdadr
     - [ ] eval
     - [ ] list
+- [ ] Figure out some way to implement maps
+    - I am thinking a macro which 
 - [ ] Sys calls somehow
 - [ ] inline assembly????
 - [ ] Rename s\_expression to form
 - [ ] Rename function to procedure
     - [ ] Make sure this reflects in toString as well
+- [ ] PartialEq on procedures
+    - [ ] Rust: When function is created, create it as a singleton with a timestamp hash
+        - [ ] Compare Hashes
+    - [ ] Lisp: Same as with Rust
+- [ ] Float type
+- [ ] Fraction type?
+- [ ] Buffer type
+    - [ ] This would also mean arrays and objects and structs, effectively
+- [ ] Array literal?
+- [ ] Make lisp procedures into closures
+- [ ] load for loading in other files
+- [ ] A compiler (lol)
+- [ ] Decide if let should be a closure or just a scope
+- [ ] set? Maybe?
 - [ ] Control flow scope
     - [ ] while loop
     - [ ] let macro
