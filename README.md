@@ -23,6 +23,11 @@
     - [ ] This would also mean arrays and objects and structs, effectively
 - [ ] Array literal?
 - [ ] Make lisp procedures into closures
+    - [ ] If we have closures, we probably need a "set symbol value" function
+          which modifies lowest level definition of symbol in scope to be value,
+          otherwise, the closure won't be very useful
+- [ ] Maybe root lists should execute concurrently?
+- [ ] Concurrent macro?
 - [ ] load for loading in other files
 - [ ] A compiler (lol)
 - [ ] Decide if let should be a closure or just a scope
