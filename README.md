@@ -26,6 +26,13 @@
     - [ ] If we have closures, we probably need a "set symbol value" function
           which modifies lowest level definition of symbol in scope to be value,
           otherwise, the closure won't be very useful
+    - [ ] How to avoid memory leak?
+        - Lambda stores rc to env, which may store rc to lambda
+            - prevent
+            - handle
+                - wrap lambda.env in smart pointer ptr<Rc<Env>>
+                - when ptr is dropped, check if rc has only 1 ref,
+                    - if it does, 
 - [ ] Maybe root lists should execute concurrently?
 - [ ] Concurrent macro?
 - [ ] load for loading in other files
