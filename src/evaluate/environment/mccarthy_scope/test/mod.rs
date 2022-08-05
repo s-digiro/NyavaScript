@@ -15,6 +15,7 @@ mod defun;
 mod equal;
 mod label;
 mod lambda;
+mod list;
 mod nil;
 mod not;
 mod null;

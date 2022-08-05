@@ -142,6 +142,13 @@ impl McCarthyScope {
         Ok(SXRef::function(sx.into()))
     }
 
+    pub fn list(sx: SXRef, _env: &mut Env) -> EvalResult {
+        let args = sx.iter().skip(1).collect::<Vec<SXRef>>();
+        let ret = SXRef::from(args);
+
+        Ok(ret)
+    }
+
     pub fn new() -> Scope {
         let mut ret = Scope::new();
 
@@ -163,6 +170,11 @@ impl McCarthyScope {
         ret.insert(
             "atom".to_string(),
             RustFunction::new(Self::atom).into(),
+        );
+
+        ret.insert(
+            "list".to_string(),
+            RustMacro::new(Self::list).into(),
         );
 
         ret.insert(
