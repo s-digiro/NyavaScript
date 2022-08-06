@@ -4,7 +4,7 @@
     - [x] T
     - [x] label
     - [ ] arbitrary cdadr
-    - [ ] eval
+    - [x] eval
     - [x] list
 - [ ] Figure out some way to implement maps
 - [ ] Sys calls somehow

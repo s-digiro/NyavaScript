@@ -3,6 +3,7 @@ mod test;
 
 use crate::evaluate::{
     eval,
+    eval_all,
     Environment as Env,
     Scope,
     Result as EvalResult,
@@ -134,6 +135,10 @@ impl McCarthyScope {
         Ok(ret)
     }
 
+    pub fn eval(args: Vec<SXRef>, env: &mut Env) -> EvalResult {
+        eval_all(args, env)
+    }
+
     pub fn label(sx: SXRef, _env: &mut Env) -> EvalResult {
         Ok(SXRef::function(LabelFunction::from(sx).into()))
     }
@@ -170,6 +175,11 @@ impl McCarthyScope {
         ret.insert(
             "atom".to_string(),
             RustFunction::new(Self::atom).into(),
+        );
+
+        ret.insert(
+            "eval".into(),
+            RustFunction::new(Self::eval).into(),
         );
 
         ret.insert(
