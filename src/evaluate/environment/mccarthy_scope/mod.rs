@@ -5,7 +5,7 @@ use crate::evaluate::{
     eval,
     eval_all,
     Environment as Env,
-    Scope,
+    HashScope,
     Result as EvalResult,
 };
 use crate::s_expression::{
@@ -154,8 +154,8 @@ impl McCarthyScope {
         Ok(ret)
     }
 
-    pub fn new() -> Scope {
-        let mut ret = Scope::new();
+    pub fn new() -> HashScope {
+        let mut ret = HashScope::new();
 
         ret.insert(
             "cons".to_string(),

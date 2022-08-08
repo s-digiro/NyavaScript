@@ -5,7 +5,7 @@ use crate::parse::{ parse, ParseError };
 use crate::s_expression::{ SExpressionRef as SXRef, util };
 use crate::evaluate::{
     Environment as Env,
-    Scope,
+    HashScope,
     eval,
     Result as EvalResult,
 };
@@ -33,7 +33,7 @@ impl LispMacro {
     }
 
     pub fn execute(&self, args: SXRef, env: &mut Env) -> EvalResult {
-        env.push(Scope::new());
+        env.push(HashScope::new());
 
         if let Some(key) = self.args().first() {
             env.set(key.to_owned(), args);

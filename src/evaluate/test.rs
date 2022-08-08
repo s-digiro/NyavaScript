@@ -6,7 +6,7 @@ use crate::evaluate::{
     UnboundFnCallError,
 };
 
-fn full_env() -> Env {
+fn full_env<'a>() -> Env<'a> {
     let mut ret = Env::new();
     ret.push(McCarthyScope::new());
 

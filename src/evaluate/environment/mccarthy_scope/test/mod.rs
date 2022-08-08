@@ -31,7 +31,7 @@ fn dummy_macro(_: SXRef, _: &mut Env) -> EvalResult {
     Ok(SXRef::nil())
 }
 
-fn mc_env() -> Env {
+fn mc_env<'a>() -> Env<'a> {
     let mut ret = Env::new();
 
     ret.push(McCarthyScope::new());

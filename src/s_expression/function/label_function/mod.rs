@@ -3,7 +3,7 @@ mod test;
 
 use crate::evaluate::{
     Environment as Env,
-    Scope,
+    HashScope,
     eval,
     Result as EvalResult,
 };
@@ -39,7 +39,7 @@ impl LabelFunction {
     }
 
     pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
-        let mut scope = Scope::new();
+        let mut scope = HashScope::new();
 
         if let Some(label) = &self.label {
             scope.insert(label.into(), self.function.clone().into());

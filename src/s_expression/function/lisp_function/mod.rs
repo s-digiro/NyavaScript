@@ -3,7 +3,7 @@ mod test;
 
 use crate::evaluate::{
     Environment as Env,
-    Scope,
+    HashScope,
     eval,
     Result as EvalResult,
 };
@@ -34,7 +34,7 @@ impl LispFunction {
     }
 
     pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
-        env.push(Scope::new());
+        env.push(HashScope::new());
 
         for (key, val) in self.args().iter().zip(args.into_iter()) {
             env.set(key.to_owned(), val);
