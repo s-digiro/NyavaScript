@@ -10,10 +10,12 @@ use crate::evaluate::{
     Result as EvalResult,
 };
 use crate::s_expression::{
+    ConsCell,
     Function,
+    LabelFunction,
+    LispFunction,
     RustFunction,
     RustMacro,
-    LabelFunction,
     SExpression as SX,
     SExpressionRef as SXRef,
     util,
@@ -30,19 +32,22 @@ pub struct McCarthyScope {
 }
 
 impl Scope for McCarthyScope {
-    fn contains_key(& self, key: &str) -> bool {
+    fn contains_key(&self, key: &str) -> bool {
         self.map.contains_key(key)
     }
 
-    fn entries(&self) -> Vec<(& str, & SXRef)> {
+    fn entries(&self) -> Vec<(&str, &SXRef)> {
         self.map.entries()
     }
 
-    fn get(&self, key: &str) -> Option<& SXRef> {
-        self.map.get(key)
+    fn get(&self, key: &str) -> Option<SXRef> {
+        match self.map.get(key) {
+            None => to_cadr(key),
+            sx => sx.map(|sx| SXRef::clone(sx)),
+        }
     }
 
-    fn keys(&self) -> Vec<& str> {
+    fn keys(&self) -> Vec<&str> {
         Scope::keys(&self.map)
     }
 
@@ -50,11 +55,11 @@ impl Scope for McCarthyScope {
         Scope::insert(&mut self.map, key, val)
     }
 
-    fn remove(& mut self, key: &str) -> Option<SXRef> {
+    fn remove(&mut self, key: &str) -> Option<SXRef> {
         self.map.remove(key)
     }
 
-    fn vals(& self) -> Vec<& SXRef> {
+    fn vals(&self) -> Vec<&SXRef> {
         self.map.vals()
     }
 }
@@ -291,4 +296,47 @@ impl McCarthyScope {
 
         Ok(SXRef::quote(arg1))
     }
+}
+
+fn to_cadr(s: &str) -> Option<SXRef> {
+    let mut chars = s.chars();
+
+    if let Some('c') = chars.next() {
+    } else {
+        return None
+    }
+
+    if let Some('r') = chars.nth_back(0) {
+    } else {
+        return None
+    }
+
+    let mut def = SXRef::symbol("x".into());
+
+    for c in chars.rev() {
+        match c {
+            'a' => def = ConsCell::new(
+                SXRef::symbol("car".into()),
+                ConsCell::new(
+                    def,
+                    SXRef::nil(),
+                ).into(),
+            ).into(),
+            'd' => def = ConsCell::new(
+                SXRef::symbol("cdr".into()),
+                ConsCell::new(
+                    def,
+                    SXRef::nil(),
+                ).into(),
+            ).into(),
+            _ => return None,
+        }
+    }
+
+    let ret = LispFunction::new(
+        vec!["x".into()],
+        def
+    ).into();
+
+    Some(ret)
 }

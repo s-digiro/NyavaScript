@@ -47,7 +47,7 @@ impl<'a> Environment<'a> {
 
     pub fn get(&self, key: &str) -> SXRef {
         let local = self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+            .find_map(|s| s.get(key));
 
         if let Some(local) = local {
             return local
@@ -58,7 +58,7 @@ impl<'a> Environment<'a> {
         }
 
         let lib = self.lib.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+            .find_map(|s| s.get(key));
 
         if let Some(lib) = lib {
             return lib

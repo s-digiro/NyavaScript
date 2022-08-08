@@ -7,6 +7,7 @@ use super::*;
 
 mod and;
 mod atom;
+mod cadr;
 mod car;
 mod cdr;
 mod cond;
@@ -47,7 +48,6 @@ fn all_mccarthy_functions_are_defined() {
         "NIL",
         "T",
         "and",
-        "cadr",
         "car",
         "cdr",
         "cond",
@@ -64,9 +64,13 @@ fn all_mccarthy_functions_are_defined() {
         "quote",
     ];
 
-    let missing: Vec<&str> = fns.into_iter()
+    let mut missing: Vec<&str> = fns.into_iter()
         .filter(|f| !subject.contains_key(*f))
         .collect();
+
+    if let None = subject.get("cadr") {
+        missing.push("cadr");
+    }
 
     if !missing.is_empty() {
         panic!("Expected McCarthyScope to contain a definition for the following keys {:?}", missing);
