@@ -57,6 +57,10 @@ impl FunScope {
         ret
     }
 
+    pub fn load(args: Vec<SXRef>, env: &mut Env) -> EvalResult {
+        unimplemented!()
+    }
+
     pub fn pipe(sx: SXRef, env: &mut Env) -> EvalResult {
         let mut it = sx.iter().skip(1);
 

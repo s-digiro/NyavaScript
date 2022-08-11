@@ -12,6 +12,9 @@ pub use fun_scope::FunScope;
 pub mod scope;
 pub use scope::Scope;
 
+mod shared;
+pub use shared::SharedLib;
+
 #[cfg(test)]
 mod test;
 
