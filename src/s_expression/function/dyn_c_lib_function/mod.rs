@@ -13,6 +13,7 @@ use std::convert::TryFrom;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct DynCLibFunction {
+    lib: Rc<DynCLib>,
     args: Vec<String>,
     definition: SXRef,
 }
