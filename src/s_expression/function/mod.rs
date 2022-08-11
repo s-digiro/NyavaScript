@@ -1,3 +1,6 @@
+mod dyn_c_lib_function;
+pub use dyn_lib_function::DynCLibFunction;
+
 mod lisp_function;
 pub use lisp_function::LispFunction;
 
@@ -17,9 +20,10 @@ use crate::parse::ParseError;
 
 #[derive(Clone)]
 pub enum Function {
+    DynCLib(DynCLibFunction),
+    Label(LabelFunction),
     Lisp(LispFunction),
     Rust(RustFunction),
-    Label(LabelFunction),
 }
 
 impl Function {
@@ -27,6 +31,7 @@ impl Function {
         eprintln!("Running Function on: {}", SXRef::from(args.clone()));
 
         let ret = match self {
+            Self::DynCLib(f) => f.execute(args, env)?,
             Self::Lisp(f) => f.execute(args, env)?,
             Self::Rust(f) => f.execute(args, env)?,
             Self::Label(f) => f.execute(args, env)?,
@@ -49,6 +54,7 @@ impl Function {
 impl PartialEq for Function {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
+            (Self::DynCLib(f), Self::DynCLib(o)) => f.eq(o),
             (Self::Lisp(l), Self::Lisp(o)) => l.eq(o),
             (Self::Rust(r), Self::Rust(o)) => r.eq(o),
             (Self::Label(l), Self::Label(o)) => l.eq(o),
@@ -60,6 +66,7 @@ impl PartialEq for Function {
 impl std::fmt::Debug  for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
+            Self::DynCLib(f) => write!(f, "{:?}", x),
             Self::Lisp(x) => write!(f, "{:?}", x),
             Self::Rust(x) => write!(f, "{:?}", x),
             Self::Label(x) => write!(f, "{:?}", x),
@@ -70,6 +77,7 @@ impl std::fmt::Debug  for Function {
 impl std::fmt::Display for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
+            Self::DynCLib(x) => write!(f, "{}", x),
             Self::Lisp(x) => write!(f, "{}", x),
             Self::Rust(x) => write!(f, "{}", x),
             Self::Label(x) => write!(f, "{}", x),
@@ -90,6 +98,12 @@ impl TryFrom<&str> for Function {
 impl From<SXRef> for Function {
     fn from(sx: SXRef) -> Self {
         Self::Lisp(sx.into())
+    }
+}
+
+impl From<DynCLibFunction> for Function {
+    fn from(f: DynCLibFunction) -> Self {
+        Self::DynCLib(f)
     }
 }
 

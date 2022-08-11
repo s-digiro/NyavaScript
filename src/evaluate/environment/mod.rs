@@ -9,7 +9,7 @@ pub use mccarthy_scope::McCarthyScope;
 mod fun_scope;
 pub use fun_scope::FunScope;
 
-mod scope;
+pub mod scope;
 pub use scope::Scope;
 
 #[cfg(test)]
