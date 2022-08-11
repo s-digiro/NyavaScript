@@ -1,4 +1,19 @@
 # To Do
+- [ ] c library dynamic loading
+    - [ ] Library object which is basically just a wrapper around lib pointer
+        - [*] implement (Called DynCLib)
+        - [ ] test
+    - [ ] dynlib scope
+        - [ ] Put it in lib scope?
+        - [ ] implement
+        - [ ] test
+    - [ ] dynlib Function
+        - [ ] Hold Rc to library it is from
+        - [ ] implement
+        - [ ] test
+    - [ ] function like "cload" or something which loads dynamic libs
+        - [ ] implement
+        - [ ] test
 - [ ] Figure out some way to implement maps
 - [ ] Sys calls somehow
 - [ ] inline assembly????
