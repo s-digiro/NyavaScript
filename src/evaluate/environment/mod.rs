@@ -2,6 +2,7 @@ use crate::s_expression::SExpressionRef as SXRef;
 use std::collections::HashMap;
 
 mod dyn_c_lib_scope;
+pub use dyn_c_lib_scope::{ DynCFunction, DynCLib, DynCLibScope };
 
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
@@ -11,9 +12,6 @@ pub use fun_scope::FunScope;
 
 pub mod scope;
 pub use scope::Scope;
-
-mod shared;
-pub use shared::SharedLib;
 
 #[cfg(test)]
 mod test;

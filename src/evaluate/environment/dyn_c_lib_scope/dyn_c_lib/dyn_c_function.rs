@@ -1,12 +1,17 @@
-use super::{ DynCSym, DynCLib };
+use std::arch::asm;
+use std::rc::Rc;
+use super::{ DynCSym, LibPtr };
 
-pub fn DynCFunction {
+#[derive(Clone, Debug)]
+pub struct DynCFunction {
     ptr: DynCSym,
-    lib: Rc<DynCLib>,
+
+    // This prevents lib ptr is in from dropping
+    lib: Rc<LibPtr>,
 }
 
 impl DynCFunction {
-    pub fn new(ptr: DynCSym, lib: Rc<DynCLib>) -> DynCFunction {
+    pub fn new(ptr: DynCSym, lib: Rc<LibPtr>) -> DynCFunction {
         DynCFunction {
             ptr,
             lib,
@@ -20,20 +25,20 @@ impl DynCFunction {
             match args.len() {
                 0 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     out("rax") result,
                     clobber_abi("C"),
                 ),
                 1 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     out("rax") result,
                     clobber_abi("C"),
                 ),
                 2 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     in("rsi") args[1],
                     out("rax") result,
@@ -41,7 +46,7 @@ impl DynCFunction {
                 ),
                 3 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     in("rsi") args[1],
                     in("rdx") args[2],
@@ -50,7 +55,7 @@ impl DynCFunction {
                 ),
                 4 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     in("rsi") args[1],
                     in("rdx") args[2],
@@ -60,7 +65,7 @@ impl DynCFunction {
                 ),
                 5 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     in("rsi") args[1],
                     in("rdx") args[2],
@@ -71,7 +76,7 @@ impl DynCFunction {
                 ),
                 6 => asm!(
                     "call {}",
-                    in(reg) fn_ptr,
+                    in(reg) self.ptr,
                     in("rdi") args[0],
                     in("rsi") args[1],
                     in("rdx") args[2],
@@ -109,14 +114,13 @@ impl DynCFunction {
 
                         in(reg) len - 1,
                         in(reg) arr.as_ptr(),
-                        in(reg) fn_ptr,
+                        in(reg) self.ptr,
                         in("rdi") arr[0],
                         in("rsi") arr[1],
                         in("rdx") arr[2],
                         in("rcx") arr[3],
                         in("r8") arr[4],
                         in("r9") arr[5],
-                        in("r14") exit,
                         out("rax") result,
                         clobber_abi("C"),
                     );
@@ -125,5 +129,11 @@ impl DynCFunction {
         }
 
         result
+    }
+}
+
+impl PartialEq for DynCFunction {
+    fn eq(&self, other: &Self) -> bool {
+        self.ptr == other.ptr
     }
 }

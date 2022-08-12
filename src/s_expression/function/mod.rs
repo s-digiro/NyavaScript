@@ -1,5 +1,5 @@
 mod dyn_c_lib_function;
-pub use dyn_lib_function::DynCLibFunction;
+pub use dyn_c_lib_function::DynCLibFunction;
 
 mod lisp_function;
 pub use lisp_function::LispFunction;
@@ -66,7 +66,7 @@ impl PartialEq for Function {
 impl std::fmt::Debug  for Function {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Self::DynCLib(f) => write!(f, "{:?}", x),
+            Self::DynCLib(x) => write!(f, "{:?}", x),
             Self::Lisp(x) => write!(f, "{:?}", x),
             Self::Rust(x) => write!(f, "{:?}", x),
             Self::Label(x) => write!(f, "{:?}", x),

@@ -1,14 +1,14 @@
 # To Do
 - [ ] c library dynamic loading
     - [ ] Library object which is basically just a wrapper around lib pointer
-        - [*] implement (Called DynCLib)
+        - [x] implement (Called DynCLib)
         - [ ] test
     - [ ] dynlib scope
-        - [ ] Put it in lib scope?
-        - [ ] implement
+        - [ ] Put it in its own stack
+        - [x] implement
         - [ ] test
     - [ ] dynlib Function
-        - [ ] Hold Rc to library it is from
+        - [x] Hold Rc to library it is from
         - [ ] implement
         - [ ] test
     - [ ] function like "cload" or something which loads dynamic libs

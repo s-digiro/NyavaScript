@@ -1,75 +1,61 @@
-use crate::evaluate::{
-    Environment as Env,
-    HashScope,
-    eval,
-    Result as EvalResult,
+use crate::{
+    evaluate::{
+        DynCFunction,
+        Environment as Env,
+        Result as EvalResult,
+    },
+    s_expression::{ SExpressionRef as SXRef, SExpression as SX },
 };
-use crate::parse::{ parse, ParseError };
-use crate::s_expression::{
-    SExpressionRef as SXRef,
-    util,
+use std::{
+    ffi::{ CStr, OsStr },
+    os::unix::ffi::OsStrExt,
 };
-use std::convert::TryFrom;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct DynCLibFunction {
-    lib: Rc<DynCLib>,
-    args: Vec<String>,
-    definition: SXRef,
+    f: DynCFunction,
+    name: String,
 }
 
-impl LispFunction {
-    pub fn new(args: Vec<String>, definition: SXRef) -> LispFunction {
-        LispFunction { args, definition }
+impl DynCLibFunction {
+    pub fn new(name: String, f: DynCFunction) -> DynCLibFunction {
+        DynCLibFunction { f, name }
     }
 
-    pub fn args(&self) -> &Vec<String> {
-        &self.args
-    }
+    pub fn execute(&self, args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let args = args.iter().map(|sx| match &**sx {
+            SX::Number(n) => *n as *const () as usize,
+            SX::String(s) => {
+                let s = OsStr::new(s);
 
-    pub fn definition(&self) -> SXRef {
-        SXRef::clone(&self.definition)
-    }
+                let mut v: Vec<u8> = Vec::new();
 
-    pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
-        env.push(HashScope::new());
+                unsafe {
+                    let bytes = s.as_bytes();
 
-        for (key, val) in self.args().iter().zip(args.into_iter()) {
-            env.set(key.to_owned(), val);
-        }
+                    if s.len() > 0 && bytes[s.len() - 1] == 0 {
+                        let cstr = CStr::from_bytes_with_nul_unchecked(bytes);
+                        cstr.as_ptr() as usize
+                    } else {
+                        v.extend_from_slice(bytes);
+                        v.push(0);
+                        let slice = v.as_slice();
+                        let cstr = CStr::from_bytes_with_nul_unchecked(slice);
+                        cstr.as_ptr() as usize
+                    }
+                }
+            },
+            _ => 0,
+        }).collect();
 
-        let ret = eval(self.definition(), env);
+        let ret = self.f.call(args);
 
-        env.pop();
-
-        ret
-    }
-}
-
-impl TryFrom<&str> for LispFunction {
-    type Error = ParseError;
-
-    fn try_from(text: &str) -> Result<Self, Self::Error> {
-        let mut ast = parse(text)?;
-
-        Ok(ast.remove(0).into())
-    }
-}
-
-impl From<SXRef> for LispFunction {
-    fn from(sx: SXRef) -> Self {
-        let args = util::car(&util::cdr(&sx)).iter()
-            .filter_map(|sx| sx.as_symbol().map(|s| s.into()))
-            .collect();
-
-        let definition = util::car(&util::cdr(&util::cdr(&sx)));
-
-        LispFunction { args, definition }
+        Ok(SXRef::number(ret as *const () as isize))
     }
 }
 
-impl std::fmt::Display for LispFunction {
+impl std::fmt::Display for DynCLibFunction {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[LispFunction]")
+        write!(f, "[DynCLibFunction '{}']", self.name)
     }
 }

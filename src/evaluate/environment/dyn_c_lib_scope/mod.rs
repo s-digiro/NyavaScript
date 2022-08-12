@@ -1,8 +1,11 @@
 mod dyn_c_lib;
-use dyn_c_lib::{ DynCLib, DynCSym };
+pub use dyn_c_lib::{ DynCLib, DynCFunction, Error as DynCLibErr };
 
-use std::fmt::{ Debug, Formatter, Result as fmtResult };
-use super::Scope;
+use crate::s_expression::{
+    SExpressionRef as SXRef,
+    Function,
+    DynCLibFunction,
+};
 
 #[derive(Debug)]
 pub struct DynCLibScope {
@@ -10,22 +13,34 @@ pub struct DynCLibScope {
     path: String,
 }
 
-impl DynCLib {
-    pub fn load(path: &str) -> Result<DynCLibScope, ()> {
+impl DynCLibScope {
+    pub fn load(path: &str) -> Result<DynCLibScope, DynCLibErr> {
+        let lib = DynCLib::dlopen(path)?;
+
+        let ret = Self {
+            lib,
+            path: path.into(),
+        };
+
+        Ok(ret)
     }
 
     pub fn contains_key(&self, key: &str) -> bool {
-        match self.lib.get_sym(key) {
-            Some(_) => true,
-            None => false,
+        match self.lib.get_fn(key) {
+            Ok(_) => true,
+            Err(_) => false,
         }
     }
 
     pub fn get(&self, key: &str) -> Option<SXRef> {
-        let ptr = match self.lib.get_sym(key) {
-            Some(ptr) => ptr,
-            None => return None,
-        };
-
+        match self.lib.get_fn(key) {
+            Ok(f) => {
+                let f = DynCLibFunction::new(key.into(), f);
+                let f = Function::DynCLib(f);
+                let f = SXRef::function(f);
+                Some(f)
+            },
+            Err(_) => None,
+        }
     }
 }
