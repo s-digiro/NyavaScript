@@ -50,7 +50,11 @@ impl DynCLibScope {
                     let f = SXRef::function(f);
                     Some(f)
                 },
-                _ => unimplemented!(),
+                DynCType::USize(u) => Some(SXRef::number(
+                        unsafe {
+                            std::mem::transmute::<usize, isize>(u)
+                        }
+                    )),
             },
             Err(_) => {
                 println!("Couldn't find anything");

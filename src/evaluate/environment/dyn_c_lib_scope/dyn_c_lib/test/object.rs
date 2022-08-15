@@ -1,5 +1,4 @@
 use super::*;
-use super::DynCObjectError;
 
 #[test]
 fn get_symbol_object() {
@@ -8,24 +7,36 @@ fn get_symbol_object() {
     let o = actual.unwrap();
 
     let o = match o {
-        DynCType::Object(o) => o,
-        _ => panic!("Expected to match DynCType::Object(_), found {:?}", o),
+        DynCType::USize(u) => u,
+        _ => panic!("Expected to match DynCType::Usize(_), found {:?}", o),
     };
 
-    let slice = o.get();
+    let o = o as *mut i32;
 
-    assert_eq!(1, slice[0]);
-    assert_eq!(2, slice[4]);
-    assert_eq!(3, slice[8]);
+    let first;
+    let second;
+    let third;
 
-    o.set(&[4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 0, 0]).unwrap();
+    unsafe {
+        first = o;
+        second = o.offset(1);
+        third = o.offset(2);
 
-    assert_eq!(4, slice[0]);
-    assert_eq!(5, slice[4]);
-    assert_eq!(6, slice[8]);
+        assert_eq!(1, *first);
+        assert_eq!(2, *second);
+        assert_eq!(3, *third);
+    }
 
-    let e = o.set(&[4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 0, 0, 0]).err().unwrap();
+    unsafe {
+        *first = 4;
+        *second = 5;
+        *third = 6;
+    }
 
-    assert_eq!(e, DynCObjectError::BufferOverflow { buflen: 12, datalen: 13 });
+    unsafe {
+        assert_eq!(4, *first);
+        assert_eq!(5, *second);
+        assert_eq!(6, *third);
+    }
 }
 

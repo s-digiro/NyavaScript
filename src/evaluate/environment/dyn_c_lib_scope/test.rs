@@ -1,4 +1,5 @@
 use crate::s_expression::SExpression as SX;
+use crate::evaluate::Environment as Env;
 use std::path::PathBuf;
 use super::*;
 
@@ -23,11 +24,20 @@ fn lib_can_get_func() {
     let lib = lib();
     let actual = lib.get("func").unwrap();
     let actual = &*actual;
-    assert!(
-        matches!(actual, SX::Function(_)),
-        "Expected an SX::Function, but got {:?}",
-        actual,
-    );
+
+    match actual {
+        SX::Function(f) => {
+            let ret = f.execute(vec![], &mut Env::new()).unwrap();
+            match &*ret {
+                SX::Number(n) => assert_eq!(*n, 1),
+                x => panic!("Expected an SX::Number, but got {:?}", x),
+            }
+        },
+        _ => panic!(
+            "Expected an SX::Function, but got {:?}",
+            actual,
+        ),
+    }
 }
 
 #[test]
@@ -47,9 +57,12 @@ fn lib_can_get_obj() {
     let lib = lib();
     let actual = lib.get("object").unwrap();
     let actual = &*actual;
-    assert!(
-        matches!(actual, SX::Function(_)),
-        "Expected an SX::Function, but got {:?}",
-        actual,
-    );
+
+    match actual {
+        SX::Number(n) => assert_ne!(0, *n),
+        _ => panic!(
+            "Expected an SX::Number, but got {:?}",
+            actual,
+        ),
+    }
 }

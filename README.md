@@ -3,9 +3,9 @@
     - [ ] \n should lex into newline
     - [ ] More. Make a list
 - [ ] c library dynamic loading
-    - [ ] Library object which is basically just a wrapper around lib pointer
+    - [x] Library object which is basically just a wrapper around lib pointer
         - [x] implement (Called DynCLib)
-        - [ ] test
+        - [x] test
             - [x] dlopen
             - [x] invalid dlsym
             - [x] STT_GNU_IFUNC
@@ -20,41 +20,25 @@
                 - [x] can get
                 - [x] get func
                 - [x] Func can be called
-            - [ ] STT_TLS
-                - [ ] Figure out how they even work in shared libs
-                - [x] can get
-                - [ ] get tls
-            - [ ] STT_NOTYPE
-                - [ ] Figure out how they even work in c libs
-                - [ ] can get
-                - [ ] get notype
-            - [ ] STT_SECTION
-                - [ ] Figure out how they even work in c libs
-                - [ ] can get
-                - [ ] get section
-            - [ ] STT_FILE
-                - [ ] Figure out how they even work in c libs
-                - [ ] can get
-                - [ ] get file
-            - [ ] STT_COMMON
-                - [ ] Figure out how they even work in c libs
-                - [ ] can get
-                - [ ] get common
-    - [ ] dynlib scope
+    - [x] dynlib scope
         - [x] Put it in its own stack
         - [x] implement
-        - [ ] test
-    - [ ] dynlib Function
+        - [x] test
+    - [x] dynlib Function
         - [x] Hold Rc to library it is from
-        - [ ] Convert sxrefs to whatever they should be converted to
-        - [ ] implement
+        - [x] Convert sxrefs to whatever they should be converted to
+        - [x] implement
+        - [x] test
+    - [ ] dynlib Object ptr
         - [ ] test
-    - [ ] function like "cload" or something which loads dynamic libs
-        - [*] implement
-        - [ ] test
-    - [ ] function deref which gets val at mem address
-        - [ ] implement
-        - [ ] test
+            - [ ] Make sure deref does what we want
+            - [ ] make sure we can write to it
+    - [x] function like "cload" or something which loads dynamic libs
+        - [x] implement
+        - [x] test
+    - [x] function deref which gets val at mem address
+        - [x] implement
+        - [x] test
     - [ ] function setat which sets val at mem address
         - [ ] implement
         - [ ] test

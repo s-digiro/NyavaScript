@@ -9,22 +9,10 @@ use super::Error;
 mod func;
 pub use func::DynCFunction;
 
-mod object;
-pub use object::{
-    DynCObject,
-    Error as DynCObjectError,
-};
-
 #[derive(Debug)]
 pub enum DynCType {
-    NoType(DynCSym),
-    Object(DynCObject),
     Func(DynCFunction),
-    Section(DynCSym),
-    File(DynCSym),
-    Common(DynCSym),
-    Tls(DynCSym),
-    GnuIFunc(DynCSym),
+    USize(usize),
 }
 
 impl From<DynCFunction> for DynCType {
@@ -33,9 +21,9 @@ impl From<DynCFunction> for DynCType {
     }
 }
 
-impl From<DynCObject> for DynCType {
-    fn from(x: DynCObject) -> DynCType {
-        DynCType::Object(x)
+impl From<usize> for DynCType {
+    fn from(x: usize) -> DynCType {
+        DynCType::USize(x)
     }
 }
 
@@ -88,7 +76,7 @@ struct ExtraInfo {
 }
 
 
-pub fn get_type_and_size(sym: DynCSym) -> Result<(u8, u64), Error> {
+pub fn get_type(sym: DynCSym) -> Result<u8, Error> {
     unsafe {
         let mut info = MaybeUninit::<DlInfo>::zeroed();
         let mut extra_info: *mut ExtraInfo = std::ptr::null_mut();
@@ -109,7 +97,6 @@ pub fn get_type_and_size(sym: DynCSym) -> Result<(u8, u64), Error> {
         }
 
         let st_info = (*extra_info).st_info;
-        let st_size = (*extra_info).st_size;
-        Ok((st_info & 0xf, st_size))
+        Ok(st_info & 0xf)
     }
 }

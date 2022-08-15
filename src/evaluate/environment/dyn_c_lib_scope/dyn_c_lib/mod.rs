@@ -80,13 +80,13 @@ impl DynCLib {
         }
 
         let sym = sym as *mut ();
-        let (typ, size) = dyn_c_type::get_type_and_size(sym)?;
+        let typ = dyn_c_type::get_type(sym)?;
         let lib = Rc::clone(&self.lib_ptr);
 
         let ret = match typ {
             STT_FUNC
             | STT_GNU_IFUNC => DynCFunction::new(sym, lib).into(),
-            STT_OBJECT => DynCObject::new(sym, size, lib).into(),
+            STT_OBJECT => (sym as usize).into(),
             x => {
                 let unhandled = |x: &str| Error::UnsupportedSymbolType {
                     name: name.into(),

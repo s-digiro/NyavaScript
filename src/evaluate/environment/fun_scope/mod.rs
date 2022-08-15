@@ -23,13 +23,28 @@ impl FunScope {
             if let SX::String(path) = &**arg1 {
                 if let Ok(scope) = DynCLibScope::load(path) {
                     env.dynclib.push(scope);
-                    eprintln!("{:?}", env);
-                    return Ok(SXRef::number(1))
+                    return Ok(SXRef::nil())
                 }
             }
         }
 
-        Ok(SXRef::nil())
+        Ok(SXRef::number(-1))
+    }
+
+    pub fn deref(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        if let Some(arg1) = args.get(0) {
+            match &**arg1 {
+                SX::Number(n) => {
+                    let n = *n;
+                    let ret = unsafe { *(n as *const u8) };
+
+                    Ok(SXRef::number(ret.into()))
+                },
+                _ => Ok(SXRef::nil()),
+            }
+        } else {
+            Ok(SXRef::nil())
+        }
     }
 
     pub fn new() -> HashScope {
@@ -48,6 +63,11 @@ impl FunScope {
         ret.insert(
             "cload".into(),
             RustFunction::new(Self::cload).into(),
+        );
+
+        ret.insert(
+            "deref".into(),
+            RustFunction::new(Self::deref).into(),
         );
 
         ret.insert(
@@ -73,11 +93,12 @@ impl FunScope {
             ).into(),
         );
 
-        ret
-    }
+        ret.insert(
+            "set-at".into(),
+            RustFunction::new(Self::set_at).into(),
+        );
 
-    pub fn load(args: Vec<SXRef>, env: &mut Env) -> EvalResult {
-        unimplemented!()
+        ret
     }
 
     pub fn pipe(sx: SXRef, env: &mut Env) -> EvalResult {
@@ -107,5 +128,35 @@ impl FunScope {
         }
 
         Ok(last)
+    }
+
+    pub fn set_at(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let arg1 = args.get(0);
+        let arg2 = args.get(1);
+
+        match (arg1, arg2) {
+            (Some(arg1), Some(arg2)) => {
+                match &**arg1 {
+                    SX::Number(n) => {
+                        let ptr = *n as *mut u8;
+
+                        match &**arg2 {
+                            SX::Number(n) => unsafe {
+                                let valptr = *n as *const u8;
+                                *ptr = *valptr;
+
+                                let ptr = ptr.offset(1);
+                                let valptr = valptr.offset(1);
+                            },
+                            _ => unimplemented!(),
+                        }
+
+                        Ok(SXRef::nil())
+                    },
+                    _ => Ok(SXRef::number(-1)),
+                }
+            },
+            _ => Ok(SXRef::number(-1)),
+        }
     }
 }

@@ -86,6 +86,7 @@ fn get_non_existant_symbol() {
 }
 
 #[test]
+#[should_panic]
 fn get_symbol_no_type() {
     let subject = test_lib();
     let actual = subject.get_sym("undefined");
@@ -93,11 +94,7 @@ fn get_symbol_no_type() {
 }
 
 #[test]
-fn get_symbol_section() {
-    panic!("FAIL");
-}
-
-#[test]
+#[should_panic]
 fn get_symbol_file() {
     let subject = test_lib();
     let actual = subject.get_sym("lib.c");
@@ -105,13 +102,7 @@ fn get_symbol_file() {
 }
 
 #[test]
-fn get_symbol_common() {
-    let subject = test_lib();
-    let actual = subject.get_sym("common");
-    actual.unwrap();
-}
-
-#[test]
+#[should_panic]
 fn get_symbol_tls() {
     let subject = test_lib();
     let actual = subject.get_sym("tls");
