@@ -1,64 +1,60 @@
 # To Do
-- [ ] We need special escape chars
-    - [ ] \n should lex into newline
-    - [ ] More. Make a list
-- [ ] Figure out some way to implement maps
-- [ ] Sys calls somehow
-- [ ] Rename s\_expression to form
-- [ ] Rename function to procedure
-    - [ ] Make sure this reflects in toString as well
-- [ ] PartialEq on procedures
-    - [ ] Rust: When function is created, create it as a singleton with a timestamp hash
-        - [ ] Compare Hashes
-    - [ ] Lisp: Same as with Rust
-- [ ] Float type
-- [ ] Buffer type
-    - [ ] This would also mean arrays and objects and structs, effectively
-- [ ] load for loading in other files
-- [ ] A compiler (lol)
-- [ ] Control flow scope
-    - [ ] while loop
-    - [ ] let macro
-    - [ ] define global var
-- [ ] String scope
-    - [ ] print
-    - [ ] println
-    - [ ] string concatenation
-    - [ ] string indexing
-    - [ ] string length
-    - [ ] string to list of chars
-- [ ] Math scope
-    - [ ] Math operations
-        - [ ] Addition
-        - [ ] Subtraction
-        - [ ] Multiplication
-        - [ ] Division
-        - [ ] Modulo
+- Features
+    - [ ] A compiler (lol)
+    - [ ] We need special escape chars
+        - [ ] \n should lex into newline
+        - [ ] More. Make a list
+    - [ ] Pass env to macro
+    - [ ] Add line and column to errors where applicable
+    - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
+    - [ ] From SX for SXRef
+    - [ ] From inner for SXRef
+    - [ ] From inner for SX
+    - [ ] Better toString for Function
+    - [ ] Better toString for Macro
+    - [ ] PartialEq on functions
+        - [ ] Rust: When function is created, create it as a singleton with a timestamp hash
+            - [ ] Compare Hashes
+        - [ ] Lisp: Same as with Rust
+        - [ ] Make sure that's all of them
+    - [ ] PartialEq on Macros
+- DataTypes
+    - [ ] Hashmaps
+    - [ ] Vectors
+    - [ ] Float type
+- Functions
+    - [ ] Sys calls somehow
+    - [ ] load for loading stuff from other files
+    - [ ] While
+    - [ ] let
+    - [ ] define
+    - [ ] String util
+        - [ ] print
+        - [ ] println
+        - [ ] string concatenation
+        - [ ] string indexing
+        - [ ] string length
+        - [ ] string to list of chars
+        - [ ] Check what's in libc and duplicate it
+    - [ ] Math stuff
+        - [ ] Math operations
+            - [ ] Addition
+            - [ ] Subtraction
+            - [ ] Multiplication
+            - [ ] Division
+            - [ ] Modulo
+            - [ ] Check what's in libc and duplicate it
     - [ ] bitwise operations
         - [ ] and
         - [ ] or
         - [ ] left shift
         - [ ] right shift
         - [ ] not
-- [ ] Consider returning data type errors rather than evaluating errors to nil
-- [ ] Pass env to macro
-- [ ] Add line and column to errors where applicable
-- [ ] Passing lambdas to other lambdas is a lil weird... figure it out
-- [ ] Lib user defined Rust Contexts
-- [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
-- [ ] Garbage collector
-- [ ] Evaluate List should be refactored into more functions so its easier to read
-- [ ] List macro
-- [ ] Label macro
-- [ ] let macro
-- [ ] arbitrary cdaddr function
-- [ ] From SX for SXRef
-- [ ] From inner for SXRef
-- [ ] From inner for SX
-- [ ] Better toString for Function
-- [ ] Better toString for Macro
-- [ ] Find a way to implement PartialEq on RustFunction
-- [ ] Find a way to implement PartialEq on RustMacro
+    - [ ] list
+- Bugs
+    - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
+- Refactor
+    - [ ] Evaluate List should be refactored into more functions so its easier to read
 
 # Potential features
 - [ ] inline assembly????
@@ -74,3 +70,5 @@
 - [ ] Vector data type
 - [ ] HashMap data type
 - [ ] Set data type
+- [ ] Consider returning data type errors rather than evaluating errors to nil
+- [ ] Garbage collector
