@@ -1,5 +1,13 @@
 mod dyn_c_lib;
-pub use dyn_c_lib::{ DynCLib, DynCFunction, Error as DynCLibErr };
+pub use dyn_c_lib::{
+    DynCLib,
+    DynCFunction,
+    DynCType,
+    Error as DynCLibErr
+};
+
+#[cfg(test)]
+mod test;
 
 use crate::s_expression::{
     SExpressionRef as SXRef,
@@ -26,21 +34,28 @@ impl DynCLibScope {
     }
 
     pub fn contains_key(&self, key: &str) -> bool {
-        match self.lib.get_fn(key) {
+        match self.lib.get_sym(key) {
             Ok(_) => true,
             Err(_) => false,
         }
     }
 
     pub fn get(&self, key: &str) -> Option<SXRef> {
-        match self.lib.get_fn(key) {
-            Ok(f) => {
-                let f = DynCLibFunction::new(key.into(), f);
-                let f = Function::DynCLib(f);
-                let f = SXRef::function(f);
-                Some(f)
+        println!("Called get");
+        match self.lib.get_sym(key) {
+            Ok(sym) => match sym {
+                DynCType::Func(f) => {
+                    let f = DynCLibFunction::new(key.into(), f);
+                    let f = Function::DynCLib(f);
+                    let f = SXRef::function(f);
+                    Some(f)
+                },
+                _ => unimplemented!(),
             },
-            Err(_) => None,
+            Err(_) => {
+                println!("Couldn't find anything");
+                None
+            },
         }
     }
 }

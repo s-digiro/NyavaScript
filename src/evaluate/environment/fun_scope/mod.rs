@@ -18,6 +18,20 @@ use crate::s_expression::{
 pub struct FunScope;
 
 impl FunScope {
+    pub fn cload(args: Vec<SXRef>, env: &mut Env) -> EvalResult {
+        if let Some(arg1) = args.get(0) {
+            if let SX::String(path) = &**arg1 {
+                if let Ok(scope) = DynCLibScope::load(path) {
+                    env.dynclib.push(scope);
+                    eprintln!("{:?}", env);
+                    return Ok(SXRef::number(1))
+                }
+            }
+        }
+
+        Ok(SXRef::nil())
+    }
+
     pub fn new() -> HashScope {
         let mut ret = HashScope::new();
 
@@ -29,6 +43,11 @@ impl FunScope {
         ret.insert(
             ";".into(),
             RustMacro::new(Self::procedural).into(),
+        );
+
+        ret.insert(
+            "cload".into(),
+            RustFunction::new(Self::cload).into(),
         );
 
         ret.insert(

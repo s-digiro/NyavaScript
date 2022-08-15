@@ -23,6 +23,7 @@ type BoxScope<'a> = Box<dyn Scope + 'a>;
 #[derive(Debug)]
 pub struct Environment<'a> {
     global: HashScope,
+    dynclib: Vec<DynCLibScope>,
     lib: Vec<BoxScope<'a>>,
     stack: Vec<BoxScope<'a>>,
 }
@@ -31,6 +32,7 @@ impl<'a> Environment<'a> {
     pub fn new() -> Environment<'a> {
         Environment {
             stack: vec![],
+            dynclib: vec![],
             lib: vec![],
             global: HashScope::new(),
         }
@@ -46,6 +48,9 @@ impl<'a> Environment<'a> {
 
     pub fn has(&self, key: &str) -> bool {
         self.stack.iter().any(|s| s.contains_key(key))
+        || self.global.contains_key(key)
+        || self.lib.iter().any(|s| s.contains_key(key))
+        || self.dynclib.iter().any(|s| s.contains_key(key))
     }
 
     pub fn get(&self, key: &str) -> SXRef {
@@ -58,6 +63,13 @@ impl<'a> Environment<'a> {
 
         if let Some(global) = self.global.get(key) {
             return SXRef::clone(global)
+        }
+
+        let dynclib = self.dynclib.iter().rev()
+            .find_map(|s| s.get(key));
+
+        if let Some(sx) = dynclib {
+            return sx
         }
 
         let lib = self.lib.iter().rev()

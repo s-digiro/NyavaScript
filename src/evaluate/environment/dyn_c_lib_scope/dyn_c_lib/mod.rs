@@ -1,9 +1,11 @@
-mod dyn_c_function;
-pub use dyn_c_function::DynCFunction;
+mod dyn_c_type;
+pub use dyn_c_type::*;
+
+#[cfg(test)]
+mod test;
 
 use std::{
     ffi::{ CStr, OsStr, c_void },
-    mem::MaybeUninit,
     ops::Drop,
     os::{
         raw::{ c_char, c_int},
@@ -12,9 +14,7 @@ use std::{
     rc::Rc,
 };
 
-pub type DynCSym = *mut ();
-
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct LibPtr(pub *mut c_void);
 
 impl Drop for LibPtr {
@@ -25,7 +25,7 @@ impl Drop for LibPtr {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct DynCLib {
     lib_ptr: Rc<LibPtr>,
 }
@@ -59,43 +59,12 @@ impl DynCLib {
         }
     }
 
-    pub fn get_fn(&self, name: &str) -> Result<DynCFunction, Error> {
-        let sym = self.get_sym(name)?;
-
-        let typ = unsafe {
-            let mut info = MaybeUninit::<DlInfo>::zeroed();
-            let mut extra_info: *mut ExtraInfo = std::ptr::null_mut();
-
-            let res = dladdr1(
-                sym as *mut c_void,
-                info.as_mut_ptr(),
-                &mut extra_info,
-                RTLD_DL_SYMENT
-            );
-
-            let info = info.assume_init();
-
-            if res == 0 {
-                return Err(Error::NoSharedObjForAddr)
-            } else if info.dli_sname.is_null() && info.dli_saddr.is_null() {
-                return Err(Error::NoSymForSharedObjAddr)
-            }
-
-            (*extra_info).st_info
-        };
-
-        match typ {
-            STT_FUNC => Ok(DynCFunction::new(sym, Rc::clone(&self.lib_ptr))),
-            _ => Err(Error::NotAFunction),
-        }
-    }
-
-    fn get_sym(&self, name: &str) -> Result<DynCSym, Error> {
+    pub fn get_sym(&self, name: &str) -> Result<DynCType, Error> {
         let mut v = Vec::new();
-        let name = str_to_c_str(name, &mut v);
+        let cstr = str_to_c_str(name, &mut v);
 
         let sym = unsafe {
-            dlsym(self.lib_ptr.0, name.as_ptr())
+            dlsym(self.lib_ptr.0, cstr.as_ptr())
         };
 
         if sym.is_null() {
@@ -107,19 +76,49 @@ impl DynCLib {
                 Error::GetSym(msg)
             };
 
-            Err(ret)
-        } else {
-            Ok(sym as DynCSym)
+            return Err(ret)
         }
+
+        let sym = sym as *mut ();
+        let (typ, size) = dyn_c_type::get_type_and_size(sym)?;
+        let lib = Rc::clone(&self.lib_ptr);
+
+        let ret = match typ {
+            STT_FUNC
+            | STT_GNU_IFUNC => DynCFunction::new(sym, lib).into(),
+            STT_OBJECT => DynCObject::new(sym, size, lib).into(),
+            x => {
+                let unhandled = |x: &str| Error::UnsupportedSymbolType {
+                    name: name.into(),
+                    typ: x.into()
+                };
+
+                let ret = match x {
+                    STT_NOTYPE => unhandled("STT_NOTYPE"),
+                    STT_SECTION => unhandled("STT_SECTION"),
+                    STT_FILE => unhandled("STT_FILE"),
+                    STT_COMMON => unhandled("STT_COMMON"),
+                    STT_TLS => unhandled("STT_TLS"),
+                    x => unhandled(&format!("{}", x)),
+                };
+
+                return Err(ret)
+            }
+        };
+
+        Ok(ret)
     }
+
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Error {
     Load(String),
     GetSym(String),
     NotAFunction,
     NoSymForSharedObjAddr,
     NoSharedObjForAddr,
+    UnsupportedSymbolType { name: String, typ: String },
 }
 
 fn str_to_c_str<'a>(s: &'a str, v: &'a mut Vec<u8>) -> &'a CStr {
@@ -136,53 +135,13 @@ fn str_to_c_str<'a>(s: &'a str, v: &'a mut Vec<u8>) -> &'a CStr {
     }
 }
 
-type Elf64Word = u32;
-type Elf64Section = u16;
-type Elf64Addr = u64;
-type Elf64Xword = u64;
-
-#[repr(C)]
-struct DlInfo {
-    pub dli_fname: *const c_char,
-    pub dli_fbase: *mut c_void,
-    pub dli_sname: *const c_char,
-    pub dli_saddr: *mut c_void,
-}
-
-#[repr(C)]
-struct ExtraInfo {
-    pub st_name: Elf64Word,
-    pub st_info: u8,
-    pub st_other: u8,
-    pub st_shndx: Elf64Section,
-    pub st_value: Elf64Addr,
-    pub st_size: Elf64Xword,
-}
-
 #[link(name = "c")]
 extern "C" {
     fn dlopen(filename: *const c_char, flag: c_int) -> *mut c_void;
     fn dlsym(handle: *mut c_void, symbol: *const c_char) -> *mut c_void;
     fn dlerror() -> *mut c_char;
     fn dlclose(handle: *mut c_void) -> c_int;
-    fn dladdr1(
-        addr: *const c_void,
-        info: *mut DlInfo,
-        extra_info: *mut *mut ExtraInfo,
-        flags: c_int
-    ) -> c_int;
 }
 
 const RTLD_LOCAL: c_int = 0;
 const RTLD_LAZY: c_int = 1;
-
-const RTLD_DL_SYMENT: c_int = 1;
-
-const STT_NOTYPE: u8 = 0;
-const STT_OBJECT: u8 = 1;
-const STT_FUNC: u8 = 2;
-const STT_SECTION: u8 = 3;
-const STT_FILE: u8 = 4;
-const STT_COMMON: u8 = 5;
-const STT_TLS: u8 = 6;
-const STT_GNU_IFUNC: u8 = 10;

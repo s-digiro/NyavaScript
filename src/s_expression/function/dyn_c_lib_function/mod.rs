@@ -7,7 +7,7 @@ use crate::{
     s_expression::{ SExpressionRef as SXRef, SExpression as SX },
 };
 use std::{
-    ffi::{ CStr, OsStr },
+    ffi::{ CString, OsStr },
     os::unix::ffi::OsStrExt,
 };
 
@@ -23,27 +23,16 @@ impl DynCLibFunction {
     }
 
     pub fn execute(&self, args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let mut bufs = Vec::new();
+
         let args = args.iter().map(|sx| match &**sx {
             SX::Number(n) => *n as *const () as usize,
             SX::String(s) => {
                 let s = OsStr::new(s);
+                let s = CString::new(s.as_bytes()).unwrap();
+                bufs.push(s);
 
-                let mut v: Vec<u8> = Vec::new();
-
-                unsafe {
-                    let bytes = s.as_bytes();
-
-                    if s.len() > 0 && bytes[s.len() - 1] == 0 {
-                        let cstr = CStr::from_bytes_with_nul_unchecked(bytes);
-                        cstr.as_ptr() as usize
-                    } else {
-                        v.extend_from_slice(bytes);
-                        v.push(0);
-                        let slice = v.as_slice();
-                        let cstr = CStr::from_bytes_with_nul_unchecked(slice);
-                        cstr.as_ptr() as usize
-                    }
-                }
+                bufs.last().unwrap().as_ptr() as usize
             },
             _ => 0,
         }).collect();

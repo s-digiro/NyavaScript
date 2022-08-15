@@ -1,6 +1,6 @@
 use std::arch::asm;
 use std::rc::Rc;
-use super::{ DynCSym, LibPtr };
+use super::super::{ DynCSym, LibPtr };
 
 #[derive(Clone, Debug)]
 pub struct DynCFunction {
@@ -19,6 +19,7 @@ impl DynCFunction {
     }
 
     pub fn call(&self, args: Vec<usize>) -> usize {
+        println!("call");
         let result;
 
         unsafe {
