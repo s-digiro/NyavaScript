@@ -1,7 +1,9 @@
 # To Do
+- [ ] We need special escape chars
+    - [ ] \n should lex into newline
+    - [ ] More. Make a list
 - [ ] Figure out some way to implement maps
 - [ ] Sys calls somehow
-- [ ] inline assembly????
 - [ ] Rename s\_expression to form
 - [ ] Rename function to procedure
     - [ ] Make sure this reflects in toString as well
@@ -10,15 +12,10 @@
         - [ ] Compare Hashes
     - [ ] Lisp: Same as with Rust
 - [ ] Float type
-- [ ] Fraction type?
 - [ ] Buffer type
     - [ ] This would also mean arrays and objects and structs, effectively
-- [ ] Array literal?
-- [ ] Maybe root lists should execute concurrently?
-- [ ] Concurrent macro?
 - [ ] load for loading in other files
 - [ ] A compiler (lol)
-- [ ] set? Maybe?
 - [ ] Control flow scope
     - [ ] while loop
     - [ ] let macro
@@ -51,12 +48,10 @@
 - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
 - [ ] Garbage collector
 - [ ] Evaluate List should be refactored into more functions so its easier to read
-- [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols? Pick one
 - [ ] List macro
 - [ ] Label macro
 - [ ] let macro
 - [ ] arbitrary cdaddr function
-- [ ] Maybe mccarthy functions should be "specials", separate from macros? decide.
 - [ ] From SX for SXRef
 - [ ] From inner for SXRef
 - [ ] From inner for SX
@@ -64,3 +59,18 @@
 - [ ] Better toString for Macro
 - [ ] Find a way to implement PartialEq on RustFunction
 - [ ] Find a way to implement PartialEq on RustMacro
+
+# Potential features
+- [ ] inline assembly????
+- [ ] Fraction type?
+- [ ] Array literal?
+- [ ] Maybe root lists should execute concurrently?
+- [ ] Concurrent macro?
+- [ ] set? Maybe?
+- [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols? Pick one
+- [ ] Maybe mccarthy functions should be "specials", separate from macros? decide.
+- [ ] Blob data type
+- [ ] Fixed array data type
+- [ ] Vector data type
+- [ ] HashMap data type
+- [ ] Set data type
