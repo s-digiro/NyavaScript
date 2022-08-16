@@ -76,18 +76,34 @@ pub fn parse(text: &str) -> Result<Vec<Token>, LexError> {
                 ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 ret.push(Token::OpenList);
                 state = State::InList;
-            }
+            },
             (State::InAtom, ')') => {
                 ret.push(Token::Symbol(mem::replace(&mut buf, String::new())));
                 ret.push(Token::CloseList);
                 state = State::InList;
-            }
+            },
             (State::InAtom, c) => buf.push(c),
 
+            (State::SlashQuote, 'n') => {
+                buf.push('\n');
+                state = State::InString;
+            },
+            (State::SlashQuote, 'r') => {
+                buf.push('\r');
+                state = State::InString;
+            },
+            (State::SlashQuote, 't') => {
+                buf.push('\t');
+                state = State::InString;
+            },
+            (State::SlashQuote, '0') => {
+                buf.push('\0');
+                state = State::InString;
+            },
             (State::SlashQuote, c) => {
                 buf.push(c);
                 state = State::InString;
-            }
+            },
 
             (State::InString, '"') => {
                 ret.push(Token::String(mem::replace(&mut buf, String::new())));

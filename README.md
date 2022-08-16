@@ -2,8 +2,24 @@
 - Features
     - [ ] A compiler (lol)
     - [ ] We need special escape chars
-        - [ ] \n should lex into newline
-        - [ ] More. Make a list
+        - [x] \n -> newline
+            - [x] Implement in lexer
+            - [x] Tests
+        - [x] \r -> carriage return
+            - [x] Implement in lexer
+            - [x] Tests
+        - [x] \t -> tab
+            - [x] Implement in lexer
+            - [x] Tests
+        - [x] \0 -> null
+            - [x] Implement in lexer
+            - [x] Tests
+        - [x] \\ -> backslash, obviously
+            - [x] Just add tests to ensure it works
+        - [x] \' -> single quote
+            - [x] Just add tests to ensure it works
+        - [x] \" -> double quote
+            - [x] Just add tests to ensure it works
     - [ ] Pass env to macro
     - [ ] Add line and column to errors where applicable
     - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
