@@ -18,7 +18,8 @@
 - DataTypes
     - [ ] Hashmaps
     - [ ] Vectors
-    - [ ] Float type
+    - [ ] Set
+    - [ ] Float
 - Functions
     - [ ] Sys calls somehow
     - [ ] load for loading stuff from other files
@@ -62,10 +63,8 @@
 - [ ] set? Maybe?
 - [ ] Maybe strings should be lists of chars? Or maybe permanently quoted symbols? Pick one
 - [ ] Maybe mccarthy functions should be "specials", separate from macros? decide.
+- [ ] Byte data type
 - [ ] Blob data type
 - [ ] Fixed array data type
-- [ ] Vector data type
-- [ ] HashMap data type
-- [ ] Set data type
 - [ ] Consider returning data type errors rather than evaluating errors to nil
 - [ ] Garbage collector
