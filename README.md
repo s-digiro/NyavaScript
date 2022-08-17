@@ -1,6 +1,18 @@
 # To Do
 - Features
     - [ ] A compiler (lol)
+    - [ ] Closures
+        - [ ] Figure some stuff out
+            - [ ] Maybe only data and atoms should be held in rcs?
+                - [ ] Lambdas could hold their def in rc, but not themselves
+        - [ ] Refactor SXRef to be Rc RefCell
+            - [ ] Implement
+            - [ ] Build successfully
+            - [ ] Make sure tests still pass
+            - [ ] Add tests?
+        - [ ] Lambda owns an Env with SXRefs in it
+            - [ ] Lambda must analyze itself upon creation to fill its Env
+            - [ ] Lambda must not be allowed to hold itself
     - [ ] Pass env to macro
     - [ ] Add line and column to errors where applicable
     - [ ] Figure out the difference and standard practices between e2e tests and lib unit tests
