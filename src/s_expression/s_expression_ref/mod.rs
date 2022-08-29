@@ -24,17 +24,9 @@ impl Deref for SExpressionRef {
 impl SExpressionRef {
     pub fn new(sx: SExpression) -> Self {
         match sx {
-            SExpression::Function(_) => Self::new_owned(sx),
-            _ => Self::new_rc(sx),
+            SExpression::Function(_) => Self(MaybeRc::rc(sx)),
+            _ => Self(MaybeRc::owned(sx)),
         }
-    }
-
-    fn new_rc(sx: SExpression) -> Self {
-        Self(MaybeRc::rc(sx))
-    }
-
-    fn new_owned(sx: SExpression) -> Self {
-        Self(MaybeRc::owned(sx))
     }
 
     pub fn clone(sx: &Self) -> Self {
@@ -42,11 +34,11 @@ impl SExpressionRef {
     }
 
     pub fn cons_cell(c: ConsCell) -> Self {
-        Self::new_rc(SExpression::ConsCell(c))
+        Self::new(SExpression::ConsCell(c))
     }
 
     pub fn function(function: Function) -> Self {
-        Self::new_rc(SExpression::Function(function))
+        Self::new(SExpression::Function(function))
     }
 
     pub fn iter(&self) -> ListIter {
@@ -60,27 +52,27 @@ impl SExpressionRef {
     }
 
     pub fn r#macro(m: Macro) -> Self {
-        Self::new_rc(SExpression::Macro(m))
+        Self::new(SExpression::Macro(m))
     }
 
     pub fn number(n: isize) -> Self {
-        Self::new_rc(SExpression::Number(n))
+        Self::new(SExpression::Number(n))
     }
 
     pub fn nil() -> Self {
-        Self::new_rc(SExpression::Nil)
+        Self::new(SExpression::Nil)
     }
 
     pub fn quote(v: Self) -> Self {
-        Self::new_rc(SExpression::Quote(v))
+        Self::new(SExpression::Quote(v))
     }
 
     pub fn string(s: String) -> Self {
-        Self::new_rc(SExpression::String(s))
+        Self::new(SExpression::String(s))
     }
 
     pub fn symbol(s: String) -> Self {
-        Self::new_rc(SExpression::Symbol(s))
+        Self::new(SExpression::Symbol(s))
     }
 }
 
@@ -128,7 +120,7 @@ impl From<LispMacro> for SExpressionRef {
 
 impl From<SExpression> for SExpressionRef {
     fn from(sx: SExpression) -> Self {
-        Self::new_rc(sx)
+        Self::new(sx)
     }
 }
 
