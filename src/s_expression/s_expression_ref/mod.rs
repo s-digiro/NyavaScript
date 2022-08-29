@@ -1,15 +1,17 @@
 mod iter;
 pub use iter::*;
 
+mod maybe_rc;
+pub use maybe_rc::MaybeRc;
+
 #[cfg(test)]
 mod test;
 
-use std::rc::Rc;
 use super::*;
 use std::ops::Deref;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct SExpressionRef(pub Rc<SExpression>);
+pub struct SExpressionRef(pub MaybeRc<SExpression>);
 
 impl Deref for SExpressionRef {
     type Target = SExpression;
@@ -21,19 +23,30 @@ impl Deref for SExpressionRef {
 
 impl SExpressionRef {
     pub fn new(sx: SExpression) -> Self {
-        Self(Rc::new(sx))
+        match sx {
+            SExpression::Function(_) => Self::new_owned(sx),
+            _ => Self::new_rc(sx),
+        }
+    }
+
+    fn new_rc(sx: SExpression) -> Self {
+        Self(MaybeRc::rc(sx))
+    }
+
+    fn new_owned(sx: SExpression) -> Self {
+        Self(MaybeRc::owned(sx))
     }
 
     pub fn clone(sx: &Self) -> Self {
-        Self(Rc::clone(&sx.0))
+        Self(MaybeRc::clone(&sx.0))
     }
 
     pub fn cons_cell(c: ConsCell) -> Self {
-        Self::new(SExpression::ConsCell(c))
+        Self::new_rc(SExpression::ConsCell(c))
     }
 
     pub fn function(function: Function) -> Self {
-        Self::new(SExpression::Function(function))
+        Self::new_rc(SExpression::Function(function))
     }
 
     pub fn iter(&self) -> ListIter {
@@ -47,33 +60,33 @@ impl SExpressionRef {
     }
 
     pub fn r#macro(m: Macro) -> Self {
-        Self::new(SExpression::Macro(m))
+        Self::new_rc(SExpression::Macro(m))
     }
 
     pub fn number(n: isize) -> Self {
-        Self::new(SExpression::Number(n))
+        Self::new_rc(SExpression::Number(n))
     }
 
     pub fn nil() -> Self {
-        Self::new(SExpression::Nil)
+        Self::new_rc(SExpression::Nil)
     }
 
     pub fn quote(v: Self) -> Self {
-        Self::new(SExpression::Quote(v))
+        Self::new_rc(SExpression::Quote(v))
     }
 
     pub fn string(s: String) -> Self {
-        Self::new(SExpression::String(s))
+        Self::new_rc(SExpression::String(s))
     }
 
     pub fn symbol(s: String) -> Self {
-        Self::new(SExpression::Symbol(s))
+        Self::new_rc(SExpression::Symbol(s))
     }
 }
 
 impl std::fmt::Display for SExpressionRef {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        write!(f, "{}", *self.0)
     }
 }
 
@@ -115,7 +128,7 @@ impl From<LispMacro> for SExpressionRef {
 
 impl From<SExpression> for SExpressionRef {
     fn from(sx: SExpression) -> Self {
-        Self::new(sx)
+        Self::new_rc(sx)
     }
 }
 
