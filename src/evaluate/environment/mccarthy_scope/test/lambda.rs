@@ -23,6 +23,7 @@ pub fn lambda_with_1_arg_and_def_produces_function() {
             SXRef::symbol("x".into()),
             SXRef::number(1),
         ]),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -55,6 +56,7 @@ pub fn lambda_with_2_arg_and_def_produces_function() {
             SXRef::symbol("x".into()),
             SXRef::symbol("y".into()),
         ]),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -91,6 +93,7 @@ pub fn lambda_with_3_arg_and_def_produces_function() {
             SXRef::symbol("y".into()),
             SXRef::symbol("z".into()),
         ]),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -121,6 +124,7 @@ pub fn lambda_with_0_arg_and_def_produces_function() {
             SXRef::symbol("y".into()),
             SXRef::symbol("z".into()),
         ]),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -145,6 +149,7 @@ pub fn lambda_with_2_arg_and_number_def_produces_function() {
             "y".into()
         ],
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -169,6 +174,7 @@ pub fn lambda_with_2_arg_and_string_def_produces_function() {
             "y".into()
         ],
         SXRef::string("foo".into()),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -193,6 +199,7 @@ pub fn lambda_with_2_arg_and_symbol_def_produces_function() {
             "y".into()
         ],
         SXRef::symbol("foo".into()),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -217,6 +224,7 @@ pub fn lambda_with_2_arg_and_quote_def_produces_function() {
             "y".into()
         ],
         SXRef::quote(SXRef::symbol("foo".into())),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -241,6 +249,7 @@ pub fn lambda_with_2_arg_and_nil_def_produces_function() {
             "y".into()
         ],
         SXRef::nil(),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -265,6 +274,7 @@ pub fn lambda_with_2_arg_and_function_def_produces_function() {
             "y".into()
         ],
         SXRef::function("()".try_into().unwrap()),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -289,6 +299,7 @@ pub fn lambda_with_2_arg_and_macro_def_produces_function() {
             "y".into()
         ],
         SXRef::r#macro("()".try_into().unwrap()),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -386,6 +397,7 @@ pub fn lambda_with_2_arg_and_no_def_produces_function() {
             "y".into()
         ],
         SXRef::nil(),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -404,6 +416,7 @@ pub fn lambda_with_no_args_and_no_def_produces_function() {
     let expected =  SXRef::function(Function::lisp_function(
         empty,
         SXRef::nil(),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -424,6 +437,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -439,6 +453,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -454,6 +469,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -469,6 +485,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -484,6 +501,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -499,6 +517,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -514,6 +533,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();
@@ -529,6 +549,7 @@ pub fn lambda_with_non_list_args_returns_function_that_takes_no_args() {
     let expected =  SXRef::function(Function::lisp_function(
         empty.clone(),
         SXRef::number(1),
+        &mut Env::new(),
     ));
 
     let actual = McCarthyScope::lambda(subject, &mut Env::new()).unwrap();

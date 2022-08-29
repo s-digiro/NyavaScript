@@ -144,7 +144,7 @@ impl McCarthyScope {
         let definition = macro_args.next().unwrap_or(SXRef::nil()); // arg 3
 
         if let Some(name) = name {
-            let f = Function::lisp_function(args, definition);
+            let f = Function::lisp_function(args, definition, env);
 
             env.defun(name.into(), f.into());
         }
@@ -335,7 +335,8 @@ fn to_cadr(s: &str) -> Option<SXRef> {
 
     let ret = LispFunction::new(
         vec!["x".into()],
-        def
+        def,
+        &mut Env::new(),
     ).into();
 
     Some(ret)
