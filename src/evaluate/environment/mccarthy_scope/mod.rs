@@ -182,8 +182,21 @@ impl McCarthyScope {
         Ok(SXRef::function(LabelFunction::from(sx).into()))
     }
 
-    pub fn lambda(sx: SXRef, _env: &mut Env) -> EvalResult {
-        Ok(SXRef::function(sx.into()))
+    pub fn lambda(sx: SXRef, env: &mut Env) -> EvalResult {
+        let args = util::car(&util::cdr(&sx))
+            .iter()
+            .filter_map(|sx| match &*sx {
+                SX::Symbol(sym) => Some(sym.to_string()),
+                _ => None,
+            }).collect::<Vec<String>>();
+
+        let def = util::car(&util::cdr(&util::cdr(&sx)));
+
+        Ok(SXRef::function(Function::lisp_function(
+            args,
+            def,
+            env,
+        )))
     }
 
     pub fn list(sx: SXRef, _env: &mut Env) -> EvalResult {

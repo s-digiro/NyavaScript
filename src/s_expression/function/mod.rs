@@ -91,12 +91,6 @@ impl TryFrom<&str> for Function {
     }
 }
 
-impl From<SXRef> for Function {
-    fn from(sx: SXRef) -> Self {
-        Self::Lisp(sx.into())
-    }
-}
-
 impl From<RustFunction> for Function {
     fn from(f: RustFunction) -> Self {
         Self::Rust(f)

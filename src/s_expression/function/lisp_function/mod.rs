@@ -14,7 +14,6 @@ use crate::s_expression::{
     util,
 };
 use std::convert::TryFrom;
-use std::collections::HashMap;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct LispFunction {
@@ -60,7 +59,7 @@ impl TryFrom<&str> for LispFunction {
     fn try_from(text: &str) -> Result<Self, Self::Error> {
         let mut ast = parse(text)?;
 
-        Ok(ast.remove(0).into())
+        Ok(LispFunction::from(ast.remove(0)))
     }
 }
 
@@ -72,7 +71,13 @@ impl From<SXRef> for LispFunction {
 
         let definition = util::car(&util::cdr(&util::cdr(&sx)));
 
-        LispFunction { args, definition, closure: HashMap::new(), }
+        let closure = capture_symbols(
+            SXRef::clone(&definition),
+            &args,
+            &mut Env::new(),
+        ).into_iter().collect();
+
+        LispFunction { args, definition, closure, }
     }
 }
 
@@ -83,12 +88,20 @@ impl std::fmt::Display for LispFunction {
 }
 
 fn capture_symbols(f: SXRef, filter: &Vec<String>, env: &mut Env) -> Vec<(String, SXRef)> {
-    match &*f {
+    eprintln!("capture_symbols");
+    eprintln!("~~~~~~~~~~~~~~~");
+    eprintln!("{}\n{:?}\n{:?}", f, filter, env);
+    let ret = match &*f {
         SX::Symbol(sym) if !filter.contains(sym) =>
             vec![(sym.into(), env.get(sym))],
         SX::ConsCell(l) => l.iter()
             .map(|sx| capture_symbols(sx, filter, env))
             .flatten().collect(),
         _ => Vec::new(),
-    }
+    };
+
+    eprintln!("ret: {:?}", ret);
+    eprintln!("");
+
+    ret
 }
