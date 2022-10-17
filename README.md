@@ -49,7 +49,6 @@
         - [ ] right shift
         - [ ] not
     - [ ] list
-    - [ ] print
 - Bugs
     - [ ] Passing lambdas to other lambdas is a lil weird... figure it out
 - Refactor
