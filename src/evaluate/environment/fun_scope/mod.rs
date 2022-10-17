@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test;
 
-use super::Scope;
+use super::*;
 use crate::evaluate::{
     eval,
     Environment as Env,
@@ -18,8 +18,8 @@ use crate::s_expression::{
 pub struct FunScope;
 
 impl FunScope {
-    pub fn new() -> Scope {
-        let mut ret = Scope::new();
+    pub fn new() -> HashScope {
+        let mut ret = HashScope::new();
 
         ret.insert(
             "|>".into(),

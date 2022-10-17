@@ -7,6 +7,7 @@ use super::*;
 
 mod and;
 mod atom;
+mod cadr;
 mod car;
 mod cdr;
 mod cond;
@@ -15,6 +16,7 @@ mod defun;
 mod equal;
 mod label;
 mod lambda;
+mod list;
 mod nil;
 mod not;
 mod null;
@@ -30,7 +32,7 @@ fn dummy_macro(_: SXRef, _: &mut Env) -> EvalResult {
     Ok(SXRef::nil())
 }
 
-fn mc_env() -> Env {
+fn mc_env<'a>() -> Env<'a> {
     let mut ret = Env::new();
 
     ret.push(McCarthyScope::new());
@@ -46,7 +48,6 @@ fn all_mccarthy_functions_are_defined() {
         "NIL",
         "T",
         "and",
-        "cadr",
         "car",
         "cdr",
         "cond",
@@ -63,9 +64,13 @@ fn all_mccarthy_functions_are_defined() {
         "quote",
     ];
 
-    let missing: Vec<&str> = fns.into_iter()
+    let mut missing: Vec<&str> = fns.into_iter()
         .filter(|f| !subject.contains_key(*f))
         .collect();
+
+    if let None = subject.get("cadr") {
+        missing.push("cadr");
+    }
 
     if !missing.is_empty() {
         panic!("Expected McCarthyScope to contain a definition for the following keys {:?}", missing);

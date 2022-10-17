@@ -7,33 +7,38 @@ pub use mccarthy_scope::McCarthyScope;
 mod fun_scope;
 pub use fun_scope::FunScope;
 
+mod scope;
+pub use scope::Scope;
+
 #[cfg(test)]
 mod test;
 
-pub type Scope = HashMap<String, SXRef>;
+pub type HashScope = HashMap<String, SXRef>;
+
+type BoxScope<'a> = Box<dyn Scope + 'a>;
 
 #[derive(Debug)]
-pub struct Environment {
-    global: Scope,
-    lib: Vec<Scope>,
-    stack: Vec<Scope>,
+pub struct Environment<'a> {
+    global: HashScope,
+    lib: Vec<BoxScope<'a>>,
+    stack: Vec<BoxScope<'a>>,
 }
 
-impl Environment {
-    pub fn new() -> Environment {
+impl<'a> Environment<'a> {
+    pub fn new() -> Environment<'a> {
         Environment {
-            stack: vec![Scope::new()],
+            stack: vec![],
             lib: vec![],
-            global: Scope::new(),
+            global: HashScope::new(),
         }
     }
 
-    pub fn pop_lib(&mut self) -> Scope {
-        self.lib.pop().unwrap()
+    pub fn pop_lib(&mut self) -> Option<BoxScope> {
+        self.lib.pop()
     }
 
-    pub fn push_lib(&mut self, c: Scope) {
-        self.lib.push(c);
+    pub fn push_lib(&mut self, c: impl Scope + 'a) {
+        self.lib.push(Box::new(c));
     }
 
     pub fn has(&self, key: &str) -> bool {
@@ -42,7 +47,7 @@ impl Environment {
 
     pub fn get(&self, key: &str) -> SXRef {
         let local = self.stack.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+            .find_map(|s| s.get(key));
 
         if let Some(local) = local {
             return local
@@ -53,7 +58,7 @@ impl Environment {
         }
 
         let lib = self.lib.iter().rev()
-            .find_map(|s| s.get(key).map(|exref| SXRef::clone(exref)));
+            .find_map(|s| s.get(key));
 
         if let Some(lib) = lib {
             return lib
@@ -62,12 +67,12 @@ impl Environment {
         SXRef::nil()
     }
 
-    pub fn pop(&mut self) -> Scope {
-        self.stack.pop().unwrap()
+    pub fn pop(&mut self) -> Option<BoxScope> {
+        self.stack.pop()
     }
 
-    pub fn push(&mut self, c: Scope) {
-        self.stack.push(c);
+    pub fn push(&mut self, c: impl Scope + 'a) {
+        self.stack.push(Box::new(c));
     }
 
     pub fn set(&mut self, key: String, val: SXRef) {

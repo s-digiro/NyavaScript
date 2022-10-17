@@ -37,8 +37,12 @@ impl Function {
         Ok(ret)
     }
 
-    pub fn lisp_function(args: Vec<String>, definition: SXRef) -> Function {
-        Self::Lisp(LispFunction::new(args, definition))
+    pub fn lisp_function(
+        args: Vec<String>,
+        definition: SXRef,
+        env: &mut Env
+    ) -> Function {
+        Self::Lisp(LispFunction::new(args, definition, env))
     }
 
     pub fn rust_function(f: RustFunction) -> Self {
@@ -84,12 +88,6 @@ impl TryFrom<&str> for Function {
         let f = text.try_into()?;
 
         Ok(Self::Lisp(f))
-    }
-}
-
-impl From<SXRef> for Function {
-    fn from(sx: SXRef) -> Self {
-        Self::Lisp(sx.into())
     }
 }
 

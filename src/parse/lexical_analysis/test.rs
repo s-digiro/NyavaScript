@@ -442,3 +442,211 @@ fn multiline_comment() {
 
     assert_eq!(expected, actual);
 }
+
+#[test]
+fn backlash_n_in_string_becomes_newline() {
+    let subject = "\"\\n\"";
+    let expected = vec![Token::string("\n")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_n_in_complex_string_becomes_backslash_n() {
+    let subject = "\"My name is below\\nSean\"";
+    let expected = vec![Token::string("My name is below\nSean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backlash_n_in_string_becomes_backslash_n() {
+    let subject = "\"\\\\n\"";
+    let expected = vec![Token::string("\\n")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_n_in_list_becomes_symbol() {
+    let subject = "(\\n)";
+    let expected = vec![Token::OpenList, Token::symbol("\\n"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_r_in_string_becomes_carriage_return() {
+    let subject = "\"\\r\"";
+    let expected = vec![Token::string("\r")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_r_in_complex_string_becomes_carriage_return() {
+    let subject = "\"My name is below\\rSean\"";
+    let expected = vec![Token::string("My name is below\rSean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backlash_r_in_string_becomes_backslash_carriage_return() {
+    let subject = "\"\\\\r\"";
+    let expected = vec![Token::string("\\r")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_r_in_list_becomes_symbol() {
+    let subject = "(\\r)";
+    let expected = vec![Token::OpenList, Token::symbol("\\r"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_t_in_string_becomes_tab() {
+    let subject = "\"\\t\"";
+    let expected = vec![Token::string("\t")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_t_in_complex_string_becomes_tab() {
+    let subject = "\"My name is below\\tSean\"";
+    let expected = vec![Token::string("My name is below\tSean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backlash_t_in_string_becomes_backslash_tab() {
+    let subject = "\"\\\\t\"";
+    let expected = vec![Token::string("\\t")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_t_in_list_becomes_symbol() {
+    let subject = "(\\t)";
+    let expected = vec![Token::OpenList, Token::symbol("\\t"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_0_in_string_becomes_nullbyte() {
+    let subject = "\"\\0\"";
+    let expected = vec![Token::string("\0")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_0_in_complex_string_becomes_nullbyte() {
+    let subject = "\"My name is below\\0Sean\"";
+    let expected = vec![Token::string("My name is below\0Sean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backlash_0_in_string_becomes_backslash_nullbyte() {
+    let subject = "\"\\\\0\"";
+    let expected = vec![Token::string("\\0")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_0_in_list_becomes_symbol() {
+    let subject = "(\\0)";
+    let expected = vec![Token::OpenList, Token::symbol("\\0"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backslash_in_string_becomes_backslash() {
+    let subject = "\"\\\\\"";
+    let expected = vec![Token::string("\\")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backslash_in_complex_string_becomes_backslash() {
+    let subject = "\"My name is below\\\\Sean\"";
+    let expected = vec![Token::string("My name is below\\Sean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backslash_in_list_becomes_symbol() {
+    let subject = "(\\\\)";
+    let expected = vec![Token::OpenList, Token::symbol("\\\\"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_single_quote_in_string_becomes_single_quote() {
+    let subject = "\"\\'\"";
+    let expected = vec![Token::string("'")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_single_quote_in_complex_string_becomes_single_quote() {
+    let subject = "\"My name is below\\'Sean\"";
+    let expected = vec![Token::string("My name is below'Sean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_backlash_single_quote_in_string_becomes_backslash_single_quote() {
+    let subject = "\"\\\\'\"";
+    let expected = vec![Token::string("\\'")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_single_quote_in_list_becomes_symbol() {
+    let subject = "(\\')";
+    let expected = vec![Token::OpenList, Token::symbol("\\'"), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_double_quote_in_string_becomes_double_quote() {
+    let subject = "\"\\\"\"";
+    let expected = vec![Token::string("\"")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_double_quote_in_complex_string_becomes_double_quote() {
+    let subject = "\"My name is below\\\"Sean\"";
+    let expected = vec![Token::string("My name is below\"Sean")];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}
+
+#[test]
+fn backlash_double_quote_in_list_becomes_symbol() {
+    let subject = "(\\\")";
+    let expected = vec![Token::OpenList, Token::symbol("\\\""), Token::CloseList];
+    let actual = parse(subject).unwrap();
+    assert_eq!(expected, actual);
+}

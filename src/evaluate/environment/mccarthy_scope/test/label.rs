@@ -21,6 +21,7 @@ fn correctly_formed_returns_label() {
             LispFunction::new(
                 vec!["x".into()],
                 SXRef::number(1),
+                &mut Env::new(),
             ).into(),
         )
     );

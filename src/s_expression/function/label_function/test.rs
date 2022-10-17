@@ -22,6 +22,7 @@ fn gets_correct_label_and_function_when_made_from_sxref() {
         LispFunction::new(
             vec!["a".into(), "b".into()],
             SXRef::number(2),
+            &mut Env::new(),
         ).into(),
     );
 
@@ -48,6 +49,7 @@ pub fn from_string() {
                     ]),
                 ),
             ]),
+            &mut Env::new(),
         ).into(),
     );
 
@@ -65,6 +67,7 @@ pub fn str_that_is_missing_args_work() {
         LispFunction::new(
             Vec::new(),
             SXRef::nil(),
+            &mut Env::new(),
         ).into(),
     );
 
