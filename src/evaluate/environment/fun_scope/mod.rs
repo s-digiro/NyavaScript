@@ -37,7 +37,7 @@ impl FunScope {
                 |args, _env| {
                     match args.get(0) {
                         Some(sx) => match &**sx {
-                            SX::Nil => println!(),
+                            SX::Nil => println!("[NIL]"),
                             SX::Macro(_) => println!("[macro]"),
                             SX::Function(_) => println!("[function]"),
                             SX::Number(n) => println!("{}", n),
@@ -45,6 +45,29 @@ impl FunScope {
                             SX::Symbol(s) => println!("{}", s),
                             SX::Quote(q) => println!("'{}", q),
                             SX::ConsCell(c) => println!("{}", c),
+                        },
+                        None => println!(),
+                    }
+
+                    Ok(SXRef::nil())
+                }
+            ).into(),
+        );
+
+        ret.insert(
+            "print".into(),
+            RustFunction::new(
+                |args, _env| {
+                    match args.get(0) {
+                        Some(sx) => match &**sx {
+                            SX::Nil => print!("[NIL]"),
+                            SX::Macro(_) => print!("[macro]"),
+                            SX::Function(_) => print!("[function]"),
+                            SX::Number(n) => print!("{}", n),
+                            SX::String(s) => print!("{}", s),
+                            SX::Symbol(s) => print!("{}", s),
+                            SX::Quote(q) => print!("'{}", q),
+                            SX::ConsCell(c) => print!("{}", c),
                         },
                         None => println!(),
                     }
