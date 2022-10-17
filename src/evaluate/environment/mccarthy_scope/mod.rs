@@ -144,7 +144,7 @@ impl McCarthyScope {
         let definition = macro_args.next().unwrap_or(SXRef::nil()); // arg 3
 
         if let Some(name) = name {
-            let f = Function::lisp_function(args, definition);
+            let f = Function::lisp_function(args, definition, env);
 
             env.defun(name.into(), f.into());
         }
@@ -182,8 +182,21 @@ impl McCarthyScope {
         Ok(SXRef::function(LabelFunction::from(sx).into()))
     }
 
-    pub fn lambda(sx: SXRef, _env: &mut Env) -> EvalResult {
-        Ok(SXRef::function(sx.into()))
+    pub fn lambda(sx: SXRef, env: &mut Env) -> EvalResult {
+        let args = util::car(&util::cdr(&sx))
+            .iter()
+            .filter_map(|sx| match &*sx {
+                SX::Symbol(sym) => Some(sym.to_string()),
+                _ => None,
+            }).collect::<Vec<String>>();
+
+        let def = util::car(&util::cdr(&util::cdr(&sx)));
+
+        Ok(SXRef::function(Function::lisp_function(
+            args,
+            def,
+            env,
+        )))
     }
 
     pub fn list(sx: SXRef, _env: &mut Env) -> EvalResult {
@@ -335,7 +348,8 @@ fn to_cadr(s: &str) -> Option<SXRef> {
 
     let ret = LispFunction::new(
         vec!["x".into()],
-        def
+        def,
+        &mut Env::new(),
     ).into();
 
     Some(ret)

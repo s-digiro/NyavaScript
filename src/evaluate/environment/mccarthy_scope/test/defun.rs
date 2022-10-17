@@ -1,5 +1,4 @@
 use super::*;
-use std::rc::Rc;
 
 #[test]
 pub fn defun_adds_well_formed_function_to_global_scope() {
@@ -23,9 +22,9 @@ pub fn defun_adds_well_formed_function_to_global_scope() {
 
     assert_eq!(expected, actual);
 
-    let mut f = env.get("foo");
+    let f = env.get("foo");
 
-    let f = if let SX::Function(f) = Rc::make_mut(&mut f.0) {
+    let f = if let SX::Function(f) = &*f {
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
@@ -69,9 +68,9 @@ pub fn defun_adds_function_to_global_scope_with_nil_def_when_missing_def() {
 
     assert_eq!(expected, actual);
 
-    let mut f = env.get("foo");
+    let f = env.get("foo");
 
-    let f = if let SX::Function(f) = Rc::make_mut(&mut f.0) {
+    let f = if let SX::Function(f) = &*f {
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
@@ -109,9 +108,9 @@ pub fn defun_adds_function_with_nil_def_and_args_to_global_scope_when_missing_de
 
     assert_eq!(expected, actual);
 
-    let mut f = env.get("foo");
+    let f = env.get("foo");
 
-    let f = if let SX::Function(f) = Rc::make_mut(&mut f.0) {
+    let f = if let SX::Function(f) = &*f {
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)
@@ -178,9 +177,9 @@ pub fn defun_can_define_lambda_with_no_args() {
 
     assert_eq!(expected, actual);
 
-    let mut f = env.get("foo");
+    let f = env.get("foo");
 
-    let f = if let SX::Function(f) = Rc::make_mut(&mut f.0) {
+    let f = if let SX::Function(f) = &*f {
         f
     } else {
         panic!("Expected f to be a SX::Function. Instead it was {:?}", f)

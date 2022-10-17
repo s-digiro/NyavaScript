@@ -1,15 +1,17 @@
 mod iter;
 pub use iter::*;
 
+mod maybe_rc;
+pub use maybe_rc::MaybeRc;
+
 #[cfg(test)]
 mod test;
 
-use std::rc::Rc;
 use super::*;
 use std::ops::Deref;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct SExpressionRef(pub Rc<SExpression>);
+pub struct SExpressionRef(pub MaybeRc<SExpression>);
 
 impl Deref for SExpressionRef {
     type Target = SExpression;
@@ -21,11 +23,14 @@ impl Deref for SExpressionRef {
 
 impl SExpressionRef {
     pub fn new(sx: SExpression) -> Self {
-        Self(Rc::new(sx))
+        match sx {
+            SExpression::Function(_) => Self(MaybeRc::rc(sx)),
+            _ => Self(MaybeRc::owned(sx)),
+        }
     }
 
     pub fn clone(sx: &Self) -> Self {
-        Self(Rc::clone(&sx.0))
+        Self(MaybeRc::clone(&sx.0))
     }
 
     pub fn cons_cell(c: ConsCell) -> Self {
@@ -73,7 +78,7 @@ impl SExpressionRef {
 
 impl std::fmt::Display for SExpressionRef {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        write!(f, "{}", *self.0)
     }
 }
 

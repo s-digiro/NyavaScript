@@ -117,6 +117,7 @@ fn args_returns_list_of_args() {
     let subject = LispFunction::new(
         vec!["x".into(), "y".into()],
         SXRef::nil(),
+        &mut Env::new(),
     );
 
     let expected: Vec<String> = vec!["x".into(), "y".into()];
@@ -131,6 +132,7 @@ fn definition_returns_lambda_definition() {
     let subject = LispFunction::new(
         Vec::new(),
         SXRef::number(1),
+        &mut Env::new(),
     );
 
     let expected = SXRef::number(1);

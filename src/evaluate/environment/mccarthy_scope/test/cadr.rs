@@ -11,6 +11,7 @@ fn cadr() {
                 SXRef::symbol("x".into()),
             ].into(),
         ].into(),
+        &mut Env::new(),
     ).into();
 
     let actual = mc_env().get("cadr");
@@ -29,6 +30,7 @@ fn cdar() {
                 SXRef::symbol("x".into()),
             ].into(),
         ].into(),
+        &mut Env::new(),
     ).into();
 
     let actual = mc_env().get("cdar");
@@ -47,6 +49,7 @@ fn caar() {
                 SXRef::symbol("x".into()),
             ].into(),
         ].into(),
+        &mut Env::new(),
     ).into();
 
     let actual = mc_env().get("caar");
@@ -65,6 +68,7 @@ fn cddr() {
                 SXRef::symbol("x".into()),
             ].into(),
         ].into(),
+        &mut Env::new(),
     ).into();
 
     let actual = mc_env().get("cddr");
@@ -86,6 +90,7 @@ fn cdadr() {
                 ].into(),
             ].into(),
         ].into(),
+        &mut Env::new(),
     ).into();
 
     let actual = mc_env().get("cdadr");
