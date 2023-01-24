@@ -1,3 +1,4 @@
+mod define;
 mod pipe;
 mod procedural;
 

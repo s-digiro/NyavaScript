@@ -24,15 +24,11 @@ pub enum Function {
 
 impl Function {
     pub fn execute(&self, args: Vec<SXRef>, env: &mut Env) -> EvalResult {
-        eprintln!("Running Function on: {}", SXRef::from(args.clone()));
-
         let ret = match self {
             Self::Lisp(f) => f.execute(args, env)?,
             Self::Rust(f) => f.execute(args, env)?,
             Self::Label(f) => f.execute(args, env)?,
         };
-
-        eprintln!("Function returning: {}", ret);
 
         Ok(ret)
     }

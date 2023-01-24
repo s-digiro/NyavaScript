@@ -19,14 +19,10 @@ pub enum Macro {
 
 impl Macro {
     pub fn execute(&self, sx: SXRef, env: &mut Env) -> EvalResult {
-        eprintln!("Running Macro on: {}", sx);
-
         let ret = match self {
             Self::Lisp(f) => f.execute(sx, env)?,
             Self::Rust(f) => f.execute(sx, env)?,
         };
-
-        eprintln!("Macro returning: {}", ret);
 
         Ok(ret)
     }

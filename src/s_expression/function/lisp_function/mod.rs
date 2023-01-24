@@ -88,9 +88,6 @@ impl std::fmt::Display for LispFunction {
 }
 
 fn capture_symbols(f: SXRef, filter: &Vec<String>, env: &mut Env) -> Vec<(String, SXRef)> {
-    eprintln!("capture_symbols");
-    eprintln!("~~~~~~~~~~~~~~~");
-    eprintln!("{}\n{:?}\n{:?}", f, filter, env);
     let ret = match &*f {
         SX::Symbol(sym) if !filter.contains(sym) =>
             vec![(sym.into(), env.get(sym))],
@@ -99,9 +96,6 @@ fn capture_symbols(f: SXRef, filter: &Vec<String>, env: &mut Env) -> Vec<(String
             .flatten().collect(),
         _ => Vec::new(),
     };
-
-    eprintln!("ret: {:?}", ret);
-    eprintln!("");
 
     ret
 }
