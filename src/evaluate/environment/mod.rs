@@ -1,6 +1,9 @@
 use crate::s_expression::SExpressionRef as SXRef;
 use std::collections::HashMap;
 
+mod debug_scope;
+pub use debug_scope::DebugScope;
+
 mod mccarthy_scope;
 pub use mccarthy_scope::McCarthyScope;
 

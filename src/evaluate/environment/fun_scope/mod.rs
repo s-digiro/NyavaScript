@@ -77,6 +77,16 @@ impl FunScope {
             ).into(),
         );
 
+        ret.insert(
+            "define".into(),
+            RustMacro::new(Self::define).into(),
+        );
+
+        ret.insert(
+            "add".into(),
+            RustFunction::new(Self::add).into(),
+        );
+
         ret
     }
 
@@ -107,5 +117,44 @@ impl FunScope {
         }
 
         Ok(last)
+    }
+
+    pub fn define(sx: SXRef, env: &mut Env) -> EvalResult {
+        let mut iter = sx.iter().skip(1);
+
+        match iter.next() {
+            Some(sxref) => match &*sxref {
+                SX::Symbol(s) => {
+                    let val = match iter.next() {
+                        Some(sx) => SXRef::clone(&sx),
+                        None => SXRef::nil(),
+                    };
+
+                    let val = eval(val, env)?;
+
+                    env.defun(s.into(), val);
+                }
+                _ => (),
+            },
+            None => (),
+        }
+
+        Ok(SXRef::nil())
+    }
+
+    pub fn add(args: Vec<SXRef>, _env: &mut Env) -> EvalResult {
+        let get_num = |n: usize| match args.get(n) {
+            Some(sx) => match &**sx {
+                SX::Number(num) => *num,
+                _ => 0,
+            },
+            None => 0,
+        };
+
+        let a = get_num(1);
+        let b = get_num(2);
+        let ret = a + b;
+
+        Ok(SXRef::number(ret))
     }
 }

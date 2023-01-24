@@ -2,7 +2,7 @@ pub mod evaluate;
 pub mod s_expression;
 pub mod parse;
 
-use evaluate::{ Environment, eval_all, McCarthyScope, FunScope };
+use evaluate::{ Environment, eval_all, McCarthyScope, FunScope, DebugScope };
 use s_expression::SExpressionRef;
 use parse::parse;
 use std::error::Error;
@@ -13,6 +13,7 @@ pub fn run(text: &str) -> Result<SExpressionRef, Box<dyn Error>> {
     let mut context = Environment::new();
     context.push_lib(McCarthyScope::new());
     context.push_lib(FunScope::new());
+    context.push_lib(DebugScope::new());
 
     let ret = eval_all(parsed, &mut context)?;
 

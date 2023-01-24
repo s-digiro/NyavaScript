@@ -37,16 +37,12 @@ pub fn eval_all(sxs: Vec<SXRef>, env: &mut Env) -> Result {
 pub fn eval(sx: SXRef, env: &mut Env) -> Result {
     let id = get_id();
 
-    eprintln!("{} Evaluating: {}", id, sx);
-
     let ret = match &*sx {
         SX::ConsCell(_) => eval_list(sx, env)?,
         SX::Quote(r) => SXRef::clone(r),
         SX::Symbol(s) => env.get(s),
         _ => sx,
     };
-
-    eprintln!("{} Returning: {}", id, ret);
 
     Ok(ret)
 }
@@ -70,11 +66,6 @@ fn eval_list(list: SXRef, env: &mut Env) -> Result {
             let args = rest.iter()
                 .map(|sx| eval(sx, env))
                 .collect::<std::result::Result<Vec<SXRef>, Error>>()?;
-            eprint!("Calling Function on (");
-            for arg in args.iter() {
-                eprintln!("{}, ", arg);
-            }
-            eprintln!(")");
             let ret = f.execute(args, env)?;
             Ok(ret)
         },
